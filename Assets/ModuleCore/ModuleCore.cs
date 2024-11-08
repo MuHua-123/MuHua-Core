@@ -4,36 +4,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using MuHua;
 
-/// <summary>
-/// 核心模块，提供全部的抽象接口
-/// </summary>
 public class ModuleCore : Module<ModuleCore> {
-    /*---------------------------------------------功能模块--------------------------------------------------------*/
-    /// <summary> 视频模块  </summary>
-    public ModuleVideo ModuleVideo;
-    /// <summary> 场景模块  </summary>
-    public ModuleScene ModuleScene;
-    /// <summary> 代理模块  </summary>
-    public ModuleAgent ModuleAgent;
-    /*---------------------------------------------页面模块--------------------------------------------------------*/
-    /// <summary> 当前的主要页面模块 (UIDocument) </summary>
-    public ModuleUIPage CurrentPage;
+
+    #region 资产模块
+    /// <summary> 预设模板资产 </summary>
+    public ModuleAssets<DataPresetsPlate> PresetsPlateAssets;
+    #endregion
+
+    #region 页面模块
     /// <summary> 不会被销毁的全局唯一页面模块 (UIDocument) </summary>
     public ModuleUIPage GlobalPage;
-    /*---------------------------------------------页面模块--------------------------------------------------------*/
-    /// <summary> 加载页面模块 (回调Action) </summary>
-    public ModuleUIPanel<Action> LoadingPanel;
-    /// <summary> 弹出提示模块 </summary>
-    public ModuleUIPanel<string> PopupPromptPanel;
-    /// <summary> 弹出窗口模块 </summary>
-    public ModuleUIPanel<DataPopup> PopupWindowPanel;
+    /// <summary> 当前的主要页面模块 (UIDocument) </summary>
+    public ModuleUIPage CurrentPage;
+    /// <summary> 预设模板窗口 (回调Action) </summary>
+    public ModuleUIWindow<Action> PresetsPlateWindow;
+    #endregion
 
-    /// <summary> 设备视频交互模块 </summary>
-    public ModuleUIPanel<DataVideo> VideoPanel;
-    /// <summary> 设备视频图文交互模块 </summary>
-    public ModuleUIPanel<DataVideoImage> VideoImagePanel;
-    /// <summary> 学习视频模块 (回调Action) </summary>
-    public ModuleUIPanel<Action> LearningVideoPanel;
-    /// <summary> 全屏播放视频模块 (回调Action) </summary>
-    public ModuleUIPanel<Action> FullScreenVideoPanel;
+    #region 功能模块
+    /// <summary> 代理模块 </summary>
+    public ModuleAgent ModuleAgent;
+    /// <summary> 根据设计点生成边缘算法模块 </summary>
+    public ModuleAlgorithm<DataPlate> GenerateEdge = new AlgorithmGenerateEdge();
+    /// <summary> 边缘排序算法模块 </summary>
+    public ModuleAlgorithm<DataPlate> EdgeSort = new AlgorithmEdge();
+    /// <summary> 多边形算法模块 </summary>
+    public ModuleAlgorithm<DataPlate> Polygon = new AlgorithmPolygon();
+    /// <summary> 板片设计模块 </summary>
+    public ModulePlateDesign PlateDesign;
+    /// <summary> 板片设计相机视图 </summary>
+    public ModuleViewCamera PlateDesignViewCamera;
+    /// <summary> 板片烘焙相机视图 </summary>
+    public ModuleViewCamera PlateBakingViewCamera;
+    #endregion
+
+    #region 控制模块
+    /// <summary> 板片设计输入模块 </summary>
+    public ModuleViewInput PlateDesignViewInput;
+    /// <summary> 板片烘焙输入模块 </summary>
+    public ModuleViewInput PlateBakingViewInput;
+    #endregion
 }

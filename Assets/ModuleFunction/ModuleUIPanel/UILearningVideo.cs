@@ -21,7 +21,7 @@ public class UILearningVideo : ModuleUIPanel<Action> {
     private Button CloseButton => element.Q<Button>("Close");
     public override void Awake() {
         //初始化模块
-        ModuleCore.LearningVideoPanel = this;
+        //ModuleCore.LearningVideoPanel = this;
         InitElement();
         //加载视频媒体ui
         VisualElement media = element.Q<VisualElement>("MediaPlayer");
@@ -49,24 +49,24 @@ public class UILearningVideo : ModuleUIPanel<Action> {
     /// <summary> 全屏播放功能 </summary>
     private void MediaPlayerFullScreen() {
         element.style.display = DisplayStyle.None;
-        ModuleCore.FullScreenVideoPanel.Open(() => {
-            mediaPlayer.Open();
-            element.style.display = DisplayStyle.Flex;
-        });
+        //ModuleCore.FullScreenVideoPanel.Open(() => {
+        //    mediaPlayer.Open();
+        //    element.style.display = DisplayStyle.Flex;
+        //});
     }
     private void Button1_clicked() {
         DataVideoClip videoClip = new DataVideoClip(clip1);
-        ModuleCore.ModuleVideo.SetValue(videoClip);
+        //ModuleCore.ModuleVideo.SetValue(videoClip);
         mediaPlayer.Open();
     }
     private void Button2_clicked() {
         DataVideoClip videoClip = new DataVideoClip(clip2);
-        ModuleCore.ModuleVideo.SetValue(videoClip);
+        //ModuleCore.ModuleVideo.SetValue(videoClip);
         mediaPlayer.Open();
     }
     private void Button3_clicked() {
         DataVideoClip videoClip = new DataVideoClip(clip3);
-        ModuleCore.ModuleVideo.SetValue(videoClip);
+        //ModuleCore.ModuleVideo.SetValue(videoClip);
         mediaPlayer.Open();
     }
 }

@@ -9,7 +9,7 @@ public class UIDeviceVideo : ModuleUIPanel<DataVideo> {
     private Button CloseButton => element.Q<Button>("Close");
     public override void Awake() {
         //初始化模块
-        ModuleCore.VideoPanel = this;
+        //ModuleCore.VideoPanel = this;
         InitElement();
         //加载视频媒体ui
         VisualElement media = element.Q<VisualElement>("MediaPlayer");
@@ -20,7 +20,7 @@ public class UIDeviceVideo : ModuleUIPanel<DataVideo> {
     public override void Open(DataVideo data) {
         this.data = data;
         element.style.display = DisplayStyle.Flex;
-        ModuleCore.ModuleVideo.SetValue(data);
+        //ModuleCore.ModuleVideo.SetValue(data);
         mediaPlayer.Open();
     }
     public override void Close() {
@@ -35,9 +35,9 @@ public class UIDeviceVideo : ModuleUIPanel<DataVideo> {
     /// <summary> 全屏播放功能 </summary>
     private void MediaPlayerFullScreen() {
         element.style.display = DisplayStyle.None;
-        ModuleCore.FullScreenVideoPanel.Open(() => {
-            mediaPlayer.Open();
-            element.style.display = DisplayStyle.Flex;
-        });
+        //ModuleCore.FullScreenVideoPanel.Open(() => {
+        //    mediaPlayer.Open();
+        //    element.style.display = DisplayStyle.Flex;
+        //});
     }
 }

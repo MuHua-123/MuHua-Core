@@ -8,7 +8,7 @@ public class UIFullScreenVideo : ModuleUIPanel<Action> {
     private Action callback;
     private MediaPlayer mediaPlayer;
     public override void Awake() {
-        ModuleCore.FullScreenVideoPanel = this;
+        //ModuleCore.FullScreenVideoPanel = this;
         InitElement();
         VisualElement media = element.Q<VisualElement>("MediaPlayer");
         mediaPlayer = new MediaPlayer(media, Close);

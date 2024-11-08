@@ -13,8 +13,8 @@ public class MediaPlayer {
     private Action fullAction;
 
     private ModuleCore Core => ModuleCore.I;
-    private ModuleVideo ModuleVideo => Core.ModuleVideo;
-    private RenderTexture RenderTexture => ModuleVideo.renderTexture;
+    //private ModuleVideo ModuleVideo => Core.ModuleVideo;
+    //private RenderTexture RenderTexture => ModuleVideo.renderTexture;
     private VisualElement VideoView => element.Q<VisualElement>("VideoView");
     private VisualElement VideoController => element.Q<VisualElement>("VideoController");
     private MUSliderHorizontal Slider => element.Q<MUSliderHorizontal>("Slider");
@@ -40,27 +40,27 @@ public class MediaPlayer {
         Slider.SlidingValueChanged += Slider_SlidingValueChanged;
     }
     private void Play_clicked() {
-        ModuleVideo.Play(); showTime = 5;
-        Play.style.display = DisplayStyle.None;
-        Pause.style.display = DisplayStyle.Flex;
-        Slider.MaxValue = ModuleVideo.frameCount;
+        //ModuleVideo.Play(); showTime = 5;
+        //Play.style.display = DisplayStyle.None;
+        //Pause.style.display = DisplayStyle.Flex;
+        //Slider.MaxValue = ModuleVideo.frameCount;
     }
     private void Pause_clicked() {
-        ModuleVideo.Pause();
-        Play.style.display = DisplayStyle.Flex;
-        Pause.style.display = DisplayStyle.None;
+        //ModuleVideo.Pause();
+        //Play.style.display = DisplayStyle.Flex;
+        //Pause.style.display = DisplayStyle.None;
     }
     private void FullScreen_clicked() {
         fullAction?.Invoke();
     }
     private void Slider_SlidingValueChanged(float obj) {
-        ModuleVideo.frame = (long)obj;
+        //ModuleVideo.frame = (long)obj;
     }
     public void Open() {
         element.style.visibility = Visibility.Visible;
         //设置渲染纹理
-        Background background = Background.FromRenderTexture(RenderTexture);
-        VideoView.style.backgroundImage = new StyleBackground(background);
+        //Background background = Background.FromRenderTexture(RenderTexture);
+        //VideoView.style.backgroundImage = new StyleBackground(background);
         //播放视频
         Play_clicked();
     }
@@ -73,10 +73,10 @@ public class MediaPlayer {
         Visibility visibility = showTime > 0 ? Visibility.Visible : Visibility.Hidden;
         VideoController.style.visibility = visibility;
 
-        if (!isDownSlider) { Slider.Value = ModuleVideo.frame; }
+        //if (!isDownSlider) { Slider.Value = ModuleVideo.frame; }
 
-        string clockTime = TimeSpan.FromSeconds(ModuleVideo.time).ToString(@"mm\:ss");
-        string length = TimeSpan.FromSeconds(ModuleVideo.maxTime).ToString(@"mm\:ss");
-        Time.text = clockTime + "/" + length;
+        //string clockTime = TimeSpan.FromSeconds(ModuleVideo.time).ToString(@"mm\:ss");
+        //string length = TimeSpan.FromSeconds(ModuleVideo.maxTime).ToString(@"mm\:ss");
+        //Time.text = clockTime + "/" + length;
     }
 }

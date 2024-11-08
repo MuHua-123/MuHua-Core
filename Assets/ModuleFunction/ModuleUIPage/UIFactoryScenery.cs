@@ -15,7 +15,7 @@ public class UIFactoryScenery : ModuleUIPage {
     private Button Button4 => root.Q<Button>("Button4");
     private MUFoldout Foldout => root.Q<MUFoldout>("MUFoldout");
     protected override void Awake() {
-        base.Awake();
+        ModuleCore.FunctionRegister(this);
         Button1.clicked += Button1_clicked;
         Button2.clicked += Button2_clicked;
         Button3.clicked += Button3_clicked;
@@ -32,7 +32,7 @@ public class UIFactoryScenery : ModuleUIPage {
         Debug.Log("地图导航");
     }
     private void Button4_clicked() {
-        ModuleCore.ModuleScene.LoadSceneAsync(returnScene);
+        //ModuleCore.ModuleScene.LoadSceneAsync(returnScene);
     }
     public void CreateUINavigationUnit(NavigationData data) {
         VisualElement element = NavigationUnitlAsset.Instantiate();
@@ -57,6 +57,6 @@ public class UINavigationUnit {
         Button.clicked += Button_clicked;
     }
     private void Button_clicked() {
-        ModuleCore.ModuleScene.LoadSceneAsync(value.scene);
+        //ModuleCore.ModuleScene.LoadSceneAsync(value.scene);
     }
 }

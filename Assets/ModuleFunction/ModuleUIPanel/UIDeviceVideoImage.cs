@@ -15,7 +15,7 @@ public class UIDeviceVideoImage : ModuleUIPanel<DataVideoImage> {
 
     public override void Awake() {
         //初始化模块
-        ModuleCore.VideoImagePanel = this;
+        //ModuleCore.VideoImagePanel = this;
         InitElement();
         //加载视频媒体ui
         VisualElement media = element.Q<VisualElement>("MediaPlayer");
@@ -29,7 +29,7 @@ public class UIDeviceVideoImage : ModuleUIPanel<DataVideoImage> {
     public override void Open(DataVideoImage data) {
         this.data = data;
         element.style.display = DisplayStyle.Flex;
-        ModuleCore.ModuleVideo.SetValue(data.dataVideo);
+        //ModuleCore.ModuleVideo.SetValue(data.dataVideo);
         Image.style.backgroundImage = new StyleBackground(data.sprite);
         Button2_clicked();
     }
@@ -45,10 +45,10 @@ public class UIDeviceVideoImage : ModuleUIPanel<DataVideoImage> {
     /// <summary> 全屏播放功能 </summary>
     private void MediaPlayerFullScreen() {
         element.style.display = DisplayStyle.None;
-        ModuleCore.FullScreenVideoPanel.Open(() => {
-            mediaPlayer.Open();
-            element.style.display = DisplayStyle.Flex;
-        });
+        //ModuleCore.FullScreenVideoPanel.Open(() => {
+        //    mediaPlayer.Open();
+        //    element.style.display = DisplayStyle.Flex;
+        //});
     }
     private void Button1_clicked() {
         mediaPlayer.Close();
