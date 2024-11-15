@@ -8,11 +8,10 @@
       "hash": "66f6e29184c1132a599627053454c1d97ebf751c"
     },
     "com.muhua.uicontrol": {
-      "version": "https://github.com/MuHua-123/MuHua-UIControl.git?path=Packages/UIControl",
+      "version": "file:UIControl",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "006cd0e3232a7561b7720a33010d78737689e26f"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.unity.collab-proxy": {
       "version": "2.5.2",

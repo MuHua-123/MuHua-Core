@@ -7,9 +7,9 @@ using UnityEngine.UIElements;
 public class UIPresetsPlateUnit {
     public Action Click;
     public readonly VisualElement element;
-    public readonly DataPresetsPlate data;
+    public readonly DataPlatePresets data;
     public Button Button => element.Q<Button>("Button");
-    public UIPresetsPlateUnit(VisualElement element, DataPresetsPlate data) {
+    public UIPresetsPlateUnit(VisualElement element, DataPlatePresets data) {
         this.data = data;
         this.element = element;
         Button.text = data.name;

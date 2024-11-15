@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// UI页面
+/// </summary>
 public abstract class ModuleUIPage : MonoBehaviour {
     public UIDocument document;
     /// <summary> 根目录文档 </summary>

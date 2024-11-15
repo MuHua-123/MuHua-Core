@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// UI窗口
+/// </summary>
+/// <typeparam name="Data">窗口需要的数据类型</typeparam>
 public abstract class ModuleUIWindow<Data> : MonoBehaviour {
     /// <summary> 绑定的页面 </summary>
     public ModuleUIPage ModuleUIPage;
