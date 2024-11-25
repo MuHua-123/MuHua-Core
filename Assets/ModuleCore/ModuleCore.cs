@@ -10,10 +10,12 @@ using MuHua;
 public class ModuleCore : Module<ModuleCore> {
 
     #region 资产模块
-    /// <summary> 板片资产 </summary>
+    /// <summary> 板片资源管理模块 </summary>
     public ModuleAssets<DataPlate> AssetsPlate;
     /// <summary> 预设板片资产 </summary>
     public ModuleAssets<DataPlatePresets> AssetsPlatePresets;
+    /// <summary> 轮廓渲染资源模块 </summary>
+    public ModuleAssets<Transform> AssetsOutline;
     #endregion
 
     #region 页面模块
@@ -32,50 +34,62 @@ public class ModuleCore : Module<ModuleCore> {
     public ModuleViewCamera ViewCameraBaking;
     #endregion
 
-    #region 广播模块
-    /// <summary> 广播板片数据模块 </summary>
-    public ModuleSending<DataPlate> SendingPlate;
-    /// <summary> 广播板片数据点模块 </summary>
-    public ModuleSending<DataPoint> SendingPoint;
-    /// <summary> 广播查询数据模块 </summary>
-    public ModuleSending<DataFindPoint> SendingFindPoint;
-    #endregion
-
     #region 输入模块
     /// <summary> 设计UI输入模块 </summary>
-    public ModuleUIInput<UIInputDesignUnit> UIInputDesign;
+    public ModuleUIInput<UnitMouseInput> UIInputDesign;
+    /// <summary> 烘焙UI输入模块 </summary>
+    public ModuleUIInput<UnitMouseInput> UIInputBaking;
     #endregion
 
     #region 转换模块
-    /// <summary> 预设板片转换板片 </summary>
+    /// <summary> 板片预设数据(DataPlatePresets) 转换 板片数据(DataPlate) </summary>
     public ModuleBuilder<DataPlatePresets, DataPlate> PlatePresetsToPlate;
-    /// <summary> 插入点数据转换板片上的点 </summary>
+    /// <summary> 板片数据(DataPlate) 转换 多边形数据(DataPolygon) </summary>
+    public ModuleBuilder<DataPlate, DataPolygon> PlateToPolygon;
+    /// <summary> 插入点(DataInsertPoint) 转换 点(DataPoint) </summary>
     public ModuleBuilder<DataInsertPoint, DataPoint> InsertPointToPoint;
     #endregion
 
     #region 可视模块
-    /// <summary> 板片可视化内容生成模块 </summary>
-    public ModuleVisual<DataPlate> VisualPlate;
-    /// <summary> 点可视化内容生成模块 </summary>
-    public ModuleVisual<DataPoint> VisualPoint;
-    /// <summary> 多边形可视化内容生成模块 </summary>
-    public ModuleVisual<DataPolygon> VisualPolygon;
+    /// <summary> 设计可视化内容生成模块 </summary>
+    public ModuleVisual<DataPlate> VisualDesign;
+    /// <summary> 烘焙可视化内容生成模块 </summary>
+    public ModuleVisual<DataPlate> VisualBaking;
+    /// <summary> 连接可视化内容生成模块 </summary>
+    public ModuleVisual<DataConnector> VisualConnector;
+    #endregion
+
+    #region 查询模块
+    /// <summary> 查询点模块 </summary>
+    public ModuleFind<DataPoint> FindPoint;
+    /// <summary> 查询边模块 </summary>
+    public ModuleFind<DataSide> FindSide;
+    /// <summary> 查询贝塞尔点模块 </summary>
+    public ModuleFind<DataBezier> FindBezier;
     #endregion
 
     #region 算法模块
+    /// <summary> 计算位置到边上最近的点 </summary>
+    public ModuleAlgorithm<DataIntersect> AlgorithmSidePoint;
+    /// <summary> 简单多边形算法模块 </summary>
+    public ModuleAlgorithm<DataPlate> AlgorithmSimplePolygon;
+    /// <summary> 细分多边形算法模块 </summary>
+    public ModuleAlgorithm<DataPlate> AlgorithmSubdivisionPolygon;
+    /// <summary> 缝合边算法模块 </summary>
+    public ModuleAlgorithm<DataSutureSide> AlgorithmSutureSide;
+    #endregion
 
-    /// <summary> 查询点算法模块 </summary>
-    public ModuleAlgorithm<DataFindPoint> AlgorithmFindPoint;
-    /// <summary> 查询贝塞尔点算法模块 </summary>
-    public ModuleAlgorithm<DataFindBezier> AlgorithmFindBezier;
+    #region 事件定义
+    /// <summary> 标记数据Event </summary>
+    public event Action<DataMark> OnMark;
+    /// <summary> 移动烘焙视图的板片Event </summary>
+    public event Action<DataPlate> OnBakingMobilePlate;
+    #endregion
 
-    /// <summary> 插入点算法模块 </summary>
-    public ModuleAlgorithm<DataInsertPoint> AlgorithmInsertPoint;
-
-    /// <summary> 多边形算法模块 </summary>
-    public ModuleAlgorithm<DataPlate> AlgorithmPolygon;
-    ///// <summary> 边缘排序算法模块 </summary>
-    //public ModuleAlgorithm<DataPlate> EdgeSort = new AlgorithmEdge();
-
+    #region 事件触发
+    /// <summary> 触发标记数据Event </summary>
+    public void Mark(DataMark data) => OnMark?.Invoke(data);
+    /// <summary> 触发移动烘焙视图的板片Event </summary>
+    public void BakingMobilePlate(DataPlate data) => OnBakingMobilePlate?.Invoke(data);
     #endregion
 }

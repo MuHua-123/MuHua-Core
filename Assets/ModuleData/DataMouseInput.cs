@@ -1,25 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
+/// <summary>
+/// 鼠标输入参数
+/// </summary>
 public class DataMouseInput {
-    public Vector3 ScreenPosition;
+    /// <summary> 鼠标输入参数 </summary>
+    public DataMouseInput() { }
+    /// <summary> 鼠标滚动量 </summary>
     public float ScrollWheel;
-    public DataMouseInput(MouseDownEvent evt) {
-        ScreenPosition = evt.localMousePosition;
-    }
-    public DataMouseInput(MouseMoveEvent evt) {
-        ScreenPosition = evt.localMousePosition;
-    }
-    public DataMouseInput(MouseUpEvent evt) {
-        ScreenPosition = evt.localMousePosition;
-    }
-    public DataMouseInput(MouseOutEvent evt) {
-        ScreenPosition = evt.localMousePosition;
-    }
-    public DataMouseInput(WheelEvent evt) {
-        ScreenPosition = evt.localMousePosition;
-        ScrollWheel = evt.delta.y;
-    }
+    /// <summary> 视图坐标 </summary>
+    public Vector3 ViewPosition;
+    /// <summary> 世界坐标 </summary>
+    public Vector3 WorldPosition;
+    /// <summary> 屏幕坐标 </summary>
+    public Vector3 ScreenPosition;
 }
