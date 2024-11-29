@@ -46,37 +46,37 @@ public class ModuleCore : Module<ModuleCore> {
     public ModuleBuilder<DataPlatePresets, DataPlate> PlatePresetsToPlate;
     /// <summary> 板片数据(DataPlate) 转换 多边形数据(DataPolygon) </summary>
     public ModuleBuilder<DataPlate, DataPolygon> PlateToPolygon;
-    /// <summary> 插入点(DataInsertPoint) 转换 点(DataPoint) </summary>
-    public ModuleBuilder<DataInsertPoint, DataPoint> InsertPointToPoint;
     #endregion
 
     #region 可视模块
-    /// <summary> 设计可视化内容生成模块 </summary>
-    public ModuleVisual<DataPlate> VisualDesign;
-    /// <summary> 烘焙可视化内容生成模块 </summary>
-    public ModuleVisual<DataPlate> VisualBaking;
-    /// <summary> 连接可视化内容生成模块 </summary>
+    /// <summary> 板片设计 可视化内容生成模块 </summary>
+    public ModuleVisual<DataPlate> VisualPlateDesign;
+    /// <summary> 板片烘焙 可视化内容生成模块 </summary>
+    public ModuleVisual<DataPlate> VisualPlateBaking;
+    /// <summary> 缝合设计 可视化内容生成模块 </summary>
+    public ModuleVisual<DataSuture> VisualSutureDesign;
+    /// <summary> 缝合烘焙 可视化内容生成模块 </summary>
+    public ModuleVisual<DataSuture> VisualSutureBaking;
+    /// <summary> 连接器 可视化内容生成模块 </summary>
     public ModuleVisual<DataConnector> VisualConnector;
     #endregion
 
     #region 查询模块
     /// <summary> 查询点模块 </summary>
-    public ModuleFind<DataPoint> FindPoint;
+    public ModuleFind<DataPlatePoint> FindPoint;
     /// <summary> 查询边模块 </summary>
-    public ModuleFind<DataSide> FindSide;
+    public ModuleFind<DataPlateSide> FindSide;
     /// <summary> 查询贝塞尔点模块 </summary>
     public ModuleFind<DataBezier> FindBezier;
     #endregion
 
     #region 算法模块
-    /// <summary> 计算位置到边上最近的点 </summary>
-    public ModuleAlgorithm<DataIntersect> AlgorithmSidePoint;
     /// <summary> 简单多边形算法模块 </summary>
     public ModuleAlgorithm<DataPlate> AlgorithmSimplePolygon;
     /// <summary> 细分多边形算法模块 </summary>
     public ModuleAlgorithm<DataPlate> AlgorithmSubdivisionPolygon;
     /// <summary> 缝合边算法模块 </summary>
-    public ModuleAlgorithm<DataSutureSide> AlgorithmSutureSide;
+    public ModuleAlgorithm<DataSuture> AlgorithmSuture;
     #endregion
 
     #region 事件定义

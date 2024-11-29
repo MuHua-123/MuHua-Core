@@ -12,10 +12,10 @@ public class PrefabPlateBaking : ModulePrefab<DataPlate> {
 
     public override void UpdateVisual(DataPlate plate) {
         this.plate = plate;
-        transform.localPosition = plate.bakingPosition;
-        transform.localEulerAngles = plate.bakingEulerAngles;
-
-        meshFilter.mesh = plate.designMesh;
-        meshCollider.sharedMesh = plate.designMesh;
+        DataPlateBaking baking = plate.dataBaking;
+        //transform.localPosition = baking.position;
+        //transform.localEulerAngles = baking.eulerAngles;
+        meshFilter.mesh = baking.mesh;
+        meshCollider.sharedMesh = baking.mesh;
     }
 }

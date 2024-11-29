@@ -6,7 +6,7 @@ public class DataBezier {
     /// <summary> 是否是a </summary>
     public bool isA;
     /// <summary> 关联的边 </summary>
-    public DataSide side;
+    public DataPlateSide side;
     /// <summary> 位置 </summary>
     public Vector3 position => isA ? side.aBezier : side.bBezier;
 

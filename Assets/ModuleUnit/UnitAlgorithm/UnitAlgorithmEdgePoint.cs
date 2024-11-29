@@ -35,7 +35,7 @@ public class UnitAlgorithmEdgePoint : UnitAlgorithm<DataPolygon> {
 
     #region 函数
     /// <summary> 二阶贝塞尔线段 </summary> 
-    public List<Vector3> CreateLine(DataPoint aPoint, DataPoint bPoint, Vector3 b, float smooth) {
+    public List<Vector3> CreateLine(DataPlatePoint aPoint, DataPlatePoint bPoint, Vector3 b, float smooth) {
         List<Vector3> points = new List<Vector3>();
         //方向，距离
         Vector2 direction = (bPoint.position - aPoint.position).normalized;
@@ -53,7 +53,7 @@ public class UnitAlgorithmEdgePoint : UnitAlgorithm<DataPolygon> {
         return points;
     }
     /// <summary> 三阶贝塞尔线段 </summary> 
-    public List<Vector3> CreateLine(DataPoint aPoint, DataPoint bPoint, float smooth) {
+    public List<Vector3> CreateLine(DataPlatePoint aPoint, DataPlatePoint bPoint, float smooth) {
         List<Vector3> points = new List<Vector3>();
         //方向，距离
         Vector2 direction = (bPoint.position - aPoint.position).normalized;

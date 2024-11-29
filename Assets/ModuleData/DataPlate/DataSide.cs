@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Bezier {
-    一阶 = 0, 二阶 = 1, 三阶 = 2
-}
+//public enum Bezier {
+//    一阶 = 0, 二阶 = 1, 三阶 = 2
+//}
 public class DataSide {
     /// <summary> 绑定的板片 </summary>
     public readonly DataPlate plate;

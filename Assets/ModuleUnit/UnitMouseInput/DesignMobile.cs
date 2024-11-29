@@ -11,7 +11,7 @@ public class DesignMobile : UnitMouseInput {
     private DataBezier bezier;
     private Vector3 mousePosition;
     private Vector3 originalPosition;
-    private ModulePrefab<DataPoint> prefabPoint;
+    private ModulePrefab<DataPlatePoint> prefabPoint;
     private ModulePrefab<DataPlate> prefabPlate;
 
     public override void MouseDown(DataMouseInput data) {
@@ -61,10 +61,10 @@ public class DesignMobile : UnitMouseInput {
     //板片
     private void RecordPlate(Vector3 screenPosition) {
         mousePosition = screenPosition;
-        originalPosition = prefabPlate.Value.designPosition;
+        originalPosition = prefabPlate.Value.dataDesign.position;
     }
     private void MobilePlate(Vector3 offset) {
-        prefabPlate.Value.designPosition = originalPosition + offset;
+        prefabPlate.Value.dataDesign.position = originalPosition + offset;
         prefabPlate.Value.UpdateVisual(false);
     }
     //相机

@@ -14,10 +14,12 @@ public class PrefabSutureBaking : ModulePrefab<DataSuture> {
     public override void UpdateVisual(DataSuture suture) {
         this.suture = suture;
 
-        aLineRenderer.SetPosition(0, suture.a.BakingPosintA);
-        aLineRenderer.SetPosition(1, suture.b.BakingPosintA);
+        DataSutureSideBaking aBaking = suture.a.dataBaking;
+        DataSutureSideBaking bBaking = suture.b.dataBaking;
+        aLineRenderer.SetPosition(0, aBaking.PointA);
+        aLineRenderer.SetPosition(1, bBaking.PointA);
 
-        bLineRenderer.SetPosition(0, suture.a.BakingPosintB);
-        bLineRenderer.SetPosition(1, suture.b.BakingPosintB);
+        bLineRenderer.SetPosition(0, aBaking.PointB);
+        bLineRenderer.SetPosition(1, bBaking.PointB);
     }
 }

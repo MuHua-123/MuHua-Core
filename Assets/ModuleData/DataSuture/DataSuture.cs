@@ -5,24 +5,33 @@ using UnityEngine;
 public class DataSuture {
     /// <summary> 核心模块 </summary>
     private ModuleCore ModuleCore => ModuleCore.I;
-    /// <summary> 简单多边形算法模块 </summary>
-    private ModuleAlgorithm<DataSutureSide> AlgorithmSutureSide => ModuleCore.AlgorithmSutureSide;
+    /// <summary> 设计可视化模块 </summary>
+    private ModuleVisual<DataSuture> VisualDesign => ModuleCore.VisualSutureDesign;
+    /// <summary> 烘焙可视化模块 </summary>
+    private ModuleVisual<DataSuture> VisualBaking => ModuleCore.VisualSutureBaking;
+    /// <summary> 缝合线算法模块 </summary>
+    private ModuleAlgorithm<DataSuture> AlgorithmSuture => ModuleCore.AlgorithmSuture;
 
     public readonly DataSutureSide a;
     public readonly DataSutureSide b;
-    public DataSuture(DataSide aSide, DataSide bSide) {
+    public DataSuture(DataPlateSide aSide, DataPlateSide bSide) {
         a = new DataSutureSide(aSide, this);
         b = new DataSutureSide(bSide, this);
-        Update();
+        UpdateVisual();
     }
 
-    public void Update() {
-        AlgorithmSutureSide.Compute(a);
-        AlgorithmSutureSide.Compute(b);
+    public void UpdateVisual() {
+        AlgorithmSuture.Compute(this);
+        VisualDesign.UpdateVisual(this);
+        VisualBaking.UpdateVisual(this);
     }
 
+    #region 次要数据
     /// <summary> 缝合长度 </summary>
-    public float length => this.SutureLength();
+    public float length;
+    /// <summary> 缝合点 </summary>
+    public List<DataSuturePoint> points;
+    #endregion
 
     #region 可视化内容
     /// <summary> 可视化内容 </summary>

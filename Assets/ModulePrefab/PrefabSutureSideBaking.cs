@@ -12,7 +12,8 @@ public class PrefabSutureSideBaking : ModulePrefab<DataSutureSide> {
     public override void UpdateVisual(DataSutureSide sutureSide) {
         this.sutureSide = sutureSide;
 
-        lineRenderer.positionCount = sutureSide.bakingPositions.Length;
-        lineRenderer.SetPositions(sutureSide.bakingPositions);
+        DataSutureSideBaking baking = sutureSide.dataBaking;
+        lineRenderer.positionCount = baking.positions.Length;
+        lineRenderer.SetPositions(baking.positions);
     }
 }

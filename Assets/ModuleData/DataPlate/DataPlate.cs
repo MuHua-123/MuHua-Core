@@ -7,18 +7,22 @@ public class DataPlate {
     /// <summary> 核心模块 </summary>
     private ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 设计可视化模块 </summary>
-    private ModuleVisual<DataPlate> VisualDesign => ModuleCore.VisualDesign;
+    private ModuleVisual<DataPlate> VisualDesign => ModuleCore.VisualPlateDesign;
     /// <summary> 烘焙可视化模块 </summary>
-    private ModuleVisual<DataPlate> VisualBaking => ModuleCore.VisualBaking;
+    private ModuleVisual<DataPlate> VisualBaking => ModuleCore.VisualPlateBaking;
     /// <summary> 简单多边形算法模块 </summary>
     private ModuleAlgorithm<DataPlate> AlgorithmSimplePolygon => ModuleCore.AlgorithmSimplePolygon;
     /// <summary> 细分多边形算法模块 </summary>
     private ModuleAlgorithm<DataPlate> AlgorithmSubdivisionPolygon => ModuleCore.AlgorithmSubdivisionPolygon;
 
+    public DataPlate() {
+        dataDesign = new DataPlateDesign(this);
+    }
+
     public void UpdateVisual(bool recalculate = true) {
         if (recalculate) {
             //简单多边形计算
-            //AlgorithmSimplePolygon.Compute(this);
+            AlgorithmSimplePolygon.Compute(this);
             //细分多边形计算
             AlgorithmSubdivisionPolygon.Compute(this);
         }
@@ -29,42 +33,55 @@ public class DataPlate {
     }
 
     #region 核心数据
-    /// <summary> 边缘平滑度 </summary>
-    public float smooth = 0.01f;
-    /// <summary> 板片设计视图的位置(本地坐标系) </summary>
-    public Vector3 designPosition;
-    /// <summary> 板片烘焙视图的位置(本地坐标系) </summary>
-    public Vector3 bakingPosition;
-    /// <summary> 板片烘焙视图的旋转(本地坐标系) </summary>
-    public Vector3 bakingEulerAngles;
     /// <summary> 点 </summary>
-    public List<DataPoint> points = new List<DataPoint>();
+    public List<DataPlatePoint> platePoints = new List<DataPlatePoint>();
     /// <summary> 边 </summary>
-    public List<DataSide> sides = new List<DataSide>();
+    public List<DataPlateSide> plateSides = new List<DataPlateSide>();
     #endregion
 
     #region 次要数据
-    /// <summary> 边界数据 </summary>
-    public DataBorder border;
-    /// <summary> 边缘点 </summary>
-    public List<Vector3> edgePoints;
-    /// <summary> 设计网格 </summary>
-    public Mesh designMesh;
-    
-    /// <summary> 三角形数据 </summary>
-    public List<DataTriangle> triangles;
-
-    /// <summary> 顶点网格 </summary>
-    public GridTool<DataVertex> vertexGrid;
+    /// <summary> 设计缓存数据 </summary>
+    public DataPlateDesign dataDesign;
+    /// <summary> 烘焙缓存数据 </summary>
+    public DataPlateBaking dataBaking = new DataPlateBaking();
     #endregion
 
     #region 可视化数据
     /// <summary> 可视化对象 </summary>
-    public ModulePrefab<DataPlate> design;
+    public ModulePrefab<DataPlate> designPrefab;
     /// <summary> 可视化对象 </summary>
-    public ModulePrefab<DataPlate> baking;
+    public ModulePrefab<DataPlate> bakingPrefab;
     /// <summary> 安排点 </summary>
     public FixedArrange arrange;
     #endregion
 
+}
+/// <summary> 设计缓存数据 </summary>
+public class DataPlateDesign {
+    /// <summary> 板片 </summary>
+    public readonly DataPlate plate;
+    /// <summary> 设计缓存数据 </summary>
+    public DataPlateDesign(DataPlate plate) => this.plate = plate;
+
+    /// <summary> 板片的位置 </summary>
+    public Vector3 position;
+    /// <summary> 网格 </summary>
+    public Mesh mesh;
+    /// <summary> 边缘点 </summary>
+    public Vector3[] points;
+    /// <summary> 三角形数据 </summary>
+    public List<DataTriangle> triangles;
+}
+/// <summary> 烘焙缓存数据 </summary>
+public class DataPlateBaking {
+    /// <summary> 网格 </summary>
+    public Mesh mesh;
+    /// <summary> 板片的位置 </summary>
+    public Vector3 position;
+    /// <summary> 板片的旋转 </summary>
+    public Vector3 eulerAngles;
+    /// <summary> 边界数据 </summary>
+    public DataBorder border;
+    /// <summary> 全部顶点 </summary>
+    public DataPlateVertex[] vertexs;
 }

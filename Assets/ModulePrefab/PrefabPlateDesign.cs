@@ -12,9 +12,10 @@ public class PrefabPlateDesign : ModulePrefab<DataPlate> {
 
     public override void UpdateVisual(DataPlate plate) {
         this.plate = plate;
-        transform.localPosition = plate.designPosition;
-        meshFilter.mesh = plate.designMesh;
-        meshCollider.sharedMesh = plate.designMesh;
+        DataPlateDesign design = plate.dataDesign;
+        transform.localPosition = design.position;
+        meshFilter.mesh = design.mesh;
+        meshCollider.sharedMesh = design.mesh;
     }
 
 }

@@ -17,15 +17,15 @@ public class BakingMobilePlate : UnitMouseInput {
         if (!ViewCamera.ScreenToWorldObject(data.ScreenPosition, out platePrefab)) { return; }
         mousePosition = data.ScreenPosition;
         originalPosition = platePrefab.transform.localPosition;
-        platePrefab.Value.bakingPosition = originalPosition;
+        platePrefab.Value.dataBaking.position = originalPosition;
         ModuleCore.BakingMobilePlate(platePrefab.Value);
     }
     public override void MouseDrag(DataMouseInput data) {
         if (platePrefab == null) { return; }
         if (ViewCamera.ScreenToWorldObjectParent(data.ScreenPosition, out arrange, Arrange)) {
             platePrefab.Value.arrange = arrange;
-            platePrefab.Value.bakingPosition = arrange.transform.localPosition;
-            platePrefab.Value.bakingEulerAngles = arrange.transform.localEulerAngles;
+            platePrefab.Value.dataBaking.position = arrange.transform.localPosition;
+            platePrefab.Value.dataBaking.eulerAngles = arrange.transform.localEulerAngles;
         }
         else { Mobile(data.WorldPosition); }
         platePrefab.Value.UpdateVisual(false);
@@ -41,6 +41,6 @@ public class BakingMobilePlate : UnitMouseInput {
         Vector3 offset = current - original;
         Vector3 up = ViewCamera.Up * offset.y;
         Vector3 right = ViewCamera.Right * offset.x;
-        platePrefab.Value.bakingPosition = originalPosition - up - right;
+        platePrefab.Value.dataBaking.position = originalPosition - up - right;
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 多边形耳切法
 /// </summary>
-public class UnitAlgorithmEarCutting : UnitAlgorithm<DataPlate> {
+public class UnitAlgorithmEarCutting : UnitAlgorithm<DataPlateDesign> {
     /// <summary> 多边形耳切法 </summary>
     public UnitAlgorithmEarCutting() { }
 
@@ -17,27 +17,27 @@ public class UnitAlgorithmEarCutting : UnitAlgorithm<DataPlate> {
         public Vector3 cPoint;//+1
     }
 
-    public void Compute(DataPlate data) {
-        List<Vector3> points = new List<Vector3>(data.edgePoints);
+    public void Compute(DataPlateDesign plateDesign) {
+        List<Vector3> points = new List<Vector3>(plateDesign.points);
         //判断散列点排序方向
-        Vector3[] allArray = points.ToArray();
-        bool isClockWise = IsClockWise(allArray);
+        Vector3[] allPoints = plateDesign.points;
+        bool isClockWise = IsClockWise(allPoints);
         //耳切法生成三角形
         List<DataTriangle> triangles = new List<DataTriangle>();
-        ComputeAuriculare(triangles, points, allArray, isClockWise);
-        data.triangles = triangles;
+        ComputeAuriculare(triangles, points, allPoints, isClockWise);
+        plateDesign.triangles = triangles;
     }
 
     #region 函数
     /// <summary> 循环计算有效的耳点 </summary>
-    public static void ComputeAuriculare(List<DataTriangle> triangles, List<Vector3> edgePoints, Vector3[] allArray, bool isClockWise) {
-        List<DataTriangle> temp = ComputeAuriculare(edgePoints, allArray, isClockWise);
+    public static void ComputeAuriculare(List<DataTriangle> triangles, List<Vector3> edgePoints, Vector3[] allPoints, bool isClockWise) {
+        List<DataTriangle> temp = ComputeAuriculare(edgePoints, allPoints, isClockWise);
         if (temp.Count == 0) { return; }
         triangles.AddRange(temp);
-        ComputeAuriculare(triangles, edgePoints, allArray, isClockWise);
+        ComputeAuriculare(triangles, edgePoints, allPoints, isClockWise);
     }
     /// <summary> 计算一个有效的耳点 </summary>
-    public static List<DataTriangle> ComputeAuriculare(List<Vector3> edgePoints, Vector3[] allArray, bool isClockWise) {
+    public static List<DataTriangle> ComputeAuriculare(List<Vector3> edgePoints, Vector3[] allPoints, bool isClockWise) {
         Vector3[] array = edgePoints.ToArray();
         List<DataTriangle> polygons = new List<DataTriangle>();
         for (int i = 0; i < array.Length; i++) {
@@ -45,7 +45,7 @@ public class UnitAlgorithmEarCutting : UnitAlgorithm<DataPlate> {
             // 等于180，大于180，不可能为耳点
             if (!GetAngleType(auriculare, isClockWise)) { continue; }
             // 包含其他点，不可能为耳点
-            if (IsInsideTriangle(auriculare, allArray)) { continue; }
+            if (IsInsideTriangle(auriculare, allPoints)) { continue; }
             // 包含其他耳点，不可能成为耳点
             if (!IsInsideAuriculare(auriculare, edgePoints)) { continue; }
             edgePoints.Remove(auriculare.aPoint);

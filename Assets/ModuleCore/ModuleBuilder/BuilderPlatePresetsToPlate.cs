@@ -11,24 +11,24 @@ public class BuilderPlatePresetsToPlate : ModuleBuilder<DataPlatePresets, DataPl
 
     public override DataPlate To(DataPlatePresets origin) {
         DataPlate dataPlate = new DataPlate();
-        dataPlate.points = ToDataPoint(dataPlate, origin.designPoints);
-        dataPlate.sides = ToDataSide(dataPlate, dataPlate.points);
+        dataPlate.platePoints = ToDataPoint(dataPlate, origin.designPoints);
+        dataPlate.plateSides = ToDataSide(dataPlate, dataPlate.platePoints);
         return dataPlate;
     }
 
-    private List<DataPoint> ToDataPoint(DataPlate dataPlate, List<Vector3> list) {
-        List<DataPoint> points = new List<DataPoint>();
+    private List<DataPlatePoint> ToDataPoint(DataPlate dataPlate, List<Vector3> list) {
+        List<DataPlatePoint> points = new List<DataPlatePoint>();
         for (int i = 0; i < list.Count; i++) {
-            DataPoint point = new DataPoint(dataPlate);
+            DataPlatePoint point = new DataPlatePoint(dataPlate);
             point.position = list[i];
             points.Add(point);
         }
         return points;
     }
-    private List<DataSide> ToDataSide(DataPlate dataPlate, List<DataPoint> list) {
-        List<DataSide> sides = new List<DataSide>();
+    private List<DataPlateSide> ToDataSide(DataPlate dataPlate, List<DataPlatePoint> list) {
+        List<DataPlateSide> sides = new List<DataPlateSide>();
         for (int i = 0; i < list.Count; i++) {
-            DataSide side = new DataSide(dataPlate);
+            DataPlateSide side = new DataPlateSide(dataPlate);
             side.aPoint = list.LoopIndex(i + 0);
             side.bPoint = list.LoopIndex(i + 1);
             side.OneRankBezier();

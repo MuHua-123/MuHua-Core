@@ -12,7 +12,8 @@ public class PrefabSutureSideDesign : ModulePrefab<DataSutureSide> {
     public override void UpdateVisual(DataSutureSide sutureSide) {
         this.sutureSide = sutureSide;
 
-        lineRenderer.positionCount = sutureSide.designPositions.Length;
-        lineRenderer.SetPositions(sutureSide.designPositions);
+        DataSutureSideDesign design = sutureSide.dataDesign;
+        lineRenderer.positionCount = design.positions.Length;
+        lineRenderer.SetPositions(design.positions);
     }
 }

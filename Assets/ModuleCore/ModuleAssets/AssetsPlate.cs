@@ -17,14 +17,14 @@ public class AssetsPlate : ModuleAssets<DataPlate> {
 
     protected override void Awake() => ModuleCore.AssetsPlate = this;
 
-    public override void Add(DataPlate data) {
-        if (dataPlates.Contains(data)) { return; }
-        dataPlates.Add(data);
+    public override void Add(DataPlate plate) {
+        if (dataPlates.Contains(plate)) { return; }
+        dataPlates.Add(plate);
         //初始化参数
-        data.designPosition = ViewCameraDesign.CameraPosition;
-        data.bakingPosition = ViewCameraDesign.CameraPosition;
+        plate.dataDesign.position = ViewCameraDesign.CameraPosition;
+        plate.dataBaking.position = ViewCameraDesign.CameraPosition;
         //生成可视化内容
-        data.UpdateVisual();
+        plate.UpdateVisual();
     }
     public override void Remove(DataPlate data) {
         if (!dataPlates.Contains(data)) { return; }

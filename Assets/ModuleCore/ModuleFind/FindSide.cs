@@ -5,17 +5,17 @@ using UnityEngine;
 /// <summary>
 /// 查找边
 /// </summary>
-public class FindSide : ModuleFind<DataSide> {
-    public readonly float FindRange = 0.01f; 
+public class FindSide : ModuleFind<DataPlateSide> {
+    public readonly float FindRange = 0.01f;
     /// <summary> 板片资产 </summary>
     public ModuleAssets<DataPlate> AssetsPlate => ModuleCore.AssetsPlate;
 
     protected override void Awake() => ModuleCore.FindSide = this;
 
-    public override bool Find(Vector3 position, out DataSide side) {
+    public override bool Find(Vector3 position, out DataPlateSide side) {
         List<DataPlate> plates = AssetsPlate.Datas;
         for (int i = 0; i < plates.Count; i++) {
-            Vector3 localPosition = position - plates[i].designPosition;
+            Vector3 localPosition = position - plates[i].dataDesign.position;
             side = Find(plates[i], localPosition);
             if (side != null) { return true; }
         }
@@ -23,20 +23,20 @@ public class FindSide : ModuleFind<DataSide> {
     }
 
     /// <summary> 查询匹配的边 </summary>
-    private DataSide Find(DataPlate plate, Vector3 localPosition) {
-        for (int i = 0; i < plate.sides.Count; i++) {
-            DataSide side = Find(plate.sides[i], localPosition);
+    private DataPlateSide Find(DataPlate plate, Vector3 localPosition) {
+        for (int i = 0; i < plate.plateSides.Count; i++) {
+            DataPlateSide side = Find(plate.plateSides[i], localPosition);
             if (side != null) { return side; }
         }
         return null;
     }
     /// <summary> 查询匹配的边 </summary>
-    private DataSide Find(DataSide side, Vector3 localPosition) {
-        for (int i = 0; i < side.lines.Length; i++) {
-            Vector3 a = side.lines[i].a;
-            Vector3 b = side.lines[i].b;
+    private DataPlateSide Find(DataPlateSide side, Vector3 localPosition) {
+        DataPlateSideDesign design = side.dataDesign;
+        for (int i = 0; i < design.lines.Length; i++) {
+            Vector3 a = design.lines[i].a;
+            Vector3 b = design.lines[i].b;
             float distance = ProjectDistance(a, b, localPosition);
-            //Debug.Log($"{a} , {b} , {localPosition}");
             if (distance < FindRange) { return side; }
         }
         return null;

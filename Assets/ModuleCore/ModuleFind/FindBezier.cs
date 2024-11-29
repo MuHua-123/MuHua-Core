@@ -15,7 +15,7 @@ public class FindBezier : ModuleFind<DataBezier> {
     public override bool Find(Vector3 position, out DataBezier bezier) {
         List<DataPlate> plates = AssetsPlate.Datas;
         for (int i = 0; i < plates.Count; i++) {
-            Vector3 localPosition = position - plates[i].designPosition;
+            Vector3 localPosition = position - plates[i].dataDesign.position;
             bezier = Find(plates[i], localPosition);
             if (bezier != null) { return true; }
         }
@@ -24,14 +24,14 @@ public class FindBezier : ModuleFind<DataBezier> {
 
     /// <summary> 查询匹配的边 </summary>
     private DataBezier Find(DataPlate plate, Vector3 localPosition) {
-        for (int i = 0; i < plate.sides.Count; i++) {
-            DataBezier bezier = Find(plate.sides[i], localPosition);
+        for (int i = 0; i < plate.plateSides.Count; i++) {
+            DataBezier bezier = Find(plate.plateSides[i], localPosition);
             if (bezier != null) { return bezier; }
         }
         return null;
     }
     /// <summary> 查询匹配的边 </summary>
-    private DataBezier Find(DataSide side, Vector3 localPosition) {
+    private DataBezier Find(DataPlateSide side, Vector3 localPosition) {
         if (side.bezier == Bezier.一阶) { return null; }
         float aDis = Vector3.Distance(side.aBezier, localPosition);
         if (aDis < FindRange) { return new DataBezier() { isA = true, side = side }; }

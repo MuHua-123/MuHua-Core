@@ -3,6 +3,7 @@
     "com.muhua.tools": "https://github.com/MuHua-123/MuHua-Tools.git?path=Packages/Tools",
     "com.muhua.uicontrol": "https://github.com/MuHua-123/MuHua-UIControl.git?path=Packages/UIControl",
     "com.unity.collab-proxy": "2.5.2",
+    "com.unity.collections": "1.2.4",
     "com.unity.feature.development": "1.0.1",
     "com.unity.render-pipelines.universal": "14.0.11",
     "com.unity.textmeshpro": "3.0.6",

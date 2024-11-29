@@ -3,20 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrefabSide : ModulePrefab<DataSide> {
+public class PrefabSide : ModulePrefab<DataPlateSide> {
     public Transform aPoint;
     public Transform bPoint;
     public LineRenderer lineRenderer;
     public LineRenderer aBezier;
     public LineRenderer bBezier;
-    private DataSide side;
+    private DataPlateSide side;
 
     #region 引用模块
     /// <summary> 设计UI输入模块 </summary>
     public ModuleUIInput<UnitMouseInput> UIInputDesign => ModuleCore.I.UIInputDesign;
     #endregion
 
-    public override DataSide Value => side;
+    public override DataPlateSide Value => side;
 
     private void Awake() {
         UIInputDesign.OnChangeInput += UIInputDesign_OnChangeInput;
@@ -34,11 +34,12 @@ public class PrefabSide : ModulePrefab<DataSide> {
         aBezier.gameObject.SetActive(false);
         bBezier.gameObject.SetActive(false);
     }
-    public override void UpdateVisual(DataSide side) {
+    public override void UpdateVisual(DataPlateSide side) {
         this.side = side;
 
-        lineRenderer.positionCount = side.positions.Length;
-        lineRenderer.SetPositions(side.positions);
+        DataPlateSideDesign design = side.dataDesign;
+        lineRenderer.positionCount = design.positions.Length;
+        lineRenderer.SetPositions(design.positions);
 
         Type type = UIInputDesign.Current.GetType();
         if (type != typeof(DesignBezier)) { ActiveGameObject(false); return; }
