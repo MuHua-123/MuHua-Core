@@ -1,4 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI%20Toolkit/UIWindow/PresetsPlate/PresetsPlate.uss?fileID=7433441132597879392&amp;guid=56954ee7ad04e0544988b1d2b52f7a77&amp;type=3#PresetsPlate" />
-    <ui:Button text="Button" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button" class="pp-button" />
-</ui:UXML>

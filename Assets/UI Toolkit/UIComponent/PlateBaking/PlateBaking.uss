@@ -1,9 +1,0 @@
-.pb-button {
-    height: 30px;
-    background-color: rgb(204, 204, 204);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
-    margin-top: 2px;
-}

@@ -17,7 +17,7 @@ public abstract class ModuleAssets<Data> : MonoBehaviour {
     public abstract int Count { get; }
     /// <summary> 数据列表 </summary>
     public abstract List<Data> Datas { get; }
-    
+
     /// <summary> 添加数据 </summary>
     public abstract void Add(Data data);
     /// <summary> 删除数据 </summary>
