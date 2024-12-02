@@ -12,8 +12,8 @@ public class UnitAlgorithmBakingVertex : UnitAlgorithm<DataPlateBaking> {
     public UnitAlgorithmBakingVertex() { }
 
     public void Compute(DataPlateBaking plateBaking) {
-        DataBorder border = plateBaking.border;
-        Vector3[] points = border.points;
+        //DataBorder border = plateBaking.border;
+        //Vector3[] points = border.points;
 
         //计算内部顶点
         //plateBaking.grid = new GridTool<DataPlateVertex>(border.GridWide, border.GridHigh, (x, y) => {
@@ -80,7 +80,7 @@ public class UnitAlgorithmBakingVertex : UnitAlgorithm<DataPlateBaking> {
         int vertexY = Mathf.FloorToInt(position.y / smooth);
         //填充数据
         DataPlateVertex vertex = grid.Get(vertexX, vertexY);
-        vertex.isValid = true;
+        //vertex.isValid = true;
         vertex.position = IntersectPoint;
         return vertex;
     }

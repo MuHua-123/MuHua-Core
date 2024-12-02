@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UIComponent/Inspect/Inspect.uss?fileID=7433441132597879392&amp;guid=37b4de13d0d203a44857fd3294b90ee9&amp;type=3#Inspect" />
+    <Style src="project://database/Assets/UI%20Toolkit/UIComponent/Inspect/Toggle.uss?fileID=7433441132597879392&amp;guid=794311ddf823bb84ba4458e715823ccb&amp;type=3#Toggle" />
+    <ui:VisualElement name="PlateSettings" style="display: none;">
+        <ui:Label tabindex="-1" text="板片" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-item" style="-unity-text-align: middle-center;" />
+        <ui:VisualElement class="inspect-item" style="align-items: center; justify-content: center;">
+            <ui:Label tabindex="-1" text="重新计算多边形" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-button" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="PointSettings" style="display: none;">
+        <ui:Label tabindex="-1" text="点" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-item" style="-unity-text-align: middle-center;" />
+        <ui:VisualElement name="Bezier" class="inspect-item" style="align-items: center; justify-content: center;">
+            <ui:Label tabindex="-1" text="贝塞尔曲线" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-label" style="-unity-text-align: middle-center;" />
+            <MuHua.MUToggle name="Toggle1" />
+            <ui:Label tabindex="-1" text="前" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-label" style="-unity-text-align: middle-center;" />
+            <MuHua.MUToggle name="Toggle2" />
+            <ui:Label tabindex="-1" text="后" parse-escape-sequences="true" display-tooltip-when-elided="true" class="inspect-label" style="-unity-text-align: middle-center;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

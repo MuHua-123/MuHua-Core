@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MuHua;
 
 /// <summary>
 /// 核心模块，实现业务逻辑
@@ -48,6 +47,11 @@ public class ModuleCore : Module<ModuleCore> {
     public ModuleBuilder<DataPlate, DataPolygon> PlateToPolygon;
     #endregion
 
+    #region 独立模块
+    /// <summary> 独立模块 安排点 </summary>
+    public ModuleSingle<DataMouseInput> SingleArrangePoint;
+    #endregion
+
     #region 可视模块
     /// <summary> 板片设计 可视化内容生成模块 </summary>
     public ModuleVisual<DataPlate> VisualPlateDesign;
@@ -75,6 +79,8 @@ public class ModuleCore : Module<ModuleCore> {
     public ModuleAlgorithm<DataPlate> AlgorithmSimplePolygon;
     /// <summary> 细分多边形算法模块 </summary>
     public ModuleAlgorithm<DataPlate> AlgorithmSubdivisionPolygon;
+    /// <summary> 烘焙多边形网格 </summary>
+    public ModuleAlgorithm<DataPlateBaking> AlgorithmBakingPolygon;
     /// <summary> 缝合边算法模块 </summary>
     public ModuleAlgorithm<DataSuture> AlgorithmSuture;
     #endregion

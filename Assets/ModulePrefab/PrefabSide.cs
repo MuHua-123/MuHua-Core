@@ -11,10 +11,8 @@ public class PrefabSide : ModulePrefab<DataPlateSide> {
     public LineRenderer bBezier;
     private DataPlateSide side;
 
-    #region 引用模块
     /// <summary> 设计UI输入模块 </summary>
     public ModuleUIInput<UnitMouseInput> UIInputDesign => ModuleCore.I.UIInputDesign;
-    #endregion
 
     public override DataPlateSide Value => side;
 

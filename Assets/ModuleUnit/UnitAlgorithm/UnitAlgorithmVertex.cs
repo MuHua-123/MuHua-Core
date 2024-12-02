@@ -22,8 +22,8 @@ public class UnitAlgorithmVertex : UnitAlgorithm<DataPlateBaking> {
     }
 
     public void Compute(DataPlateBaking plateBaking) {
-        DataBorder border = plateBaking.border;
-        Vector3[] points = border.points;
+        //DataBorder border = plateBaking.border;
+        //Vector3[] points = border.points;
 
         //计算内部顶点
         //plateBaking.grid = new GridTool<DataPlateVertex>(border.GridWide, border.GridHigh, (x, y) => {
@@ -41,55 +41,55 @@ public class UnitAlgorithmVertex : UnitAlgorithm<DataPlateBaking> {
         //}
     }
 
-    private void SubdivideSideVertex(DataPlateBaking plateBaking, DataPlateSide plateSides) {
-        DataBorder border = plateBaking.border;
-        DataPlateLine[] lines = plateSides.dataBaking.lines;
-        //计算水平线段顶点
-        List<SideVertex> sideVertexs = new List<SideVertex>();
-        for (int x = 0; x < border.GridWide; x++) {
-            Vector3 a = new Vector3(border.minX + x * border.smooth, border.minY - 1);
-            Vector3 b = new Vector3(border.minX + x * border.smooth, border.maxY + 1);
-            for (int i = 0; i < lines.Length; i++) {
-                if (!TryGetIntersectPoint(a, b, lines[i].a, lines[i].b, out Vector3 IntersectPoint)) { continue; }
-                float distance = Vector3.Distance(lines[i].a, IntersectPoint) + lines[i].origin;
-                SideVertex sideVertex = new SideVertex();
-                sideVertex.distance = distance;
-                sideVertex.position = IntersectPoint;
-                sideVertexs.Add(sideVertex);
-            }
-        }
-        //计算垂直线段顶点
-        for (int y = 0; y < border.GridHigh; y++) {
-            Vector3 a = new Vector3(border.minX - 1, border.minY + y * border.smooth);
-            Vector3 b = new Vector3(border.maxX + 1, border.minY + y * border.smooth);
-            for (int i = 0; i < lines.Length; i++) {
-                if (!TryGetIntersectPoint(a, b, lines[i].a, lines[i].b, out Vector3 IntersectPoint)) { continue; }
-                float distance = Vector3.Distance(lines[i].a, IntersectPoint) + lines[i].origin;
-                SideVertex sideVertex = new SideVertex();
-                sideVertex.distance = distance;
-                sideVertex.position = IntersectPoint;
-                sideVertexs.Add(sideVertex);
-            }
-        }
-        //排序
-        sideVertexs.Sort();
-        //写入网格，写入顶点
-        Vector3 offset = border.MinPoint - new Vector3(border.smooth, border.smooth, 0) * 0.3f;
-        List<DataPlateVertex> vertexs = new List<DataPlateVertex>();
-        for (int i = 0; i < sideVertexs.Count; i++) {
-            Vector3 position = sideVertexs[i].position;
-            Vector3 gridPosition = position - offset;
-            int vertexX = Mathf.FloorToInt(gridPosition.x / border.smooth);
-            int vertexY = Mathf.FloorToInt(gridPosition.y / border.smooth);
-            //填充数据
-            //DataPlateVertex vertex = plateBaking.grid.Get(vertexX, vertexY);
-            //vertex.isValid = true;
-            //vertex.position = position;
-            ////写入顶点
-            //vertexs.Add(vertex);
-        }
-        plateSides.dataBaking.vertexs = vertexs.ToArray();
-    }
+    //private void SubdivideSideVertex(DataPlateBaking plateBaking, DataPlateSide plateSides) {
+    //    DataBorder border = plateBaking.border;
+    //    DataPlateLine[] lines = plateSides.dataBaking.lines;
+    //    //计算水平线段顶点
+    //    List<SideVertex> sideVertexs = new List<SideVertex>();
+    //    for (int x = 0; x < border.GridWide; x++) {
+    //        Vector3 a = new Vector3(border.minX + x * border.smooth, border.minY - 1);
+    //        Vector3 b = new Vector3(border.minX + x * border.smooth, border.maxY + 1);
+    //        for (int i = 0; i < lines.Length; i++) {
+    //            if (!TryGetIntersectPoint(a, b, lines[i].a, lines[i].b, out Vector3 IntersectPoint)) { continue; }
+    //            float distance = Vector3.Distance(lines[i].a, IntersectPoint) + lines[i].origin;
+    //            SideVertex sideVertex = new SideVertex();
+    //            sideVertex.distance = distance;
+    //            sideVertex.position = IntersectPoint;
+    //            sideVertexs.Add(sideVertex);
+    //        }
+    //    }
+    //    //计算垂直线段顶点
+    //    for (int y = 0; y < border.GridHigh; y++) {
+    //        Vector3 a = new Vector3(border.minX - 1, border.minY + y * border.smooth);
+    //        Vector3 b = new Vector3(border.maxX + 1, border.minY + y * border.smooth);
+    //        for (int i = 0; i < lines.Length; i++) {
+    //            if (!TryGetIntersectPoint(a, b, lines[i].a, lines[i].b, out Vector3 IntersectPoint)) { continue; }
+    //            float distance = Vector3.Distance(lines[i].a, IntersectPoint) + lines[i].origin;
+    //            SideVertex sideVertex = new SideVertex();
+    //            sideVertex.distance = distance;
+    //            sideVertex.position = IntersectPoint;
+    //            sideVertexs.Add(sideVertex);
+    //        }
+    //    }
+    //    //排序
+    //    sideVertexs.Sort();
+    //    //写入网格，写入顶点
+    //    Vector3 offset = border.MinPoint - new Vector3(border.smooth, border.smooth, 0) * 0.3f;
+    //    List<DataPlateVertex> vertexs = new List<DataPlateVertex>();
+    //    for (int i = 0; i < sideVertexs.Count; i++) {
+    //        Vector3 position = sideVertexs[i].position;
+    //        Vector3 gridPosition = position - offset;
+    //        int vertexX = Mathf.FloorToInt(gridPosition.x / border.smooth);
+    //        int vertexY = Mathf.FloorToInt(gridPosition.y / border.smooth);
+    //        //填充数据
+    //        //DataPlateVertex vertex = plateBaking.grid.Get(vertexX, vertexY);
+    //        //vertex.isValid = true;
+    //        //vertex.position = position;
+    //        ////写入顶点
+    //        //vertexs.Add(vertex);
+    //    }
+    //    plateSides.dataBaking.vertexs = vertexs.ToArray();
+    //}
 
     /// <summary> 转角法查询位置是否在板片内 </summary>
     public static bool FindPlateInside(Vector3[] points, Vector3 position) {

@@ -14,6 +14,8 @@ public class DataPlate {
     private ModuleAlgorithm<DataPlate> AlgorithmSimplePolygon => ModuleCore.AlgorithmSimplePolygon;
     /// <summary> 细分多边形算法模块 </summary>
     private ModuleAlgorithm<DataPlate> AlgorithmSubdivisionPolygon => ModuleCore.AlgorithmSubdivisionPolygon;
+    /// <summary> 烘焙多边形网格 </summary>
+    public ModuleAlgorithm<DataPlateBaking> AlgorithmBakingPolygon => ModuleCore.AlgorithmBakingPolygon;
 
     public DataPlate() {
         dataDesign = new DataPlateDesign(this);
@@ -26,6 +28,8 @@ public class DataPlate {
             //细分多边形计算
             AlgorithmSubdivisionPolygon.Compute(this);
         }
+        //烘焙多边形网格
+        AlgorithmBakingPolygon.Compute(dataBaking);
         //生成可视化内容
         VisualDesign.UpdateVisual(this);
         //生成烘焙内容
@@ -80,8 +84,10 @@ public class DataPlateBaking {
     public Vector3 position;
     /// <summary> 板片的旋转 </summary>
     public Vector3 eulerAngles;
-    /// <summary> 边界数据 </summary>
-    public DataBorder border;
     /// <summary> 全部顶点 </summary>
-    public DataPlateVertex[] vertexs;
+    public DataPlateVertex[] vertices;
+    /// <summary> UV </summary>
+    public Vector2[] uv;
+    /// <summary> 三角形 </summary>
+    public int[] triangles;
 }

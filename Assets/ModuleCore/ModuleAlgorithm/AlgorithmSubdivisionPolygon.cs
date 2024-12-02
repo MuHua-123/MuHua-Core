@@ -11,33 +11,66 @@ using UnityEngine;
 /// 细分多边形算法
 /// </summary>
 public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
-    private static readonly float Subdivide = 0.1f;
-    private UnitAlgorithm<Polygon> bezierPolygonSide = new BezierPolygonSide();
-
-    private UnitAlgorithm<DataPlate> Boundary = new PolygonalBoundary();
-    private UnitAlgorithm<DataPlate> Vertex = new VertexSubdivision();
-    //private UnitAlgorithm<DataPlate> sideVertex = new SideSubdivision();
-    private UnitAlgorithm<DataPlate> Triangle = new DrawTriangle();
-
+    private static readonly float Subdivide = 0.01f;
+    private UnitAlgorithm<Polygon> sideBezier = new SideBezier();
+    private UnitAlgorithm<Polygon> computeBorder = new ComputeBorder();
+    private UnitAlgorithm<Polygon> vertexSideSubdivision = new VertexSideSubdivision();
+    private UnitAlgorithm<Polygon> vertexInsideSubdivision = new VertexInsideSubdivision();
+    private UnitAlgorithm<Polygon> vertexMergeSubdivision = new VertexMergeSubdivision();
+    private UnitAlgorithm<Polygon> triangleDraw = new TriangleDraw();
     protected override void Awake() => ModuleCore.AlgorithmSubdivisionPolygon = this;
 
     public override void Compute(DataPlate plate) {
         Polygon polygon = To(plate);
-        //第一次计算边长
-        bezierPolygonSide.Compute(polygon);
-        //第二次计算细分边长
-        bezierPolygonSide.Compute(polygon);
 
         //Chronoscope("细分多边形计算耗时：", () => {
-        //    //粗糙细分，生成边界
-        //    Boundary.Compute(plate);
-        //    //计算顶点
-        //    Vertex.Compute(plate);
-        //    //计算边点
-        //    SideVertex.Compute(plate);
-        //    //计算三角面
-        //    Triangle.Compute(plate);
+        //第一次计算边长
+        sideBezier.Compute(polygon);
+        //第二次计算细分边长
+        sideBezier.Compute(polygon);
+        //计算边界
+        computeBorder.Compute(polygon);
+        //计算边缘细分
+        vertexSideSubdivision.Compute(polygon);
+        //计算内部顶点细分
+        vertexInsideSubdivision.Compute(polygon);
+        //合并顶点
+        vertexMergeSubdivision.Compute(polygon);
+        //绘制三角形
+        triangleDraw.Compute(polygon);
         //});
+
+        List<DataPlateVertex> vertices = new List<DataPlateVertex>();
+        List<Vector2> uv = new List<Vector2>();
+        List<int> triangles = new List<int>();
+
+        for (int i = 0; i < polygon.vertices.Length; i++) {
+            PolygonVertex vertex = polygon.vertices[i];
+            if (!vertex.isValid) { continue; }
+            vertices.Add(ToData(vertex));
+            uv.Add(new Vector2(vertex.position.x, vertex.position.y));
+            triangles.AddRange(To(vertex));
+        }
+
+        plate.dataBaking.vertices = vertices.ToArray();
+        plate.dataBaking.uv = uv.ToArray();
+        plate.dataBaking.triangles = triangles.ToArray();
+    }
+    private DataPlateVertex ToData(PolygonVertex vertex) {
+        DataPlateVertex plateVertex = new DataPlateVertex();
+        plateVertex.position = vertex.position;
+        return plateVertex;
+    }
+    private List<int> To(PolygonVertex vertex) {
+        List<int> triangles = new List<int>();
+        if (vertex.a.isValid) { triangles.AddRange(To(vertex.a)); }
+        if (vertex.b.isValid) { triangles.AddRange(To(vertex.b)); }
+        if (vertex.c.isValid) { triangles.AddRange(To(vertex.c)); }
+        if (vertex.d.isValid) { triangles.AddRange(To(vertex.d)); }
+        return triangles;
+    }
+    private List<int> To(PolygonTriangle triangle) {
+        return new List<int>() { triangle.a, triangle.b, triangle.c };
     }
 
     #region 数据转换
@@ -62,11 +95,13 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
     #endregion
 
     #region 数据结构
-    public struct Polygon {
+    public class Polygon {
         /// <summary> 多边形边 </summary>
         public PolygonSide[] sides;
         /// <summary> 多边形边界 </summary>
         public PolygonBorder border;
+        /// <summary> 网格顶点 </summary>
+        public PolygonVertex[] vertices;
     }
     public struct PolygonBorder {
         /// <summary> minX </summary>
@@ -92,6 +127,22 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
         public Vector3 MinPoint => new Vector3(minX, minY, 0);
         /// <summary> 最大点 </summary>
         public Vector3 MaxPoint => new Vector3(maxX, maxY, 0);
+    }
+    public struct PolygonVertex {
+        /// <summary> 数组索引 </summary>
+        public int index;
+        /// <summary> 是否是有效顶点 </summary>
+        public bool isValid;
+        /// <summary> 位置 </summary>
+        public Vector3 position;
+        /// <summary> 左上角 </summary>
+        public PolygonTriangle a;
+        /// <summary> 右下角 </summary>
+        public PolygonTriangle b;
+        /// <summary> 右上角 </summary>
+        public PolygonTriangle c;
+        /// <summary> 左下角 </summary>
+        public PolygonTriangle d;
     }
     public struct PolygonSide {
         /// <summary> 细分数 </summary>
@@ -129,6 +180,16 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
         public Vector3 b;
         /// <summary> 到边起点的距离 </summary>
         public float origin;
+    }
+    public struct PolygonTriangle {
+        /// <summary> 是否是有效 </summary>
+        public bool isValid;
+        /// <summary> a点索引 </summary>
+        public int a;
+        /// <summary> b点索引 </summary>
+        public int b;
+        /// <summary> c点索引 </summary>
+        public int c;
     }
     #endregion
 
@@ -294,14 +355,14 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
     }
     #endregion
 
-    #region 贝塞尔曲线化多边形的边
-    public class BezierPolygonSide : UnitAlgorithm<Polygon> {
+    #region 边缘贝塞尔曲线化
+    public class SideBezier : UnitAlgorithm<Polygon> {
 
         #region 执行
         public void Compute(Polygon polygon) {
             //创建作业任务
             int count = polygon.sides.Length;
-            NativeArray<JobBezierPolygonSide> jobs = new NativeArray<JobBezierPolygonSide>(count, Allocator.Temp);
+            NativeArray<JobSideBezier> jobs = new NativeArray<JobSideBezier>(count, Allocator.Temp);
             NativeArray<JobHandle> handles = new NativeArray<JobHandle>(count, Allocator.Temp);
             for (int i = 0; i < count; i++) {
                 jobs[i] = To(polygon.sides[i]);
@@ -310,42 +371,43 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
             //执行作业
             JobHandle.CompleteAll(handles);
             //转换数据
-            for (int i = 0; i < count; i++) { To(jobs[i], polygon.sides[i]); }
+            for (int i = 0; i < count; i++) { polygon.sides[i] = To(jobs[i], polygon.sides[i]); }
         }
         #endregion
 
         #region 转换
         /// <summary> 转换作业数据 </summary>
-        private JobBezierPolygonSide To(PolygonSide polygonSide) {
-            JobBezierPolygonSide jobBezierPolygonSide = new JobBezierPolygonSide();
-            jobBezierPolygonSide.quotient = polygonSide.quotient;
-            jobBezierPolygonSide.bezier = polygonSide.bezier;
-            jobBezierPolygonSide.aPoint = polygonSide.aPoint;
-            jobBezierPolygonSide.bPoint = polygonSide.bPoint;
-            jobBezierPolygonSide.aBezier = polygonSide.aBezier;
-            jobBezierPolygonSide.bBezier = polygonSide.bBezier;
+        private JobSideBezier To(PolygonSide polygonSide) {
+            JobSideBezier job = new JobSideBezier();
+            job.quotient = polygonSide.quotient;
+            job.bezier = polygonSide.bezier;
+            job.aPoint = polygonSide.aPoint;
+            job.bPoint = polygonSide.bPoint;
+            job.aBezier = polygonSide.aBezier;
+            job.bBezier = polygonSide.bBezier;
 
             int quotient = polygonSide.quotient;
-            jobBezierPolygonSide.length = new NativeArray<float>(1, Allocator.TempJob);
-            jobBezierPolygonSide.positions = new NativeArray<Vector3>(quotient, Allocator.TempJob);
-            jobBezierPolygonSide.lines = new NativeArray<PolygonLine>(quotient - 1, Allocator.TempJob);
-            return jobBezierPolygonSide;
+            job.length = new NativeArray<float>(1, Allocator.TempJob);
+            job.positions = new NativeArray<Vector3>(quotient, Allocator.TempJob);
+            job.lines = new NativeArray<PolygonLine>(quotient - 1, Allocator.TempJob);
+            return job;
         }
         /// <summary> 转换托管数据 </summary>
-        private void To(JobBezierPolygonSide job, PolygonSide polygonSide) {
-            polygonSide.quotient = (int)(Subdivide / job.length[0]);
+        private PolygonSide To(JobSideBezier job, PolygonSide polygonSide) {
+            polygonSide.quotient = (int)(job.length[0] / Subdivide);
             polygonSide.length = job.length[0];
             polygonSide.positions = job.positions.ToArray();
             polygonSide.lines = job.lines.ToArray();
             job.length.Dispose();
             job.positions.Dispose();
             job.lines.Dispose();
+            return polygonSide;
         }
         #endregion
 
         #region Jobs
         [BurstCompile]
-        public struct JobBezierPolygonSide : IJob {
+        public struct JobSideBezier : IJob {
             /// <summary> 细分数 </summary>
             public int quotient;
             /// <summary> 贝塞尔类型 </summary>
@@ -415,14 +477,14 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
 
     #endregion
 
-    #region 多边形边界
-    public class PolygonalBorder : UnitAlgorithm<Polygon> {
+    #region 计算边界
+    public class ComputeBorder : UnitAlgorithm<Polygon> {
 
         #region 执行
         public void Compute(Polygon polygon) {
-            int count = polygon.sides.Length;
             //创建作业任务
-            JobPolygonalBorder job = To(polygon);
+            JobComputeBorder job = To(polygon);
+            int count = job.positions.Length;
             //执行作业
             JobHandle dependency = new JobHandle();
             JobHandle handle = job.Schedule(count, dependency);
@@ -436,18 +498,18 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
         #endregion
 
         #region 转换
-        private JobPolygonalBorder To(Polygon polygon) {
+        private JobComputeBorder To(Polygon polygon) {
             List<Vector3> positions = new List<Vector3>();
             for (int i = 0; i < polygon.sides.Length; i++) {
                 positions.AddRange(polygon.sides[i].positions);
             }
 
-            JobPolygonalBorder jobPolygonalBorder = new JobPolygonalBorder();
-            jobPolygonalBorder.border = new NativeArray<float>(4, Allocator.TempJob);
-            jobPolygonalBorder.positions = new NativeArray<Vector3>(positions.ToArray(), Allocator.TempJob);
-            return jobPolygonalBorder;
+            JobComputeBorder job = new JobComputeBorder();
+            job.border = new NativeArray<float>(4, Allocator.TempJob);
+            job.positions = new NativeArray<Vector3>(positions.ToArray(), Allocator.TempJob);
+            return job;
         }
-        private PolygonBorder To(JobPolygonalBorder job) {
+        private PolygonBorder To(JobComputeBorder job) {
             PolygonBorder border = new PolygonBorder();
             border.minX = job.border[0];
             border.maxX = job.border[1];
@@ -460,7 +522,7 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
 
         #region Jobs
         [BurstCompile]
-        public struct JobPolygonalBorder : IJobFor {
+        public struct JobComputeBorder : IJobFor {
             /// <summary> 0 = minX , 1 = MaxX , 2 = minY, 3 = MaxY </summary>
             public NativeArray<float> border;
             /// <summary> 点 </summary>
@@ -480,13 +542,13 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
     #endregion
 
     #region 边缘细分顶点
-    public class SideSubdivisionVertex : UnitAlgorithm<Polygon> {
+    public class VertexSideSubdivision : UnitAlgorithm<Polygon> {
 
         #region 执行
         public void Compute(Polygon polygon) {
             //创建作业任务
             int count = polygon.sides.Length;
-            NativeArray<JobSideVertex> jobs = new NativeArray<JobSideVertex>(count, Allocator.Temp);
+            NativeArray<JobVertexSideSubdivision> jobs = new NativeArray<JobVertexSideSubdivision>(count, Allocator.Temp);
             NativeArray<JobHandle> handles = new NativeArray<JobHandle>(count, Allocator.Temp);
             for (int i = 0; i < count; i++) {
                 jobs[i] = To(polygon, polygon.sides[i]);
@@ -495,54 +557,55 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
             //执行作业
             JobHandle.CompleteAll(handles);
             //转换数据
-            for (int i = 0; i < count; i++) { To(jobs[i], polygon.sides[i]); }
+            for (int i = 0; i < count; i++) { polygon.sides[i] = To(jobs[i], polygon.sides[i]); }
         }
         #endregion
 
         #region 转换
-        private JobSideVertex To(Polygon polygon, PolygonSide polygonSide) {
-            JobSideVertex jobSideVertex = new JobSideVertex();
-            jobSideVertex.gridWide = polygon.border.GridWide;
-            jobSideVertex.gridHigh = polygon.border.GridHigh;
-            jobSideVertex.interval = Subdivide;
-            jobSideVertex.minX = polygon.border.minX;
-            jobSideVertex.maxX = polygon.border.maxX;
-            jobSideVertex.minY = polygon.border.minY;
-            jobSideVertex.maxY = polygon.border.maxY;
-            jobSideVertex.minPoint = polygon.border.MinPoint;
-            jobSideVertex.lines = new NativeArray<PolygonLine>(polygonSide.lines, Allocator.TempJob);
-            jobSideVertex.vertexs = new NativeList<PolygonSideVertex>(Allocator.TempJob);
-            return jobSideVertex;
+        private JobVertexSideSubdivision To(Polygon polygon, PolygonSide polygonSide) {
+            JobVertexSideSubdivision job = new JobVertexSideSubdivision();
+            job.gridWide = polygon.border.GridWide;
+            job.gridHigh = polygon.border.GridHigh;
+            job.interval = Subdivide;
+            job.minX = polygon.border.minX;
+            job.maxX = polygon.border.maxX;
+            job.minY = polygon.border.minY;
+            job.maxY = polygon.border.maxY;
+            job.minPoint = polygon.border.MinPoint;
+            job.lines = new NativeArray<PolygonLine>(polygonSide.lines, Allocator.TempJob);
+            job.vertexs = new NativeList<PolygonSideVertex>(Allocator.TempJob);
+            return job;
         }
         /// <summary> 转换托管数据 </summary>
-        private void To(JobSideVertex job, PolygonSide polygonSide) {
+        private PolygonSide To(JobVertexSideSubdivision job, PolygonSide polygonSide) {
             polygonSide.vertexs = job.vertexs.ToArray();
             job.lines.Dispose();
             job.vertexs.Dispose();
+            return polygonSide;
         }
         #endregion
 
         #region Jobs
         [BurstCompile]
-        public struct JobSideVertex : IJob {
+        public struct JobVertexSideSubdivision : IJob {
             /// <summary> 网格宽 </summary>
-            public int gridWide;
+            [ReadOnly] public int gridWide;
             /// <summary> 网格高 </summary>
-            public int gridHigh;
+            [ReadOnly] public int gridHigh;
             /// <summary> 网格间隔 </summary>
-            public float interval;
+            [ReadOnly] public float interval;
             /// <summary> minX </summary>
-            public float minX;
+            [ReadOnly] public float minX;
             /// <summary> maxX </summary>
-            public float maxX;
+            [ReadOnly] public float maxX;
             /// <summary> minY </summary>
-            public float minY;
+            [ReadOnly] public float minY;
             /// <summary> maxY </summary>
-            public float maxY;
+            [ReadOnly] public float maxY;
             /// <summary> 原点 </summary>
-            public Vector3 minPoint;
+            [ReadOnly] public Vector3 minPoint;
             /// <summary> 输入边线 </summary>
-            public NativeArray<PolygonLine> lines;
+            [ReadOnly] public NativeArray<PolygonLine> lines;
 
             /// <summary> 输出边点 </summary>
             public NativeList<PolygonSideVertex> vertexs;
@@ -557,6 +620,15 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
                     Vector3 a = new Vector3(minX - 1, minY + y * interval);
                     Vector3 b = new Vector3(maxX + 1, minY + y * interval);
                     Subdivision(a, b);
+                }
+                for (int i = 1; i < vertexs.Length; i++) {
+                    PolygonSideVertex temp = vertexs[i];
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (vertexs[j].origin > temp.origin) {
+                            vertexs[j + 1] = vertexs[j];
+                            vertexs[j] = temp;
+                        }
+                    }
                 }
             }
             public void Subdivision(Vector3 a, Vector3 b) {
@@ -577,402 +649,131 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
     #endregion
 
     #region 内部细分顶点
-    public class InsideSubdivisionVertex : UnitAlgorithm<Polygon> {
+    public class VertexInsideSubdivision : UnitAlgorithm<Polygon> {
 
         #region 执行
-        public void Compute(Polygon data) {
-            throw new NotImplementedException();
-        }
-        #endregion
-
-        #region 转换
-
-        #endregion
-
-        #region Jobs
-
-        #endregion
-
-    }
-    #endregion
-
-    #region 多边形边界
-    public class PolygonalBoundary : UnitAlgorithm<DataPlate> {
-
-        #region 执行
-        public void Compute(DataPlate plate) {
-            int count = plate.plateSides.Count;
-            List<DataPlateSide> plateSides = plate.plateSides;
+        public void Compute(Polygon polygon) {
             //创建作业任务
-            NativeArray<JobPolygonalBoundary> jobs = new NativeArray<JobPolygonalBoundary>(count, Allocator.Temp);
-            NativeArray<JobHandle> handles = new NativeArray<JobHandle>(count, Allocator.Temp);
-            for (int i = 0; i < count; i++) {
-                jobs[i] = DataPlateSideToJobSideSubdivision(plateSides[i], 10);
-                handles[i] = jobs[i].Schedule();
-            }
-            //执行作业
-            JobHandle.CompleteAll(handles);
-            //转换数据
-            List<Vector3> points = new List<Vector3>();
-            for (int i = 0; i < count; i++) {
-                OutputSideToDataPlateSide(jobs[i].outputSide, plateSides[i]);
-                points.AddRange(plateSides[i].dataBaking.positions);
-            }
-            plate.dataBaking.border = Border(points.Distinct().ToArray());
-        }
-        #endregion
-
-        #region Jobs
-        [BurstCompile]
-        public struct JobPolygonalBoundary : IJob {
-            /// <summary> 输入 </summary>
-            public InputSide inputSide;
-            /// <summary> 输出 </summary>
-            public OutputSide outputSide;
-
-            public void Execute() {
-                //细分点
-                for (int i = 0; i < inputSide.quotient; i++) {
-                    float t = i / (float)(inputSide.quotient - 1);
-                    if (inputSide.bezier == Bezier.一阶) {
-                        outputSide.positions[i] = ComputeBezier(inputSide.aPoint, inputSide.bPoint, t);
-                    }
-                    if (inputSide.bezier == Bezier.二阶) {
-                        outputSide.positions[i] = ComputeBezier(inputSide.aPoint, inputSide.aBezier, inputSide.bPoint, t);
-                    }
-                    if (inputSide.bezier == Bezier.三阶) {
-                        outputSide.positions[i] = ComputeBezier(inputSide.aPoint, inputSide.aBezier, inputSide.bBezier, inputSide.bPoint, t);
-                    }
-                }
-
-                //线段
-                for (int i = 0; i < inputSide.quotient - 1; i++) {
-                    OutputLine line = new OutputLine();
-                    line.a = outputSide.positions[i];
-                    line.b = outputSide.positions[i + 1];
-                    line.origin = outputSide.length;
-                    outputSide.lines[i] = line;
-                    outputSide.length += Vector3.Distance(line.a, line.b);
-                }
-            }
-        }
-        #endregion
-
-        #region 转换
-        /// <summary> 转换作业数据 </summary>
-        private JobPolygonalBoundary DataPlateSideToJobSideSubdivision(DataPlateSide plateSide, int quotient) {
-            InputSide inputSide = new InputSide();
-            inputSide.bezier = plateSide.bezier;
-            inputSide.aPoint = plateSide.aPoint.position;
-            inputSide.bPoint = plateSide.bPoint.position;
-            inputSide.aBezier = plateSide.aBezier;
-            inputSide.bBezier = plateSide.bBezier;
-            inputSide.quotient = quotient;
-
-            OutputSide outputSide = new OutputSide();
-            outputSide.positions = new NativeArray<Vector3>(quotient, Allocator.TempJob);
-            outputSide.lines = new NativeArray<OutputLine>(quotient - 1, Allocator.TempJob);
-
-            JobPolygonalBoundary jobPolygonalBoundary = new JobPolygonalBoundary();
-            jobPolygonalBoundary.inputSide = inputSide;
-            jobPolygonalBoundary.outputSide = outputSide;
-            return jobPolygonalBoundary;
-        }
-        /// <summary> 转换托管数据 </summary>
-        private void OutputSideToDataPlateSide(OutputSide output, DataPlateSide plateSide) {
-            DataPlateSideBaking baking = plateSide.dataBaking;
-            baking.length = output.length;
-            baking.positions = output.positions.ToArray();
-            DataPlateLine[] lines = new DataPlateLine[output.lines.Length];
-            for (int i = 0; i < output.lines.Length; i++) {
-                lines[i] = OutputLineToDataPlateLine(output.lines[i]);
-            }
-            baking.lines = lines;
-            output.positions.Dispose();
-            output.lines.Dispose();
-        }
-        /// <summary> 转换托管数据 </summary>
-        public DataPlateLine OutputLineToDataPlateLine(OutputLine output) {
-            DataPlateLine line = new DataPlateLine();
-            line.a = output.a;
-            line.b = output.b;
-            line.origin = output.origin;
-            return line;
-        }
-        #endregion
-
-        #region 输入
-        public struct InputSide {
-            /// <summary> 贝塞尔类型 </summary>
-            public Bezier bezier;
-            /// <summary> a点 </summary>
-            public Vector3 aPoint;
-            /// <summary> b点 </summary>
-            public Vector3 bPoint;
-            /// <summary> a点贝塞尔点 </summary>
-            public Vector3 aBezier;
-            /// <summary> b点贝塞尔点 </summary>
-            public Vector3 bBezier;
-            /// <summary> 细分数 </summary>
-            public int quotient;
-        }
-        #endregion
-
-        #region 输出
-        public struct OutputSide {
-            /// <summary> 总长度 </summary>
-            public float length;
-            /// <summary> 点 </summary>
-            public NativeArray<Vector3> positions;
-            /// <summary> 线 </summary>
-            public NativeArray<OutputLine> lines;
-        }
-        public struct OutputLine {
-            /// <summary> 线段起点a </summary>
-            public Vector3 a;
-            /// <summary> 线段终点b </summary>
-            public Vector3 b;
-            /// <summary> 边原点距离 </summary>
-            public float origin;
-        }
-        #endregion
-
-    }
-    #endregion
-
-    #region 顶点细分
-    public class VertexSubdivision : UnitAlgorithm<DataPlate> {
-
-        #region 执行
-        public void Compute(DataPlate plate) {
-            DataBorder border = plate.dataBaking.border;
-            //创建作业任务
-            int maxIndex = border.GridWide * border.GridHigh;
-            JobVertex job = new JobVertex();
-            job.input = DataPlateToInputInitialize(plate);
-            job.outputVertices = new NativeArray<OutputVertex>(maxIndex, Allocator.TempJob);
+            int maxIndex = polygon.border.GridWide * polygon.border.GridHigh;
+            JobVertexInsideSubdivision job = To(polygon);
             //执行作业
             JobHandle handle = job.Schedule(maxIndex, 32);
             handle.Complete();
             //转换数据
-            plate.dataBaking.vertexs = OutputVertexToDataPlateVertex(job.outputVertices);
+            polygon.vertices = job.vertices.ToArray();
             //释放
-            job.input.points.Dispose();
-            job.outputVertices.Dispose();
+            job.positions.Dispose();
+            job.vertices.Dispose();
+        }
+        #endregion
+
+        #region 转换
+        private JobVertexInsideSubdivision To(Polygon polygon) {
+            int maxIndex = polygon.border.GridWide * polygon.border.GridHigh;
+            JobVertexInsideSubdivision job = new JobVertexInsideSubdivision();
+            job.gridWide = polygon.border.GridWide;
+            job.minPoint = polygon.border.MinPoint;
+            job.positions = new NativeArray<Vector3>(polygon.border.positions, Allocator.TempJob);
+            job.vertices = new NativeArray<PolygonVertex>(maxIndex, Allocator.TempJob);
+            return job;
         }
         #endregion
 
         #region Jobs
         [BurstCompile]
-        public struct JobVertex : IJobParallelFor {
-            /// <summary> 输入 </summary>
-            [ReadOnly] public InputInitialize input;
+        public struct JobVertexInsideSubdivision : IJobParallelFor {
+            /// <summary> 网格宽 </summary>
+            [ReadOnly] public int gridWide;
+            /// <summary> 网格起点 </summary>
+            [ReadOnly] public Vector3 minPoint;
+            /// <summary> 顶点列表 </summary>
+            [ReadOnly] public NativeArray<Vector3> positions;
             /// <summary> 输出 </summary>
-            public NativeArray<OutputVertex> outputVertices;
+            public NativeArray<PolygonVertex> vertices;
 
             public void Execute(int index) {
-                Vector2Int v2 = IndexToXY(index, input.wide);
-                Vector3 position = new Vector3(v2.x, v2.y) * input.interval + input.origin;
-                OutputVertex vertex = new OutputVertex();
-                vertex.isValid = FindPlateInside(input.points, position);
+                Vector2Int v2 = IndexToXY(index, gridWide);
+                Vector3 position = new Vector3(v2.x, v2.y) * Subdivide + minPoint;
+                PolygonVertex vertex = new PolygonVertex();
+                vertex.isValid = FindPlateInside(positions, position);
                 vertex.position = position;
-                outputVertices[index] = vertex;
+                vertices[index] = vertex;
             }
-        }
-        #endregion
-
-        #region 转换
-        private InputInitialize DataPlateToInputInitialize(DataPlate plate) {
-            DataBorder border = plate.dataBaking.border;
-            InputInitialize inputInitialize = new InputInitialize();
-            inputInitialize.wide = border.GridWide;
-            inputInitialize.interval = border.smooth;
-            inputInitialize.origin = border.MinPoint;
-            inputInitialize.points = new NativeArray<Vector3>(border.points, Allocator.TempJob);
-            return inputInitialize;
-        }
-        private DataPlateVertex[] OutputVertexToDataPlateVertex(NativeArray<OutputVertex> outputVertices) {
-            DataPlateVertex[] array = new DataPlateVertex[outputVertices.Length];
-            for (int i = 0; i < outputVertices.Length; i++) {
-                DataPlateVertex vertex = new DataPlateVertex();
-                vertex.isValid = outputVertices[i].isValid;
-                vertex.position = outputVertices[i].position;
-                array[i] = vertex;
-            }
-            return array;
-        }
-        #endregion
-
-        #region 输入
-        public struct InputInitialize {
-            /// <summary> 网格宽 </summary>
-            public int wide;
-            /// <summary> 网格间隔 </summary>
-            public float interval;
-            /// <summary> 原点 </summary>
-            public Vector3 origin;
-            /// <summary> 多边形边缘点 </summary>
-            public NativeArray<Vector3> points;
-        }
-        #endregion
-
-        #region 输出
-        public struct OutputVertex {
-            /// <summary> 是否是有效顶点 </summary>
-            public bool isValid;
-            /// <summary> 位置 </summary>
-            public Vector3 position;
         }
         #endregion
 
     }
     #endregion
 
-    #region 边缘细分
-    public class SideSubdivision : UnitAlgorithm<DataPlate> {
+    #region 合并细分顶点
+    public class VertexMergeSubdivision : UnitAlgorithm<Polygon> {
 
         #region 执行
-        public void Compute(DataPlate plate) {
-            int count = plate.plateSides.Count;
-            List<DataPlateSide> plateSides = plate.plateSides;
+        public void Compute(Polygon polygon) {
             //创建作业任务
-            InputBorder border = DataPlateToInputBorder(plate);
-            NativeArray<JobSideSubdivision> jobs = new NativeArray<JobSideSubdivision>(count, Allocator.Temp);
-            NativeArray<JobHandle> handles = new NativeArray<JobHandle>(count, Allocator.Temp);
-            for (int i = 0; i < count; i++) {
-                jobs[i] = DataPlateSideToJobSideSubdivision(plateSides[i], border);
-                handles[i] = jobs[i].Schedule();
-            }
+            JobVertexMergeSubdivision job = To(polygon);
+            int count = job.sideVertices.Length;
             //执行作业
-            JobHandle.CompleteAll(handles);
+            JobHandle dependency = new JobHandle();
+            JobHandle handle = job.Schedule(count, dependency);
+            handle.Complete();
             //转换数据
-            for (int i = 0; i < jobs.Length; i++) {
-                MergeSideVertex(jobs[i], plate);
-            }
-        }
-        #endregion
-
-        #region Jobs
-        public struct JobSideSubdivision : IJob {
-            /// <summary> 输入边界 </summary>
-            [ReadOnly] public InputBorder inputBorder;
-            /// <summary> 输入边线 </summary>
-            [ReadOnly] public NativeArray<InputLine> inputLines;
-            /// <summary> 输出边点 </summary>
-            public NativeList<OutputSideVertex> outputSideVertexs;
-
-            public void Execute() {
-                for (int x = 0; x < inputBorder.wide; x++) {
-                    Vector3 a = new Vector3(inputBorder.minX + x * inputBorder.interval, inputBorder.minY - 1);
-                    Vector3 b = new Vector3(inputBorder.minX + x * inputBorder.interval, inputBorder.maxY + 1);
-                    Subdivision(a, b);
-                }
-                for (int y = 0; y < inputBorder.high; y++) {
-                    Vector3 a = new Vector3(inputBorder.minX - 1, inputBorder.minY + y * inputBorder.interval);
-                    Vector3 b = new Vector3(inputBorder.maxX + 1, inputBorder.minY + y * inputBorder.interval);
-                    Subdivision(a, b);
-                }
-            }
-            public void Subdivision(Vector3 a, Vector3 b) {
-                for (int i = 0; i < inputLines.Length; i++) {
-                    InputLine line = inputLines[i];
-                    if (!TryGetIntersectPoint(a, b, line.a, line.b, out Vector3 intersectPoint)) { continue; }
-                    float distance = Vector3.Distance(line.a, intersectPoint) + line.origin;
-                    OutputSideVertex sideVertex = new OutputSideVertex();
-                    sideVertex.origin = distance;
-                    sideVertex.position = intersectPoint;
-                    outputSideVertexs.Add(sideVertex);
-                }
-            }
+            polygon.vertices = job.vertices.ToArray();
+            //释放
+            job.sideVertices.Dispose();
+            job.vertices.Dispose();
         }
         #endregion
 
         #region 转换
-        private InputBorder DataPlateToInputBorder(DataPlate plate) {
-            InputBorder inputBorder = new InputBorder();
-            inputBorder.wide = plate.dataBaking.border.GridWide;
-            inputBorder.high = plate.dataBaking.border.GridHigh;
-            inputBorder.interval = plate.dataBaking.border.smooth;
-            inputBorder.minX = plate.dataBaking.border.minX;
-            inputBorder.maxX = plate.dataBaking.border.maxX;
-            inputBorder.minY = plate.dataBaking.border.minY;
-            inputBorder.maxY = plate.dataBaking.border.maxY;
-            inputBorder.origin = plate.dataBaking.border.MinPoint;
-            return inputBorder;
-        }
-        private JobSideSubdivision DataPlateSideToJobSideSubdivision(DataPlateSide plateSide, InputBorder border) {
-            DataPlateLine[] lines = plateSide.dataBaking.lines;
-            NativeArray<InputLine> inputLines = new NativeArray<InputLine>(lines.Length, Allocator.TempJob);
-            for (int i = 0; i < lines.Length; i++) {
-                InputLine line = new InputLine();
-                line.a = lines[i].a;
-                line.b = lines[i].b;
-                line.origin = lines[i].origin;
-                inputLines[i] = line;
+        private JobVertexMergeSubdivision To(Polygon polygon) {
+            List<PolygonSideVertex> sideVertices = new List<PolygonSideVertex>();
+            for (int i = 0; i < polygon.sides.Length; i++) {
+                sideVertices.AddRange(polygon.sides[i].vertexs);
             }
 
-            JobSideSubdivision jobSideSubdivision = new JobSideSubdivision();
-            jobSideSubdivision.inputBorder = border;
-            jobSideSubdivision.inputLines = inputLines;
-            jobSideSubdivision.outputSideVertexs = new NativeList<OutputSideVertex>(Allocator.TempJob);
-            return jobSideSubdivision;
+            JobVertexMergeSubdivision job = new JobVertexMergeSubdivision();
+            job.offset = polygon.border.MinPoint - new Vector3(Subdivide, Subdivide, 0) * 0.1f;
+            job.interval = Subdivide;
+            job.GridWide = polygon.border.GridWide;
+            job.GridHigh = polygon.border.GridHigh;
+            job.sideVertices = new NativeArray<PolygonSideVertex>(sideVertices.ToArray(), Allocator.TempJob);
+            job.vertices = new NativeArray<PolygonVertex>(polygon.vertices, Allocator.TempJob);
+            return job;
         }
-        private void MergeSideVertex(JobSideSubdivision job, DataPlate plate) {
-            DataPlateVertex[] plateVertexs = plate.dataBaking.vertexs;
-            float interval = job.inputBorder.interval;
-            Vector3 offset = job.inputBorder.origin - new Vector3(interval, interval, 0) * 0.1f;
-            for (int i = 0; i < job.outputSideVertexs.Length; i++) {
-                Vector3 position = job.outputSideVertexs[i].position;
+        #endregion
+
+        #region Jobs
+        [BurstCompile]
+        public struct JobVertexMergeSubdivision : IJobFor {
+            /// <summary> 偏移 </summary>
+            [ReadOnly] public Vector3 offset;
+            /// <summary> 间隔 </summary>
+            [ReadOnly] public float interval;
+            /// <summary> 网格宽 </summary>
+            [ReadOnly] public int GridWide;
+            /// <summary> 网格高 </summary>
+            [ReadOnly] public int GridHigh;
+            /// <summary> 边点 </summary>
+            [ReadOnly] public NativeArray<PolygonSideVertex> sideVertices;
+            /// <summary> 网格顶点 </summary>
+            [NativeDisableParallelForRestriction]
+            public NativeArray<PolygonVertex> vertices;
+
+            public void Execute(int index) {
+                Vector3 position = sideVertices[index].position;
                 Vector3 gridPosition = position - offset;
                 int vertexX = Mathf.FloorToInt(gridPosition.x / interval);
                 int vertexY = Mathf.FloorToInt(gridPosition.y / interval);
-                vertexX = Math.Clamp(vertexX, 0, job.inputBorder.wide - 1);
-                vertexY = Math.Clamp(vertexY, 0, job.inputBorder.high - 1);
-                int index = XYToIndex(new Vector2Int(vertexX, vertexY), job.inputBorder.wide);
+                vertexX = Math.Clamp(vertexX, 0, GridWide - 1);
+                vertexY = Math.Clamp(vertexY, 0, GridHigh - 1);
+                int i = XYToIndex(new Vector2Int(vertexX, vertexY), GridWide);
 
-                plateVertexs[index].isValid = true;
-                plateVertexs[index].position = position;
+                PolygonVertex vertex = vertices[i];
+                vertex.isValid = true;
+                vertex.position = position;
+                vertices[i] = vertex;
             }
-            job.inputLines.Dispose();
-            job.outputSideVertexs.Dispose();
-        }
-        #endregion
-
-        #region 输入
-        public struct InputBorder {
-            /// <summary> 网格宽 </summary>
-            public int wide;
-            /// <summary> 网格高 </summary>
-            public int high;
-            /// <summary> 网格间隔 </summary>
-            public float interval;
-            /// <summary> minX </summary>
-            public float minX;
-            /// <summary> maxX </summary>
-            public float maxX;
-            /// <summary> minY </summary>
-            public float minY;
-            /// <summary> maxY </summary>
-            public float maxY;
-            /// <summary> 原点 </summary>
-            public Vector3 origin;
-        }
-        public struct InputLine {
-            /// <summary> 线段起点a </summary>
-            public Vector3 a;
-            /// <summary> 线段终点b </summary>
-            public Vector3 b;
-            /// <summary> 原始距离 </summary>
-            public float origin;
-        }
-        #endregion
-
-        #region 输出
-        public struct OutputSideVertex {
-            /// <summary> 到边起点的距离 </summary>
-            public float origin;
-            /// <summary> 位置 </summary>
-            public Vector3 position;
         }
         #endregion
 
@@ -980,43 +781,54 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
     #endregion
 
     #region 绘制三角形
-    public class DrawTriangle : UnitAlgorithm<DataPlate> {
+    public class TriangleDraw : UnitAlgorithm<Polygon> {
 
         #region 执行
-        public void Compute(DataPlate plate) {
-            DataPlateVertex[] vertexs = plate.dataBaking.vertexs;
-            int maxIndex = vertexs.Length;
-            DataBorder border = plate.dataBaking.border;
+        public void Compute(Polygon polygon) {
+            int maxIndex = polygon.vertices.Length;
             //创建作业任务
-            JobRhombus job = new JobRhombus();
-            job.inputBorder = new InputBorder() { wide = border.GridWide, high = border.GridHigh };
-            job.inputVertexs = DataPlateToInputVertex(vertexs);
-            job.outputVertexs = new NativeArray<OutputVertex>(maxIndex, Allocator.TempJob);
+            JobTriangleDraw job = To(polygon);
             //执行作业
             JobHandle handle = job.Schedule(maxIndex, 32);
             handle.Complete();
-            //三角形合并
-            plate.dataBaking.mesh = new Mesh();
-            plate.dataBaking.mesh.vertices = Vertices(job.outputVertexs);
-            plate.dataBaking.mesh.uv = UV(job.outputVertexs);
-            plate.dataBaking.mesh.triangles = Triangles(job.outputVertexs);
-            plate.dataBaking.mesh.RecalculateBounds();
-            plate.dataBaking.mesh.RecalculateNormals();
+            //转换数据
+            polygon.vertices = job.output.ToArray();
             //释放
-            job.inputVertexs.Dispose();
-            job.outputVertexs.Dispose();
+            job.vertices.Dispose();
+            job.output.Dispose();
+        }
+        #endregion
+
+        #region 转换
+        private JobTriangleDraw To(Polygon polygon) {
+            int index = 0;
+            for (int i = 0; i < polygon.vertices.Length; i++) {
+                PolygonVertex vertex = polygon.vertices[i];
+                vertex.index = vertex.isValid ? index : -1;
+                if (vertex.isValid) { index++; }
+                polygon.vertices[i] = vertex;
+            }
+
+            JobTriangleDraw job = new JobTriangleDraw();
+            job.gridWide = polygon.border.GridWide;
+            job.gridHigh = polygon.border.GridHigh;
+            job.vertices = new NativeArray<PolygonVertex>(polygon.vertices, Allocator.TempJob);
+            job.output = new NativeArray<PolygonVertex>(polygon.vertices, Allocator.TempJob);
+            return job;
         }
         #endregion
 
         #region Jobs
         [BurstCompile]
-        public struct JobRhombus : IJobParallelFor {
-            /// <summary> 输入边界 </summary>
-            public InputBorder inputBorder;
-            /// <summary> 输入网格 </summary>
-            [ReadOnly] public NativeArray<InputVertex> inputVertexs;
-            /// <summary> 输出顶点 </summary>
-            public NativeArray<OutputVertex> outputVertexs;
+        public struct JobTriangleDraw : IJobParallelFor {
+            /// <summary> 网格宽 </summary>
+            [ReadOnly] public int gridWide;
+            /// <summary> 网格高 </summary>
+            [ReadOnly] public int gridHigh;
+            /// <summary> 网格顶点 </summary>
+            [ReadOnly] public NativeArray<PolygonVertex> vertices;
+            /// <summary> 输出 </summary>
+            public NativeArray<PolygonVertex> output;
 
             public struct ValidVertex {
                 /// <summary> 数组索引 </summary>
@@ -1026,163 +838,64 @@ public class AlgorithmSubdivisionPolygon : ModuleAlgorithm<DataPlate> {
             }
 
             public void Execute(int index) {
-                InputVertex input = inputVertexs[index];
+                PolygonVertex vertex = vertices[index];
 
-                Vector2Int xy = IndexToXY(index, inputBorder.wide);
+                Vector2Int xy = IndexToXY(index, gridWide);
 
-                ValidVertex above = TryVertex(xy.x, xy.y + 1, inputBorder.wide, inputBorder.high);
-                ValidVertex below = TryVertex(xy.x, xy.y - 1, inputBorder.wide, inputBorder.high);
-                ValidVertex lefts = TryVertex(xy.x - 1, xy.y, inputBorder.wide, inputBorder.high);
-                ValidVertex right = TryVertex(xy.x + 1, xy.y, inputBorder.wide, inputBorder.high);
+                ValidVertex above = TryVertex(xy.x, xy.y + 1);
+                ValidVertex below = TryVertex(xy.x, xy.y - 1);
+                ValidVertex lefts = TryVertex(xy.x - 1, xy.y);
+                ValidVertex right = TryVertex(xy.x + 1, xy.y);
 
-                ValidVertex leftsAbove = TryVertex(xy.x - 1, xy.y + 1, inputBorder.wide, inputBorder.high);
-                ValidVertex leftsBelow = TryVertex(xy.x - 1, xy.y - 1, inputBorder.wide, inputBorder.high);
-                ValidVertex rightAbove = TryVertex(xy.x + 1, xy.y + 1, inputBorder.wide, inputBorder.high);
-                ValidVertex rightBelow = TryVertex(xy.x + 1, xy.y - 1, inputBorder.wide, inputBorder.high);
-
-                OutputVertex output = new OutputVertex {
-                    isValid = input.isValid,
-                    position = input.position
-                };
+                ValidVertex leftsAbove = TryVertex(xy.x - 1, xy.y + 1);
+                ValidVertex leftsBelow = TryVertex(xy.x - 1, xy.y - 1);
+                ValidVertex rightAbove = TryVertex(xy.x + 1, xy.y + 1);
+                ValidVertex rightBelow = TryVertex(xy.x + 1, xy.y - 1);
 
                 //默认绘制左上角
-                output.a = new OutputTriangle {
+                vertex.a = new PolygonTriangle {
                     isValid = above.isValid && lefts.isValid,
-                    a = input.index,
-                    c = lefts.index,
-                    b = above.index
+                    a = vertex.index,
+                    b = lefts.index,
+                    c = above.index
                 };
                 //默认绘制右下角
-                output.b = new OutputTriangle {
+                vertex.b = new PolygonTriangle {
                     isValid = below.isValid && right.isValid,
-                    a = input.index,
-                    c = right.index,
-                    b = below.index
+                    a = vertex.index,
+                    b = right.index,
+                    c = below.index
                 };
                 //如果右上角点不存在，则尝试绘制右上角
-                output.c = new OutputTriangle {
+                vertex.c = new PolygonTriangle {
                     isValid = !rightAbove.isValid && above.isValid && right.isValid,
-                    a = input.index,
-                    c = above.index,
-                    b = right.index
+                    a = vertex.index,
+                    b = above.index,
+                    c = right.index
                 };
                 //如果左下角点不存在，则尝试绘制左下角
-                output.d = new OutputTriangle {
+                vertex.d = new PolygonTriangle {
                     isValid = !leftsBelow.isValid && below.isValid && lefts.isValid,
-                    a = input.index,
-                    c = below.index,
-                    b = lefts.index
+                    a = vertex.index,
+                    b = below.index,
+                    c = lefts.index
                 };
-                outputVertexs[index] = output;
+                output[index] = vertex;
             }
-            public ValidVertex TryVertex(int x, int y, int wide, int high) {
-                ValidVertex vertex = new ValidVertex() { index = -1, isValid = false };
-                if (!TryXY(x, y, wide, high)) { return vertex; }
-                int index = XYToIndex(new Vector2Int(x, y), wide);
-                InputVertex input = inputVertexs[index];
-                vertex.index = input.index;
-                vertex.isValid = input.isValid;
-                return vertex;
+            public ValidVertex TryVertex(int x, int y) {
+                ValidVertex validVertex = new ValidVertex() { index = -1, isValid = false };
+                if (!TryXY(x, y, gridWide, gridHigh)) { return validVertex; }
+                int index = XYToIndex(new Vector2Int(x, y), gridWide);
+                PolygonVertex vertex = vertices[index];
+                validVertex.index = vertex.index;
+                validVertex.isValid = vertex.isValid;
+                return validVertex;
             }
-        }
-        #endregion
-
-        #region 转换
-        private NativeArray<InputVertex> DataPlateToInputVertex(DataPlateVertex[] vertexs) {
-            NativeArray<InputVertex> InputVertexs = new NativeArray<InputVertex>(vertexs.Length, Allocator.TempJob);
-            int index = 0;
-            for (int i = 0; i < vertexs.Length; i++) {
-                InputVertex vertex = new InputVertex();
-                vertex.index = vertexs[i].isValid ? index : -1;
-                vertex.isValid = vertexs[i].isValid;
-                vertex.position = vertexs[i].position;
-                InputVertexs[i] = vertex;
-                if (vertexs[i].isValid) { index++; }
-            }
-            return InputVertexs;
-        }
-        private Vector3[] Vertices(NativeArray<OutputVertex> outputVertexs) {
-            List<Vector3> Vertices = new List<Vector3>();
-            for (int i = 0; i < outputVertexs.Length; i++) {
-                if (!outputVertexs[i].isValid) { continue; }
-                Vertices.Add(outputVertexs[i].position);
-            }
-            return Vertices.ToArray();
-        }
-        private Vector2[] UV(NativeArray<OutputVertex> outputVertexs) {
-            //展开uv (顶点去掉z坐标就是未缩放的平面UV)
-            List<Vector2> uv = new List<Vector2>();
-            for (int i = 0; i < outputVertexs.Length; i++) {
-                if (!outputVertexs[i].isValid) { continue; }
-                uv.Add(new Vector2(outputVertexs[i].position.x, outputVertexs[i].position.y));
-            }
-            return uv.ToArray();
-        }
-        private int[] Triangles(NativeArray<OutputVertex> outputVertexs) {
-            List<int> triangles = new List<int>();
-            for (int i = 0; i < outputVertexs.Length; i++) {
-                if (!outputVertexs[i].isValid) { continue; }
-                triangles.AddRange(Triangles(outputVertexs[i]));
-            }
-            return triangles.ToArray();
-        }
-        private List<int> Triangles(OutputVertex vertex) {
-            List<int> triangles = new List<int>();
-            if (vertex.a.isValid) { triangles.AddRange(Triangles(vertex.a)); }
-            if (vertex.b.isValid) { triangles.AddRange(Triangles(vertex.b)); }
-            if (vertex.c.isValid) { triangles.AddRange(Triangles(vertex.c)); }
-            if (vertex.d.isValid) { triangles.AddRange(Triangles(vertex.d)); }
-            return triangles;
-        }
-        private List<int> Triangles(OutputTriangle triangle) {
-            return new List<int>() { triangle.a, triangle.b, triangle.c };
-        }
-        #endregion
-
-        #region 输入
-        public struct InputBorder {
-            /// <summary> 网格宽 </summary>
-            public int wide;
-            /// <summary> 网格高 </summary>
-            public int high;
-        }
-        public struct InputVertex {
-            /// <summary> 数组索引 </summary>
-            public int index;
-            /// <summary> 是否是有效顶点 </summary>
-            public bool isValid;
-            /// <summary> 设计视图中位置 </summary>
-            public Vector3 position;
-        }
-        #endregion
-
-        #region 输出
-        public struct OutputVertex {
-            /// <summary> 是否是有效 </summary>
-            public bool isValid;
-            /// <summary> 顶点位置 </summary>
-            public Vector3 position;
-            /// <summary> 左上角 </summary>
-            public OutputTriangle a;
-            /// <summary> 右下角 </summary>
-            public OutputTriangle b;
-            /// <summary> 右上角 </summary>
-            public OutputTriangle c;
-            /// <summary> 左下角 </summary>
-            public OutputTriangle d;
-        }
-        public struct OutputTriangle {
-            /// <summary> 是否是有效 </summary>
-            public bool isValid;
-            /// <summary> a点索引 </summary>
-            public int a;
-            /// <summary> b点索引 </summary>
-            public int b;
-            /// <summary> c点索引 </summary>
-            public int c;
         }
         #endregion
 
     }
     #endregion
+
 }
+

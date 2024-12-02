@@ -49,7 +49,7 @@ public class UnitAlgorithmRhombus : UnitAlgorithm<DataPlateBaking> {
     private void TryGet(GridTool<DataPlateVertex> grid, int x, int y, ref DataPlateVertex vertex) {
         vertex = null;
         if (!grid.TryGet(x, y, out DataPlateVertex data)) { return; }
-        if (data.isValid) { vertex = data; }
+        //if (data.isValid) { vertex = data; }
     }
     /// <summary> 创建三角形 </summary>
     private DataTriangle CreateDataTriangle(DataPlateVertex a, DataPlateVertex b, DataPlateVertex c) {

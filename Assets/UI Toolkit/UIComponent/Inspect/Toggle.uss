@@ -1,0 +1,41 @@
+.toggle {
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.toggle-checkmark {
+    width: 20px;
+    height: 20px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(100, 100, 100);
+    border-right-color: rgb(100, 100, 100);
+    border-top-color: rgb(100, 100, 100);
+    border-bottom-color: rgb(100, 100, 100);
+    background-color: rgb(255, 255, 255);
+    -unity-background-image-tint-color: rgb(65, 65, 65);
+    margin-top: 3px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    margin-left: 3px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background-image: url("project://database/Packages/com.muhua.uicontrol/Assets/Themes/DefaultRuntimeTheme.tss?fileID=-6090568113533005507&guid=4a132c40dbcde0e4b8ee5330aebc6c23&type=3#check");
+}
+
+.toggle-checkmark:hover {
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.toggle-checkmark-a {
+    background-color: rgb(255, 255, 255);
+    background-image: url('project://database/Packages/com.muhua.uicontrol/Assets/Themes/DefaultRuntimeTheme.tss?fileID=-6090568113533005507&guid=4a132c40dbcde0e4b8ee5330aebc6c23&type=3#check');
+    -unity-background-image-tint-color: rgb(51, 51, 51);
+}
