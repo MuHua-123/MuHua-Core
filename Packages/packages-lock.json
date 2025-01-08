@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.muhua.tools": {
-      "version": "https://github.com/MuHua-123/MuHua-Tools.git?path=Packages/Tools",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "66f6e29184c1132a599627053454c1d97ebf751c"
-    },
     "com.muhua.uicontrol": {
       "version": "file:UIControl",
       "depth": 0,

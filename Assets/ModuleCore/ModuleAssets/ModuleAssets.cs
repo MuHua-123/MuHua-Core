@@ -6,24 +6,35 @@ using UnityEngine;
 /// <summary>
 /// 资源模块
 /// </summary>
-/// <typeparam name="Data">绑定的资源类型</typeparam>
-public abstract class ModuleAssets<Data> : MonoBehaviour {
-    /// <summary> 必须要初始化 </summary>
-    protected abstract void Awake();
+public class ModuleAssets<Data> {
+    protected List<Data> datas = new List<Data>();
     /// <summary> 核心模块 </summary>
     protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
-    /// <summary> 数据计数 </summary>
-    public abstract int Count { get; }
+    /// <summary> 更改事件 </summary>
+    public virtual event Action OnChange;
     /// <summary> 数据列表 </summary>
-    public abstract List<Data> Datas { get; }
+    public virtual List<Data> Datas => datas;
+    /// <summary> 数据计数 </summary>
+    public virtual int Count => Datas.Count;
+    /// <summary> 数据计数 </summary
+    public virtual Data this[int index] => Datas[index];
 
     /// <summary> 添加数据 </summary>
-    public abstract void Add(Data data);
+    public virtual void Add(Data data) { Datas.Add(data); OnChange?.Invoke(); }
+    /// <summary> 添加数据 </summary>
+    public virtual void AddRange(IList<Data> data) { Datas.AddRange(data); OnChange?.Invoke(); }
     /// <summary> 删除数据 </summary>
-    public abstract void Remove(Data data);
+    public virtual void Remove(Data data) { Datas.Remove(data); OnChange?.Invoke(); }
+
+    /// <summary> 保存数据 </summary>
+    public virtual void Save() { throw new NotImplementedException(); }
+    /// <summary> 加载数据 </summary>
+    public virtual void Load() { throw new NotImplementedException(); }
+
     /// <summary> 查询数据 </summary>
-    public abstract Data Find(int index);
+    public virtual Data Find(int index) { throw new NotImplementedException(); }
+    public virtual Data Find(Guid guid) { throw new NotImplementedException(); }
     /// <summary> 循环列表 </summary>
-    public abstract void ForEach(Action<Data> action);
+    public virtual void ForEach(Action<Data> action) => Datas.ForEach(action);
 }

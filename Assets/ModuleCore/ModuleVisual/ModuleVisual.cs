@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 可视化内容生成模块
+/// 生成可视化内容模块
 /// </summary>
 public abstract class ModuleVisual<Data> : MonoBehaviour {
     /// <summary> 必须要初始化 </summary>
@@ -11,7 +11,7 @@ public abstract class ModuleVisual<Data> : MonoBehaviour {
     /// <summary> 核心模块 </summary>
     protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
-    /// <summary> 更新可视化 </summary>
+    /// <summary> 更新可视化内容 </summary>
     public abstract void UpdateVisual(Data data);
     /// <summary> 释放可视化内容 </summary>
     public abstract void ReleaseVisual(Data data);

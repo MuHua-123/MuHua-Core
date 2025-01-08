@@ -7,14 +7,14 @@ using UnityEngine;
 /// </summary>
 public abstract class ModuleSingle<Data> : MonoBehaviour {
     /// <summary> 必须要初始化 </summary>
-    protected abstract void Awake();
+    protected virtual void Awake() { }
     /// <summary> 核心模块 </summary>
     protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 打开 </summary>
-    public abstract void Open(Data data);
+    public virtual void Open(Data data) { }
     /// <summary> 完成 </summary>
-    public abstract void Complete();
+    public virtual void Complete() { }
     /// <summary> 关闭 </summary>
-    public abstract void Close();
+    public virtual void Close() { }
 }

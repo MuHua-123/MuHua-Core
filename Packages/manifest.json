@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.muhua.tools": "https://github.com/MuHua-123/MuHua-Tools.git?path=Packages/Tools",
     "com.muhua.uicontrol": "https://github.com/MuHua-123/MuHua-UIControl.git?path=Packages/UIControl",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.collections": "1.2.4",
