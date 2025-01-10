@@ -17,37 +17,3 @@ public abstract class ModuleUIPanel : MonoBehaviour {
 
     public abstract VisualElement Element { get; }
 }
-/// <summary>
-/// UI项
-/// </summary>
-public abstract class UIItem<Data> {
-    /// <summary> 选择事件 </summary>
-    public static event Action<Data> OnSelect;
-    /// <summary> 触发事件 </summary>
-    public static void Select(Data data) => OnSelect?.Invoke(data);
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
-    /// <summary> 绑定的数据 </summary>
-    public readonly Data value;
-    /// <summary> 绑定的元素 </summary>
-    public readonly VisualElement element;
-    /// <summary> 基础实例 </summary>
-    public UIItem(Data value, VisualElement element) {
-        this.value = value;
-        this.element = element;
-        OnSelect += UIItem_OnSelect;
-    }
-    /// <summary> 触发选择事件 </summary>
-    public virtual void Select() => OnSelect?.Invoke(value);
-    /// <summary> 侦听选择事件 </summary>
-    public virtual void UIItem_OnSelect(Data obj) {
-        if (value.Equals(obj)) { SelectState(); }
-        else { DefaultState(); }
-    }
-    /// <summary> 默认状态 </summary>
-    public virtual void DefaultState() { }
-    /// <summary> 选中状态 </summary>
-    public virtual void SelectState() { }
-    /// <summary> 释放 </summary>
-    public virtual void Release() => OnSelect -= UIItem_OnSelect;
-}
