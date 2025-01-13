@@ -6,10 +6,9 @@ using UnityEngine;
 /// <summary>
 /// 资源模块
 /// </summary>
-public class ModuleAssets<Data> {
+public class ModuleAssets<Data> : Module<ModuleAssets<Data>> {
+    /// <summary> 数据列表 </summary>
     protected List<Data> datas = new List<Data>();
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 更改事件 </summary>
     public virtual event Action OnChange;
@@ -32,9 +31,6 @@ public class ModuleAssets<Data> {
     /// <summary> 加载数据 </summary>
     public virtual void Load() { throw new NotImplementedException(); }
 
-    /// <summary> 查询数据 </summary>
-    public virtual Data Find(int index) { throw new NotImplementedException(); }
-    public virtual Data Find(Guid guid) { throw new NotImplementedException(); }
     /// <summary> 循环列表 </summary>
     public virtual void ForEach(Action<Data> action) => Datas.ForEach(action);
 }

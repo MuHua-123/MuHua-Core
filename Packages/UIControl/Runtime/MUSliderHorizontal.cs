@@ -106,21 +106,15 @@ namespace MuHua {
             tracker.style.width = CurrentPosition;
             UpdateFloatField();
         }
-        internal void UpdateFloatField(ChangeEvent<float> evt) {
-            float value = Mathf.Clamp(evt.newValue, MinValue, MaxValue);
-            slidingValue = (value - MinValue) / (MaxValue - MinValue);
-            tracker.style.width = CurrentPosition;
-            SlidingValueChanged?.Invoke(Value);
-        }
         internal void UpdateFloatField(bool value) {
             isDisplayInput = value;
             floatField.style.display = isDisplayInput ? DisplayStyle.Flex : DisplayStyle.None;
         }
         internal void UpdateFloatField() {
-            floatField.SetValueWithoutNotify(Value);
+            floatField.value = Value;
         }
         internal float UpdateValue() {
-            float value = Mathf.Lerp(MinValue, MaxValue, SlidingValue);
+            float value = (MaxValue - MinValue) * SlidingValue;
             if (dataType == RoundDataType.保留两位小数) { value = (float)Math.Round(value, 2); }
             if (dataType == RoundDataType.整数) { value = Mathf.FloorToInt(value); }
             return Mathf.Clamp(value, MinValue, MaxValue);
@@ -170,8 +164,6 @@ namespace MuHua {
             dragger.RegisterCallback<PointerMoveEvent>(DraggerDrag);
             dragger.RegisterCallback<PointerUpEvent>((evt) => isDragger = false);
             dragger.RegisterCallback<PointerLeaveEvent>((evt) => isDragger = false);
-
-            floatField.RegisterCallback<ChangeEvent<float>>(UpdateFloatField);
 
             container.RegisterCallback<PointerDownEvent>(ContainerDown);
         }

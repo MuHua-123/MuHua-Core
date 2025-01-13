@@ -12,8 +12,6 @@ public abstract class ModuleUIWindow<Data> : MonoBehaviour {
     public ModuleUIPage ModuleUIPage;
     /// <summary> 必须初始化 </summary>
     public abstract void Awake();
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 绑定的根元素 </summary>
     public abstract VisualElement Element { get; }

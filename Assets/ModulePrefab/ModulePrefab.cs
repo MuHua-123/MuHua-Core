@@ -8,8 +8,6 @@ using UnityEngine;
 public abstract class ModulePrefab<Data> : MonoBehaviour {
     /// <summary> 关联的数据 </summary>
     protected Data value;
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 关联的数据 </summary>
     public virtual Data Value => value;

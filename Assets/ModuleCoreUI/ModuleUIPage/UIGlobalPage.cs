@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class UIGlobalPage : ModuleUIPage {
-    protected override void Awake() => ModuleCore.GlobalPage = this;
+    protected override void Awake() { }
 
     private void Start() {
         string url = "https://neiyihuizhouilabtest.zgfzjy.cn/api/client/color/categroies";

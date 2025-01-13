@@ -6,21 +6,19 @@ using UnityEngine;
 /// <summary>
 /// 数据处理器模块
 /// </summary>
-public class ModuleHandle<T> {
+public class ModuleHandle<Data> : Module<ModuleHandle<Data>> {
     /// <summary> 数据 </summary>
-    protected T value;
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
+    protected Data value;
 
     /// <summary> 当前数据 </summary>
-    public virtual T Current => value;
+    public virtual Data Current => value;
     /// <summary> 当前数据是否有效 </summary>
     public virtual bool IsValid => Current != null;
 
     /// <summary> 改变当前数据 Event </summary>
-    public virtual event Action<T> OnChange;
+    public virtual event Action<Data> OnChange;
     /// <summary> 改变当前数据 </summary>
     public virtual void Change() => OnChange?.Invoke(value);
     /// <summary> 改变当前数据 </summary>
-    public virtual void Change(T value) {this.value = value; OnChange?.Invoke(value); }
+    public virtual void Change(Data value) { this.value = value; OnChange?.Invoke(value); }
 }

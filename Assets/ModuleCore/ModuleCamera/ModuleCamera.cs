@@ -10,8 +10,6 @@ public abstract class ModuleCamera : MonoBehaviour {
     public static readonly LayerMask DefaultLayerMask = ~(1 << 0) | 1 << 0;
     /// <summary> 必须要初始化 </summary>
     protected abstract void Awake();
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 相机位置 </summary>
     public abstract Vector3 Position { get; set; }

@@ -12,8 +12,6 @@ public abstract class ModuleUIPanel : MonoBehaviour {
     public ModuleUIPage ModuleUIPage;
     /// <summary> 可选初始化 </summary>
     protected virtual void Awake() { }
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     public abstract VisualElement Element { get; }
 }
@@ -25,8 +23,6 @@ public abstract class UIItem<Data> {
     public static event Action<Data> OnSelect;
     /// <summary> 触发事件 </summary>
     public static void Select(Data data) => OnSelect?.Invoke(data);
-    /// <summary> 核心模块 </summary>
-    protected virtual ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 绑定的数据 </summary>
     public readonly Data value;
     /// <summary> 绑定的元素 </summary>
