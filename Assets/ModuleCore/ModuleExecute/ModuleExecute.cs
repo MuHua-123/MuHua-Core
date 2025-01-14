@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 执行模块
 /// </summary>
-public abstract class ModuleExecute<Data> {
+public interface ModuleExecute<Data> {
     /// <summary> 执行 </summary>
-    public abstract void Compute(Data data);
+    public void Compute(Data data);
 }

@@ -8,10 +8,6 @@ using UnityEngine.UIElements;
 /// UI项
 /// </summary>
 public abstract class ModuleUIItem<Data> {
-    /// <summary> 选择事件 </summary>
-    public static event Action<Data> OnSelect;
-    /// <summary> 触发事件 </summary>
-    public static void Select(Data data) => OnSelect?.Invoke(data);
     /// <summary> 绑定的数据 </summary>
     public readonly Data value;
     /// <summary> 绑定的元素 </summary>
@@ -22,13 +18,18 @@ public abstract class ModuleUIItem<Data> {
         this.element = element;
         OnSelect += UIItem_OnSelect;
     }
-    /// <summary> 触发选择事件 </summary>
-    public virtual void Select() => OnSelect?.Invoke(value);
     /// <summary> 侦听选择事件 </summary>
     public virtual void UIItem_OnSelect(Data obj) {
         if (value.Equals(obj)) { SelectState(); }
         else { DefaultState(); }
     }
+
+    /// <summary> 选择事件 </summary>
+    public static event Action<Data> OnSelect;
+    /// <summary> 触发事件 </summary>
+    public static void Select(Data data) => OnSelect?.Invoke(data);
+    /// <summary> 触发选择事件 </summary>
+    public virtual void Select() => OnSelect?.Invoke(value);
     /// <summary> 默认状态 </summary>
     public virtual void DefaultState() { }
     /// <summary> 选中状态 </summary>
