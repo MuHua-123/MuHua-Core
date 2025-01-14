@@ -6,9 +6,11 @@ using UnityEngine.UIElements;
 /// <summary>
 /// UI控件
 /// </summary>
-public abstract class ModuleUIControl {
+public class ModuleUIControl {
+    /// <summary> 核心模块 </summary>
+    protected virtual ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 绑定的元素 </summary>
     public readonly VisualElement element;
-    /// <summary> 基础实例 </summary>
+    /// <summary> UI控件 </summary>
     public ModuleUIControl(VisualElement element) => this.element = element;
 }

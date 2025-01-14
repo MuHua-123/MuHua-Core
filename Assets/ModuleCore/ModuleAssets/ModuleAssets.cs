@@ -6,9 +6,10 @@ using UnityEngine;
 /// <summary>
 /// 资源模块
 /// </summary>
-public class ModuleAssets<Data> : Module<ModuleAssets<Data>> {
-    /// <summary> 数据列表 </summary>
+public class ModuleAssets<Data> {
     protected List<Data> datas = new List<Data>();
+    /// <summary> 核心模块 </summary>
+    protected virtual ModuleCore ModuleCore => ModuleCore.I;
 
     /// <summary> 更改事件 </summary>
     public virtual event Action OnChange;

@@ -7,19 +7,16 @@ using UnityEngine.UIElements;
 /// <summary>
 /// UI项
 /// </summary>
-public abstract class ModuleUIItem<Data> {
+public abstract class ModuleUIItem<Data> : ModuleUIControl {
     /// <summary> 绑定的数据 </summary>
     public readonly Data value;
-    /// <summary> 绑定的元素 </summary>
-    public readonly VisualElement element;
-    /// <summary> 基础实例 </summary>
-    public ModuleUIItem(Data value, VisualElement element) {
+    /// <summary> UI项 </summary>
+    public ModuleUIItem(Data value, VisualElement element) : base(element) {
         this.value = value;
-        this.element = element;
-        OnSelect += UIItem_OnSelect;
+        OnSelect += UnitUIPanelItem_OnSelect;
     }
     /// <summary> 侦听选择事件 </summary>
-    public virtual void UIItem_OnSelect(Data obj) {
+    public virtual void UnitUIPanelItem_OnSelect(Data obj) {
         if (value.Equals(obj)) { SelectState(); }
         else { DefaultState(); }
     }
@@ -35,5 +32,5 @@ public abstract class ModuleUIItem<Data> {
     /// <summary> 选中状态 </summary>
     public virtual void SelectState() { }
     /// <summary> 释放 </summary>
-    public virtual void Release() => OnSelect -= UIItem_OnSelect;
+    public virtual void Release() => OnSelect -= UnitUIPanelItem_OnSelect;
 }

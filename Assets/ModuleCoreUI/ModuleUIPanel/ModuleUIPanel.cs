@@ -9,7 +9,9 @@ using UnityEngine.UIElements;
 /// </summary>
 public abstract class ModuleUIPanel : MonoBehaviour {
     /// <summary> 绑定的页面 </summary>
-    public ModuleUIPage UIPage;
+    public ModuleUIPage ModuleUIPage;
+    /// <summary> 核心模块 </summary>
+    protected virtual ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 绑定的根元素 </summary>
     public abstract VisualElement Element { get; }
 }
