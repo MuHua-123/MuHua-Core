@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 数据处理器模块
 /// </summary>
-public class ModuleHandle<Data> : Module<ModuleHandle<Data>> {
+public class ModuleHandle<Data> {
     /// <summary> 数据 </summary>
     protected Data value;
 
