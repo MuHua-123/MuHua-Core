@@ -6,14 +6,16 @@ using UnityEngine;
 /// <summary>
 /// 单例模块
 /// </summary>
-public abstract class ModuleSingle<Data> : MonoBehaviour {
+public abstract class ModuleSingle<T> : MonoBehaviour where T : ModuleSingle<T> {
     /// <summary> 模块单例 </summary>
-    public static ModuleSingle<Data> I => instance;
+    public static T I => instance;
     /// <summary> 模块单例 </summary>
-    protected static ModuleSingle<Data> instance;
+    protected static T instance;
+    /// <summary> 核心模块 </summary>
+    protected virtual ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 初始化 </summary>
     protected virtual void Awake() {
         if (instance != null) { Destroy(instance.gameObject); }
-        instance = this;
+        instance = (T)this;
     }
 }

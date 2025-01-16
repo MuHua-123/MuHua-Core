@@ -7,5 +7,5 @@ using UnityEngine;
 /// </summary>
 public interface ModuleExecute<Data> {
     /// <summary> 执行 </summary>
-    public void Compute(Data data);
+    public void Execute(Data data);
 }

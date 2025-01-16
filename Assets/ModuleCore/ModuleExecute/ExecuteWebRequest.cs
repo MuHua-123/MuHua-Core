@@ -7,19 +7,14 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 /// <summary>
-/// 网络请求工具
+/// Web请求执行模块
 /// </summary>
-public static class WebRequest {
-    public static TaskAwaiter<object> GetAwaiter(this UnityWebRequestAsyncOperation op) {
-        var tcs = new TaskCompletionSource<object>();
-        op.completed += (obj) => { tcs.SetResult(null); };
-        return tcs.Task.GetAwaiter();
-    }
+public class ExecuteWebRequest : ModuleExecute<DataRequest> {
     /// <summary> 发送请求 </summary>
-    public static void Send(DataRequest request) {
+    public void Execute(DataRequest request) {
         if (request.RequestType == WebRequestType.GET) { Get(request); }
-        if (request.RequestType == WebRequestType.POSTFORM) { PostForm(request); }
-        if (request.RequestType == WebRequestType.POSTJSON) { PostJson(request); }
+        if (request.RequestType == WebRequestType.PostForm) { PostForm(request); }
+        if (request.RequestType == WebRequestType.PostJson) { PostJson(request); }
         if (request.RequestType == WebRequestType.Texture) { Texture(request); }
     }
     public static async void Get(DataRequest request) {
@@ -63,15 +58,25 @@ public static class WebRequest {
     }
 }
 /// <summary>
+/// Web请求执行模块工具
+/// </summary>
+public static class ExecuteWebRequestTool {
+    public static TaskAwaiter<object> GetAwaiter(this UnityWebRequestAsyncOperation op) {
+        var tcs = new TaskCompletionSource<object>();
+        op.completed += (obj) => { tcs.SetResult(null); };
+        return tcs.Task.GetAwaiter();
+    }
+}
+/// <summary>
 /// Web请求类型
 /// </summary>
 public enum WebRequestType {
     /// <summary> GET </summary>
     GET = 0,
     /// <summary> POST 表单 </summary>
-    POSTFORM = 1,
+    PostForm = 1,
     /// <summary> POST Json </summary>
-    POSTJSON = 2,
+    PostJson = 2,
     /// <summary> GET 获取图片 </summary>
     Texture = 3
 }
@@ -136,14 +141,14 @@ public class DataRequestPost : DataRequest {
         this.url = url;
         this.json = json;
         this.OnCallback = OnCallback;
-        type = WebRequestType.POSTJSON;
+        type = WebRequestType.PostJson;
     }
     /// <summary> Web Post请求 提交WWWForm数据 </summary>
     public DataRequestPost(string url, WWWForm form, Action<string> OnCallback = null) {
         this.url = url;
         this.form = form;
         this.OnCallback = OnCallback;
-        type = WebRequestType.POSTFORM;
+        type = WebRequestType.PostForm;
     }
 
     public override void RequestResultHandle(bool isDone, DownloadHandler downloadHandler) {
