@@ -14,8 +14,18 @@ public abstract class ModuleSingle<T> : MonoBehaviour where T : ModuleSingle<T> 
     /// <summary> 核心模块 </summary>
     protected virtual ModuleCore ModuleCore => ModuleCore.I;
     /// <summary> 初始化 </summary>
-    protected virtual void Awake() {
+    protected abstract void Awake();
+
+    /// <summary> 替换 </summary>
+    protected virtual void Replace(bool isDontDestroy = true) {
         if (instance != null) { Destroy(instance.gameObject); }
         instance = (T)this;
+        if (isDontDestroy) { DontDestroyOnLoad(gameObject); }
+    }
+    /// <summary> 不替换 </summary>
+    protected virtual void NoReplace(bool isDontDestroy = true) {
+        if (isDontDestroy) { DontDestroyOnLoad(gameObject); }
+        if (instance == null) { instance = (T)this; }
+        else { Destroy(gameObject); }
     }
 }
