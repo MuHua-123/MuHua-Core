@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 /// <summary>
 /// UI项
 /// </summary>
-public abstract class ModuleUIItem<Data> : ModuleUIControl {
+public abstract class ModuleUIItem<Data> : ModuleUIPanel {
     /// <summary> 绑定的数据 </summary>
     public readonly Data value;
     /// <summary> UI项 </summary>

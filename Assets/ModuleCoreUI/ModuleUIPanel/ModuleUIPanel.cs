@@ -1,17 +1,16 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 /// <summary>
-/// UI面板
+/// UI控件
 /// </summary>
-public abstract class ModuleUIPanel : MonoBehaviour {
-    /// <summary> 绑定的页面 </summary>
-    public ModuleUIPage ModuleUIPage;
+public class ModuleUIPanel {
     /// <summary> 核心模块 </summary>
     protected virtual ModuleCore ModuleCore => ModuleCore.I;
-    /// <summary> 绑定的根元素 </summary>
-    public abstract VisualElement Element { get; }
+    /// <summary> 绑定的元素 </summary>
+    public readonly VisualElement element;
+    /// <summary> UI控件 </summary>
+    public ModuleUIPanel(VisualElement element) => this.element = element;
 }
