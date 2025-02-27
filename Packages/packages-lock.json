@@ -215,6 +215,12 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "muhua-finite-state-machine": {
+      "version": "file:FSM",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "muhua-label-follow": {
       "version": "file:LabelFollow",
       "depth": 0,
