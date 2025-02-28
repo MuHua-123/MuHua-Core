@@ -4,34 +4,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace MuHua {
-    public class MUSliderHorizontal : VisualElement {
-        public enum RoundDataType {
+namespace MuHua
+{
+    public class MUSliderHorizontal : VisualElement
+    {
+        public enum RoundDataType
+        {
             保留两位小数 = 0,
             小数 = 1,
             整数 = 2,
         }
         public new class UxmlFactory : UxmlFactory<MUSliderHorizontal, UxmlTraits> { }
-        public new class UxmlTraits : VisualElement.UxmlTraits {
-            private UxmlStringAttributeDescription Text = new UxmlStringAttributeDescription {
+        public new class UxmlTraits : VisualElement.UxmlTraits
+        {
+            private UxmlStringAttributeDescription Text = new UxmlStringAttributeDescription
+            {
                 name = "text"
             };
-            private UxmlFloatAttributeDescription MinValue = new UxmlFloatAttributeDescription {
+            private UxmlFloatAttributeDescription MinValue = new UxmlFloatAttributeDescription
+            {
                 name = "min-value"
             };
-            private UxmlFloatAttributeDescription MaxValue = new UxmlFloatAttributeDescription {
+            private UxmlFloatAttributeDescription MaxValue = new UxmlFloatAttributeDescription
+            {
                 name = "max-value"
             };
-            private UxmlFloatAttributeDescription SlidingValue = new UxmlFloatAttributeDescription {
+            private UxmlFloatAttributeDescription SlidingValue = new UxmlFloatAttributeDescription
+            {
                 name = "sliding-value"
             };
-            private UxmlBoolAttributeDescription DisplayInput = new UxmlBoolAttributeDescription {
+            private UxmlBoolAttributeDescription DisplayInput = new UxmlBoolAttributeDescription
+            {
                 name = "display-input"
             };
-            private UxmlEnumAttributeDescription<RoundDataType> DataType = new UxmlEnumAttributeDescription<RoundDataType> {
+            private UxmlEnumAttributeDescription<RoundDataType> DataType = new UxmlEnumAttributeDescription<RoundDataType>
+            {
                 name = "data-type"
             };
-            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc) {
+            public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
+            {
                 base.Init(ve, bag, cc);
                 MUSliderHorizontal slider = (MUSliderHorizontal)ve;
                 slider.Text = Text.GetValueFromBag(bag, cc);
@@ -50,31 +61,38 @@ namespace MuHua {
         public VisualElement tracker = new VisualElement();
         public VisualElement dragger = new VisualElement();
 
-        public string Text {
+        public string Text
+        {
             get => labelElement.text;
             set => UpdateLabelElement(value);
         }
-        public float MinValue {
+        public float MinValue
+        {
             get => minValue;
             set { minValue = value; UpdateFloatField(); }
         }
-        public float MaxValue {
+        public float MaxValue
+        {
             get => maxValue;
             set { maxValue = value; UpdateFloatField(); }
         }
-        public float SlidingValue {
+        public float SlidingValue
+        {
             get => slidingValue;
             set => UpdateSlidingValue(value);
         }
-        public bool DisplayInput {
+        public bool DisplayInput
+        {
             get => isDisplayInput;
             set => UpdateFloatField(value);
         }
-        public RoundDataType DataType {
+        public RoundDataType DataType
+        {
             get => dataType;
             set { dataType = value; UpdateFloatField(); }
         }
-        public float Value {
+        public float Value
+        {
             get => UpdateValue();
             set => UpdateValue(value);
         }
@@ -91,42 +109,56 @@ namespace MuHua {
         internal float MaxPosition { get => container.resolvedStyle.width; }
         internal float CurrentPosition { get => slidingValue * container.resolvedStyle.width; }
 
-        internal void UpdateLabelElement(string value) {
+        internal void UpdateLabelElement(string value)
+        {
             bool display = value != "" && value != null;
             labelElement.text = value;
             labelElement.style.display = display ? DisplayStyle.Flex : DisplayStyle.None;
         }
-        internal void UpdateSlidingValue(float value) {
+        internal void UpdateSlidingValue(float value)
+        {
             UpdateDragger(value);
             SlidingValueChanged?.Invoke(Value);
         }
-        internal void UpdateDragger(float value) {
+        internal void UpdateDragger(float value)
+        {
             slidingValue = value;
             slidingValue = Mathf.Clamp(slidingValue, 0, 1);
-            tracker.style.width = CurrentPosition;
+            tracker.style.width = Length.Percent(slidingValue * 100);
             UpdateFloatField();
         }
-        internal void UpdateFloatField(bool value) {
+        internal void UpdateFloatField(ChangeEvent<float> evt)
+        {
+            float value = Mathf.Clamp(evt.newValue, MinValue, MaxValue);
+            slidingValue = Mathf.InverseLerp(MinValue, MaxValue, value);
+            tracker.style.width = Length.Percent(slidingValue * 100);
+            SlidingValueChanged?.Invoke(Value);
+        }
+        internal void UpdateFloatField(bool value)
+        {
             isDisplayInput = value;
             floatField.style.display = isDisplayInput ? DisplayStyle.Flex : DisplayStyle.None;
         }
-        internal void UpdateFloatField() {
+        internal void UpdateFloatField()
+        {
             floatField.value = Value;
         }
-        internal float UpdateValue() {
-            float value = (MaxValue - MinValue) * SlidingValue;
+        internal float UpdateValue()
+        {
+            float value = Mathf.Lerp(MinValue, MaxValue, SlidingValue);
             if (dataType == RoundDataType.保留两位小数) { value = (float)Math.Round(value, 2); }
             if (dataType == RoundDataType.整数) { value = Mathf.FloorToInt(value); }
             return Mathf.Clamp(value, MinValue, MaxValue);
         }
-        internal void UpdateValue(float value) {
-            slidingValue = value / (MaxValue - MinValue);
-            slidingValue = Mathf.Clamp(slidingValue, 0, 1);
-            tracker.style.width = CurrentPosition;
+        internal void UpdateValue(float value)
+        {
+            slidingValue = Mathf.InverseLerp(MinValue, MaxValue, value);
+            tracker.style.width = Length.Percent(slidingValue * 100);
             UpdateFloatField();
         }
 
-        public MUSliderHorizontal() {
+        public MUSliderHorizontal()
+        {
             //设置名称
             labelElement.name = "Label";
             floatField.name = "FloatField";
@@ -165,20 +197,25 @@ namespace MuHua {
             dragger.RegisterCallback<PointerUpEvent>((evt) => isDragger = false);
             dragger.RegisterCallback<PointerLeaveEvent>((evt) => isDragger = false);
 
+            floatField.RegisterCallback<ChangeEvent<float>>(UpdateFloatField);
+
             container.RegisterCallback<PointerDownEvent>(ContainerDown);
         }
-        private void DraggerDown(PointerDownEvent evt) {
+        private void DraggerDown(PointerDownEvent evt)
+        {
             isDragger = true;
             mousePosition = evt.position.x;
             originalPosition = CurrentPosition;
         }
-        private void DraggerDrag(PointerMoveEvent evt) {
+        private void DraggerDrag(PointerMoveEvent evt)
+        {
             if (!isDragger) { return; }
             float offset = evt.position.x - mousePosition;
             float value = (originalPosition + offset) / MaxPosition;
             UpdateSlidingValue(value);
         }
-        private void ContainerDown(PointerDownEvent evt) {
+        private void ContainerDown(PointerDownEvent evt)
+        {
             float value = evt.localPosition.x / MaxPosition;
             UpdateSlidingValue(value);
         }

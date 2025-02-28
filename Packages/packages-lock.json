@@ -215,7 +215,7 @@
       },
       "url": "https://packages.unity.cn"
     },
-    "muhua-finite-state-machine": {
+    "muhua-fsm": {
       "version": "file:FSM",
       "depth": 0,
       "source": "embedded",
