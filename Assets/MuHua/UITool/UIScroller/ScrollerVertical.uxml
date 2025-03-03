@@ -1,8 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/MuHua/UITool/USS/Scroller.uss?fileID=7433441132597879392&amp;guid=a7fd7497066a90d4cad4bb96a3d9cf68&amp;type=3#Scroller" />
-    <MuHua.MUScrollerHorizontal />
-    <MuHua.MUScrollerVertical />
-    <ui:VisualElement name="ScrollerVertical" style="flex-grow: 1;">
-        <ui:VisualElement name="Dragger" style="flex-grow: 1;" />
-    </ui:VisualElement>
-</ui:UXML>
