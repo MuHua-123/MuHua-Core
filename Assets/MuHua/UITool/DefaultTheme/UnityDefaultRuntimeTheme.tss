@@ -4,6 +4,9 @@
 @import url("/Assets/MuHua/UITool/UIFloatingWindow/FloatingWindow.uss");
 @import url("/Assets/MuHua/UITool/UIScroller/Scroller.uss");
 @import url("/Assets/MuHua/UITool/UIScrollView/ScrollView.uss");
+@import url("/Assets/MuHua/UITool/UISlider/Slider.uss");
+
+
 
 
 

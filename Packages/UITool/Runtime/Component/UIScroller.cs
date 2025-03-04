@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 namespace MuHua {
 	/// <summary>
-	/// 滑块
+	/// 滚动条
 	/// </summary>
 	public class UIScroller {
 		/// <summary> 绑定的元素 </summary>
@@ -23,14 +23,16 @@ namespace MuHua {
 		public float originalPosition;
 		public float pointerPosition;
 
-		private UIScrollerFunc scrollerFunc;
+		public readonly UIScrollerFunc scrollerFunc;
 
-		public VisualElement dragger => element.Q<VisualElement>("Dragger");
+		public readonly VisualElement Dragger;
 
 		public UIScroller(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.FromLeftToRight) {
 			this.element = element;
 			this.canvas = canvas;
 			this.direction = direction;
+
+			Dragger = element.Q<VisualElement>("Dragger");
 
 			if (direction == UIDirection.FromLeftToRight) { scrollerFunc = new FromLeftToRight(this); }
 			if (direction == UIDirection.FromRightToLeft) { scrollerFunc = new FromRightToLeft(this); }
@@ -38,19 +40,19 @@ namespace MuHua {
 			if (direction == UIDirection.FromBottomToTop) { scrollerFunc = new FromBottomToTop(this); }
 
 			//设置事件
-			dragger.RegisterCallback<PointerDownEvent>(DraggerDown);
+			Dragger.RegisterCallback<PointerDownEvent>(DraggerDown);
 			element.RegisterCallback<PointerDownEvent>(ElementDown);
 
 			canvas.RegisterCallback<PointerUpEvent>((evt) => isDragger = false);
 			canvas.RegisterCallback<PointerLeaveEvent>((evt) => isDragger = false);
 		}
 
-		public virtual void DraggerDown(PointerDownEvent evt) => scrollerFunc.DraggerDown(evt);
-		public virtual void ElementDown(PointerDownEvent evt) => scrollerFunc.ElementDown(evt);
+		private void DraggerDown(PointerDownEvent evt) => scrollerFunc.DraggerDown(evt);
+		private void ElementDown(PointerDownEvent evt) => scrollerFunc.ElementDown(evt);
 		/// <summary> 更新状态 </summary>
-		public virtual void Update() => scrollerFunc.Update();
+		public void Update() => scrollerFunc.Update();
 		/// <summary> 更新值(0-1) </summary>
-		public virtual void UpdateValue(float value, bool send = true) => scrollerFunc.UpdateValue(value, send);
+		public void UpdateValue(float value, bool send = true) => scrollerFunc.UpdateValue(value, send);
 
 		public abstract class UIScrollerFunc {
 			public readonly UIScroller scroller;
@@ -68,12 +70,12 @@ namespace MuHua {
 			public FromLeftToRight(UIScroller scroller) : base(scroller) { }
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
-				scroller.originalPosition = scroller.dragger.transform.position.x;
+				scroller.originalPosition = scroller.Dragger.transform.position.x;
 				scroller.pointerPosition = UITool.GetMousePosition().x;
 			}
 			public override void ElementDown(PointerDownEvent evt) {
-				float offset = evt.localPosition.x - scroller.dragger.resolvedStyle.width * 0.5f;
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float offset = evt.localPosition.x - scroller.Dragger.resolvedStyle.width * 0.5f;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float value = Mathf.InverseLerp(0, max, offset);
 				UpdateValue(value);
 			}
@@ -81,16 +83,16 @@ namespace MuHua {
 				if (!scroller.isDragger) { return; }
 				float differ = UITool.GetMousePosition().x - scroller.pointerPosition;
 				float offset = differ + scroller.originalPosition;
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float value = Mathf.InverseLerp(0, max, offset);
 				UpdateValue(value);
 			}
 			public override void UpdateValue(float value, bool send = true) {
 				scroller.value = value;
 				if (send) { scroller.ValueChanged?.Invoke(value); }
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float x = Mathf.Lerp(0, max, value);
-				scroller.dragger.transform.position = new Vector3(x, 0);
+				scroller.Dragger.transform.position = new Vector3(x, 0);
 			}
 		}
 
@@ -98,12 +100,12 @@ namespace MuHua {
 			public FromRightToLeft(UIScroller scroller) : base(scroller) { }
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
-				scroller.originalPosition = scroller.dragger.transform.position.x;
+				scroller.originalPosition = scroller.Dragger.transform.position.x;
 				scroller.pointerPosition = UITool.GetMousePosition().x;
 			}
 			public override void ElementDown(PointerDownEvent evt) {
-				float offset = evt.localPosition.x - scroller.dragger.resolvedStyle.width * 0.5f;
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float offset = evt.localPosition.x - scroller.Dragger.resolvedStyle.width * 0.5f;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float value = Mathf.InverseLerp(max, 0, offset);
 				UpdateValue(value);
 			}
@@ -111,16 +113,16 @@ namespace MuHua {
 				if (!scroller.isDragger) { return; }
 				float differ = UITool.GetMousePosition().x - scroller.pointerPosition;
 				float offset = differ + scroller.originalPosition;
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float value = Mathf.InverseLerp(max, 0, offset);
 				UpdateValue(value);
 			}
 			public override void UpdateValue(float value, bool send = true) {
 				scroller.value = value;
 				if (send) { scroller.ValueChanged?.Invoke(value); }
-				float max = scroller.element.resolvedStyle.width - scroller.dragger.resolvedStyle.width;
+				float max = scroller.element.resolvedStyle.width - scroller.Dragger.resolvedStyle.width;
 				float x = Mathf.Lerp(max, 0, value);
-				scroller.dragger.transform.position = new Vector3(x, 0);
+				scroller.Dragger.transform.position = new Vector3(x, 0);
 			}
 		}
 
@@ -128,12 +130,12 @@ namespace MuHua {
 			public FromTopToBottom(UIScroller scroller) : base(scroller) { }
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
-				scroller.originalPosition = scroller.dragger.transform.position.y;
+				scroller.originalPosition = scroller.Dragger.transform.position.y;
 				scroller.pointerPosition = Screen.height - UITool.GetMousePosition().y;
 			}
 			public override void ElementDown(PointerDownEvent evt) {
-				float offset = evt.localPosition.y - scroller.dragger.resolvedStyle.height * 0.5f;
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float offset = evt.localPosition.y - scroller.Dragger.resolvedStyle.height * 0.5f;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float value = Mathf.InverseLerp(0, max, offset);
 				UpdateValue(value);
 			}
@@ -141,16 +143,16 @@ namespace MuHua {
 				if (!scroller.isDragger) { return; }
 				float differ = Screen.height - UITool.GetMousePosition().y - scroller.pointerPosition;
 				float offset = differ + scroller.originalPosition;
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float value = Mathf.InverseLerp(0, max, offset);
 				UpdateValue(value);
 			}
 			public override void UpdateValue(float value, bool send = true) {
 				scroller.value = value;
 				if (send) { scroller.ValueChanged?.Invoke(value); }
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float y = Mathf.Lerp(0, max, value);
-				scroller.dragger.transform.position = new Vector3(0, y);
+				scroller.Dragger.transform.position = new Vector3(0, y);
 			}
 		}
 
@@ -158,12 +160,12 @@ namespace MuHua {
 			public FromBottomToTop(UIScroller scroller) : base(scroller) { }
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
-				scroller.originalPosition = scroller.dragger.transform.position.y;
+				scroller.originalPosition = scroller.Dragger.transform.position.y;
 				scroller.pointerPosition = Screen.height - UITool.GetMousePosition().y;
 			}
 			public override void ElementDown(PointerDownEvent evt) {
-				float offset = evt.localPosition.y - scroller.dragger.resolvedStyle.height * 0.5f;
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float offset = evt.localPosition.y - scroller.Dragger.resolvedStyle.height * 0.5f;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float value = Mathf.InverseLerp(max, 0, offset);
 				UpdateValue(value);
 			}
@@ -171,16 +173,16 @@ namespace MuHua {
 				if (!scroller.isDragger) { return; }
 				float differ = Screen.height - UITool.GetMousePosition().y - scroller.pointerPosition;
 				float offset = differ + scroller.originalPosition;
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float value = Mathf.InverseLerp(max, 0, offset);
 				UpdateValue(value);
 			}
 			public override void UpdateValue(float value, bool send = true) {
 				scroller.value = value;
 				if (send) { scroller.ValueChanged?.Invoke(value); }
-				float max = scroller.element.resolvedStyle.height - scroller.dragger.resolvedStyle.height;
+				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
 				float y = Mathf.Lerp(max, 0, value);
-				scroller.dragger.transform.position = new Vector3(0, y);
+				scroller.Dragger.transform.position = new Vector3(0, y);
 			}
 		}
 	}

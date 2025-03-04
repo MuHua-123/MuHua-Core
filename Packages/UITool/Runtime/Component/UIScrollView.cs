@@ -23,18 +23,23 @@ namespace MuHua {
 		public Vector3 originalPosition;
 		public Vector3 pointerPosition;
 
-		private UIScroller horizontal;
-		private UIScroller vertical;
+		public readonly UIScroller horizontal;
+		public readonly UIScroller vertical;
 
-		public VisualElement Viewport => element.Q<VisualElement>("Viewport");
-		public VisualElement Container => element.Q<VisualElement>("Container");
-		public VisualElement ScrollerHorizontal => element.Q<VisualElement>("ScrollerHorizontal");
-		public VisualElement ScrollerVertical => element.Q<VisualElement>("ScrollerVertical");
+		public readonly VisualElement Viewport;
+		public readonly VisualElement Container;
+		public readonly VisualElement ScrollerHorizontal;
+		public readonly VisualElement ScrollerVertical;
 
 		public UIScrollView(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.HorizontalAndVertical, UIDirection sh = UIDirection.FromLeftToRight, UIDirection sv = UIDirection.FromTopToBottom) {
 			this.element = element;
 			this.canvas = canvas;
 			this.direction = direction;
+
+			Viewport = element.Q<VisualElement>("Viewport");
+			Container = element.Q<VisualElement>("Container");
+			ScrollerHorizontal = element.Q<VisualElement>("ScrollerHorizontal");
+			ScrollerVertical = element.Q<VisualElement>("ScrollerVertical");
 
 			element.generateVisualContent += ElementGenerateVisualContent;
 
@@ -60,8 +65,8 @@ namespace MuHua {
 			float width = Mathf.Clamp01(Viewport.resolvedStyle.width / Container.resolvedStyle.width);
 			float height = Mathf.Clamp01(Viewport.resolvedStyle.height / Container.resolvedStyle.height);
 
-			horizontal.dragger.style.width = Length.Percent(width * 100);
-			vertical.dragger.style.height = Length.Percent(height * 100);
+			horizontal.Dragger.style.width = Length.Percent(width * 100);
+			vertical.Dragger.style.height = Length.Percent(height * 100);
 		}
 		/// <summary> 视图滚轮滑动 </summary>
 		private void ViewportWheel(WheelEvent evt) {

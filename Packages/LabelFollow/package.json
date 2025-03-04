@@ -10,7 +10,7 @@
   "type": "tool",
   "samples": [
     {
-      "displayName": "Label Follow Example",
+      "displayName": "Example",
       "description": "An example showing how to use the Label Follow system.",
       "path": "Samples"
     }

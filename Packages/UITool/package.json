@@ -7,5 +7,12 @@
     "name": "MuHua",
     "email": "muhua233@qq.com"
   },
-  "type": "tool"
+  "type": "tool",
+  "samples": [
+    {
+      "displayName": "Example",
+      "description": "An example showing how to use the UITool.",
+      "path": "Samples"
+    }
+  ]
 }
