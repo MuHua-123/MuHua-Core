@@ -27,13 +27,13 @@ csharp_new_line_before_open_brace = none
 # } else {
 #     ...
 # }
-csharp_new_line_before_else = false
+#csharp_new_line_before_else = false
 # try {
 #     ...
 # } catch (Exception e) {
 #     ...
 # }
-csharp_new_line_before_catch = false
+#csharp_new_line_before_catch = false
 # try {
 #     ...
 # } catch (Exception e) {
@@ -41,6 +41,6 @@ csharp_new_line_before_catch = false
 # } finally {
 #     ...
 # }
-csharp_new_line_before_finally = false
+#csharp_new_line_before_finally = false
 # 错误提示,如果不正常可以删掉
 # dotnet_diagnostic.IDE0055.severity = error
