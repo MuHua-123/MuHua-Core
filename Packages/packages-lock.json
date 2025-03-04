@@ -233,6 +233,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "muhua-tools": {
+      "version": "file:Tools",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "muhua-ui-tool": {
       "version": "file:UITool",
       "depth": 0,
