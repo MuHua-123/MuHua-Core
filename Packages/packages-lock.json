@@ -215,6 +215,12 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "muhua-character": {
+      "version": "file:Character",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "muhua-fsm": {
       "version": "file:FSM",
       "depth": 0,

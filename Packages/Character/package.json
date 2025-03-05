@@ -1,8 +1,8 @@
 {
-  "name": "muhua-fsm",
+  "name": "muhua-character",
   "version": "1.0.0",
-  "displayName": "MuHua FSM",
-  "description": "FiniteStateMachine\u6709\u9650\u72b6\u6001\u673a\u6846\u67b6",
+  "displayName": "MuHua Character",
+  "description": "\u89d2\u8272\u5305",
   "author": {
     "name": "MuHua",
     "email": "muhua233@qq.com"
@@ -10,7 +10,7 @@
   "type": "tool",
   "samples": [
     {
-      "displayName": "示例",
+      "displayName": "\u793a\u4f8b",
       "description": "",
       "path": "Samples"
     }
