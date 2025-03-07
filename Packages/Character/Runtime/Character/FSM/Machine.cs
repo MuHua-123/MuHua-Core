@@ -29,13 +29,5 @@ namespace MuHua {
             }
         }
         #endregion
-
-        public override bool UpdateMove(Vector3 position) {
-            return movement.UpdateMove(position);
-        }
-        public override void AnimationTrigger(string value) {
-            throw new System.NotImplementedException();
-        }
-        public override void AnimationEnd() => currentState?.Trigger();
     }
 }
