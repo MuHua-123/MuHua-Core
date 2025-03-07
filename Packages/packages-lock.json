@@ -221,12 +221,6 @@
       "source": "embedded",
       "dependencies": {}
     },
-    "muhua-fsm": {
-      "version": "file:FSM",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
-    },
     "muhua-label-follow": {
       "version": "file:LabelFollow",
       "depth": 0,
