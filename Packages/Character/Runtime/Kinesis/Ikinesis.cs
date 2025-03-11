@@ -7,13 +7,13 @@ namespace MuHua {
 	/// 角色动作
 	/// </summary>
 	public abstract class Ikinesis {
-		/// <summary> 动画名字 </summary>
-		public abstract string AnimName { get; }
-		/// <summary> 是否可以打断 </summary>
-		public abstract bool Interrupt { get; }
-
 		/// <summary> 持续更新 </summary>
 		public virtual void Update() { }
+
+		/// <summary> 动作过渡 </summary>
+		public abstract bool Transition(Ikinesis kinesis);
+
+		public virtual void Startkinesis() { }
 
 		/// <summary> 触发动画特效 </summary>
 		public virtual void AnimationEffects() { }

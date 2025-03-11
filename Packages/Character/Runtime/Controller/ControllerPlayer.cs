@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace MuHua {
-	public class PlayerController : MonoBehaviour {
+	public class ControllerPlayer : MonoBehaviour {
 		public Transform cameraController; // 相机对象
-		public PlayerCharacter character;
+		public CharacterPlayer character;
 
 		private Vector2 moveInput;
 
@@ -29,8 +29,8 @@ namespace MuHua {
 
 			// 相对于玩家的移动方向
 			Vector3 position = character.transform.position + new Vector3(moveDirection.x, 0, moveDirection.z) * 0.5f;
-			PlayerKinesisMove kinesis = new PlayerKinesisMove(position, character);
-			character.Updatekinesis(kinesis);
+			KinesisMove kinesis = new KinesisMove(character, position);
+			character.Transitionkinesis(kinesis);
 		}
 
 		#region 输入系统
