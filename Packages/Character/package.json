@@ -16,6 +16,6 @@
     }
   ],
   "dependencies": {
-    "com.unity.inputsystem": ""
+    "com.unity.inputsystem": "1.7.0"
   }
 }

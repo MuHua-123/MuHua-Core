@@ -229,7 +229,7 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.inputsystem": ""
+        "com.unity.inputsystem": "1.7.0"
       }
     },
     "muhua-label-follow": {
