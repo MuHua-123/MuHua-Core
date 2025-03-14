@@ -228,7 +228,9 @@
       "version": "file:Character",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {}
+      "dependencies": {
+        "com.unity.inputsystem": ""
+      }
     },
     "muhua-label-follow": {
       "version": "file:LabelFollow",
