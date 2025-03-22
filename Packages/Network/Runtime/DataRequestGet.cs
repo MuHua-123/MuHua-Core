@@ -15,7 +15,7 @@ namespace MuHua {
 		public Action<string> OnCallback;
 
 		public override string Url => url;
-		public override AsyncWebRequestType RequestType => AsyncWebRequestType.GET;
+		public override WebRequestType RequestType => WebRequestType.GET;
 
 		/// <summary> Web Get请求数据 </summary>
 		public DataRequestGet(string url, Action<string> OnCallback = null) {

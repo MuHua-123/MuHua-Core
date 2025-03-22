@@ -25,7 +25,7 @@ public class AnalysisCollector : Module<AnalysisCollector> {
 			SaveTool.SaveText(FileName.Create(code), json);
 			StockToAnalysis(json, action);
 		};
-		AsyncWebRequest.Execute(request);
+		WebRequestAsync.Execute(request);
 	}
 
 	public void StockToAnalysis(string json, Action<List<DataAnalysis>> action = null) {

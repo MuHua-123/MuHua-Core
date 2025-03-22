@@ -15,7 +15,7 @@ namespace MuHua {
 		public Action<Texture2D> OnCallback;
 
 		public override string Url => url;
-		public override AsyncWebRequestType RequestType => AsyncWebRequestType.Texture;
+		public override WebRequestType RequestType => WebRequestType.Texture;
 
 		/// <summary> Web Get请求 Texture </summary>
 		public DataRequestTexture(string url, Action<Texture2D> OnCallback = null) {

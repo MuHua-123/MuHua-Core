@@ -6,7 +6,7 @@ namespace MuHua {
 	/// <summary>
 	/// Web请求类型
 	/// </summary>
-	public enum AsyncWebRequestType {
+	public enum WebRequestType {
 		/// <summary> GET </summary>
 		GET = 0,
 		/// <summary> POST 表单 </summary>

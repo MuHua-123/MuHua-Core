@@ -12,13 +12,13 @@ namespace MuHua {
 		public readonly string url;
 		public readonly string json;
 		public readonly WWWForm form;
-		public readonly AsyncWebRequestType type;
+		public readonly WebRequestType type;
 
 		public Action<string> OnError;
 		public Action<string> OnCallback;
 
 		public override string Url => url;
-		public override AsyncWebRequestType RequestType => type;
+		public override WebRequestType RequestType => type;
 		public override string Json => json;
 		public override WWWForm Form => form;
 
@@ -27,14 +27,14 @@ namespace MuHua {
 			this.url = url;
 			this.json = json;
 			this.OnCallback = OnCallback;
-			type = AsyncWebRequestType.PostJson;
+			type = WebRequestType.PostJson;
 		}
 		/// <summary> Web Post请求 提交WWWForm数据 </summary>
 		public DataRequestPost(string url, WWWForm form, Action<string> OnCallback = null) {
 			this.url = url;
 			this.form = form;
 			this.OnCallback = OnCallback;
-			type = AsyncWebRequestType.PostForm;
+			type = WebRequestType.PostForm;
 		}
 
 		public override void RequestResultHandle(bool isDone, UnityWebRequest web) {

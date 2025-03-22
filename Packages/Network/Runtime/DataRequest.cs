@@ -11,7 +11,7 @@ namespace MuHua {
 		/// <summary> Web请求地址 </summary>
 		public abstract string Url { get; }
 		/// <summary> Web请求类型 </summary>
-		public abstract AsyncWebRequestType RequestType { get; }
+		public abstract WebRequestType RequestType { get; }
 		/// <summary> 提交json数据 </summary>
 		public virtual string Json { get; }
 		/// <summary> 提交Form表单数据 </summary>
