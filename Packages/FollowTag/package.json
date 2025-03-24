@@ -1,7 +1,7 @@
 {
-  "name": "muhua-label-follow",
+  "name": "muhua-follow-tag",
   "version": "1.0.0",
-  "displayName": "MuHua LabelFollow",
+  "displayName": "MuHua FollowTag",
   "description": "\u6d6e\u52a8\u6807\u7b7e\u7cfb\u7edf",
   "author": {
     "name": "MuHua",

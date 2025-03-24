@@ -6,6 +6,20 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.unity.addressables": {
+      "version": "1.21.21",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "1.21.23",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      },
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.burst": {
       "version": "1.8.15",
       "depth": 1,
@@ -140,6 +154,13 @@
         "com.unity.render-pipelines.core": "14.0.10"
       }
     },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "1.21.23",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.cn"
+    },
     "com.unity.searcher": {
       "version": "4.9.2",
       "depth": 2,
@@ -250,6 +271,14 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "muhua-aaloading": {
+      "version": "file:AALoading",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.addressables": "1.21.21"
+      }
+    },
     "muhua-character": {
       "version": "file:Character",
       "depth": 0,
@@ -258,8 +287,8 @@
         "com.unity.inputsystem": "1.7.0"
       }
     },
-    "muhua-label-follow": {
-      "version": "file:LabelFollow",
+    "muhua-follow-tag": {
+      "version": "file:FollowTag",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
