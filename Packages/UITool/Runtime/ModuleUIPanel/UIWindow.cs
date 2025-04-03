@@ -24,7 +24,7 @@ namespace MuHua {
 		public VisualElement Container => element.Q<VisualElement>("Container");
 
 		public Label Title => element.Q<Label>("Title");
-		public Button Close => element.Q<Button>("Close");
+		public VisualElement Close => element.Q<VisualElement>("Close");
 
 		public UIWindow(VisualElement element, VisualElement canvas) : base(element) {
 			this.canvas = canvas;
@@ -33,7 +33,7 @@ namespace MuHua {
 			canvas.RegisterCallback<PointerUpEvent>((evt) => isDownMove = false);
 			canvas.RegisterCallback<PointerLeaveEvent>((evt) => isDownMove = false);
 
-			Close.clicked += () => { SetActive(false); };
+			Close.RegisterCallback<ClickEvent>((evt) => SetActive(false));
 		}
 
 		/// <summary> 按下Top </summary>

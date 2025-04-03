@@ -299,6 +299,14 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "muhua-render-pipeline": {
+      "version": "file:RenderPipeline",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.render-pipelines.universal": "14.0.11"
+      }
+    },
     "muhua-tools": {
       "version": "file:Tools",
       "depth": 0,

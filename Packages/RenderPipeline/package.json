@@ -1,0 +1,14 @@
+{
+  "name": "muhua-render-pipeline",
+  "version": "1.0.0",
+  "displayName": "MuHua Render Pipeline",
+  "description": "\u6e32\u67d3\u7ba1\u7ebf\u6269\u5c55\u5305",
+  "author": {
+    "name": "MuHua",
+    "email": "muhua233@qq.com"
+  },
+  "type": "tool",
+  "dependencies": {
+    "com.unity.render-pipelines.universal": "14.0.11"
+  }
+}
