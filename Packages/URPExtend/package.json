@@ -1,8 +1,8 @@
 {
-  "name": "muhua-render-pipeline",
+  "name": "muhua-urp-extend",
   "version": "1.0.0",
-  "displayName": "MuHua Render Pipeline",
-  "description": "\u6e32\u67d3\u7ba1\u7ebf\u6269\u5c55\u5305",
+  "displayName": "MuHua URP Extend",
+  "description": "\u901a\u7528\u6e32\u67d3\u7ba1\u7ebf\u6269\u5c55\u5305",
   "author": {
     "name": "MuHua",
     "email": "muhua233@qq.com"
