@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-#if ENABLE_INPUT_SYSTEM && UNITY_INPUT_SYSTEM_PACKAGE
-using UnityEngine.InputSystem;
-#endif
-
 namespace MuHua {
 	/// <summary>
 	/// 悬浮窗口
@@ -19,12 +15,12 @@ namespace MuHua {
 		private Vector3 pointerPosition;
 		private Vector3 originalPosition;
 
-		public VisualElement Window => element.Q<VisualElement>("Window");
-		public VisualElement Top => element.Q<VisualElement>("Top");
-		public VisualElement Container => element.Q<VisualElement>("Container");
+		public VisualElement Window => Q<VisualElement>("Window");
+		public VisualElement Top => Q<VisualElement>("Top");
+		public VisualElement Container => Q<VisualElement>("Container");
 
-		public Label Title => element.Q<Label>("Title");
-		public VisualElement Close => element.Q<VisualElement>("Close");
+		public Label Title => Q<Label>("Title");
+		public VisualElement Close => Q<VisualElement>("Close");
 
 		public UIWindow(VisualElement element, VisualElement canvas) : base(element) {
 			this.canvas = canvas;

@@ -24,20 +24,15 @@ namespace MuHua {
 		public readonly UIScroller horizontal;
 		public readonly UIScroller vertical;
 
-		public readonly VisualElement Viewport;
-		public readonly VisualElement Container;
-		public readonly VisualElement ScrollerHorizontal;
-		public readonly VisualElement ScrollerVertical;
+		public VisualElement Viewport => Q<VisualElement>("Viewport");
+		public VisualElement Container => Q<VisualElement>("Container");
+		public VisualElement ScrollerHorizontal => Q<VisualElement>("ScrollerHorizontal");
+		public VisualElement ScrollerVertical => Q<VisualElement>("ScrollerVertical");
 
 		public UIScrollView(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.HorizontalAndVertical,
 		 UIDirection sh = UIDirection.FromLeftToRight, UIDirection sv = UIDirection.FromTopToBottom) : base(element) {
 			this.canvas = canvas;
 			this.direction = direction;
-
-			Viewport = element.Q<VisualElement>("Viewport");
-			Container = element.Q<VisualElement>("Container");
-			ScrollerHorizontal = element.Q<VisualElement>("ScrollerHorizontal");
-			ScrollerVertical = element.Q<VisualElement>("ScrollerVertical");
 
 			element.generateVisualContent += ElementGenerateVisualContent;
 

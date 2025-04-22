@@ -23,13 +23,11 @@ namespace MuHua {
 
 		public readonly UIScrollerFunc scrollerFunc;
 
-		public readonly VisualElement Dragger;
+		public VisualElement Dragger => Q<VisualElement>("Dragger");
 
 		public UIScroller(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.FromLeftToRight) : base(element) {
 			this.canvas = canvas;
 			this.direction = direction;
-
-			Dragger = element.Q<VisualElement>("Dragger");
 
 			if (direction == UIDirection.FromLeftToRight) { scrollerFunc = new FromLeftToRight(this); }
 			if (direction == UIDirection.FromRightToLeft) { scrollerFunc = new FromRightToLeft(this); }

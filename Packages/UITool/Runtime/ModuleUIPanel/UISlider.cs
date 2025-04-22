@@ -23,17 +23,13 @@ namespace MuHua {
 
 		public readonly UISliderFunc sliderFunc;
 
-		public readonly VisualElement Container;
-		public readonly VisualElement Tracker;
-		public readonly VisualElement Dragger;
+		public VisualElement Container => Q<VisualElement>("Container");
+		public VisualElement Tracker => Q<VisualElement>("Tracker");
+		public VisualElement Dragger => Q<VisualElement>("Dragger");
 
 		public UISlider(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.FromLeftToRight) : base(element) {
 			this.canvas = canvas;
 			this.direction = direction;
-
-			Container = element.Q<VisualElement>("Container");
-			Tracker = element.Q<VisualElement>("Tracker");
-			Dragger = element.Q<VisualElement>("Dragger");
 
 			if (direction == UIDirection.FromLeftToRight) { sliderFunc = new FromLeftToRight(this); }
 			if (direction == UIDirection.FromRightToLeft) { sliderFunc = new FromRightToLeft(this); }
