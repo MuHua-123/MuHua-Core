@@ -7,7 +7,9 @@
 @import url("/Assets/UI Toolkit/Component/ScrollView/ScrollView.uss");
 @import url("/Assets/UI Toolkit/Component/Slider/Slider.uss");
 @import url("/Assets/UI Toolkit/Component/Toggle/Toggle.uss");
-@import url("/Assets/UI Toolkit/Component/Window/Window.uss");
+@import url("/Assets/UI Toolkit/GameWindow/GameWindow.uss");
+
+
 
 
 

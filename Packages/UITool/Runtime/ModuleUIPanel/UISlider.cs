@@ -24,6 +24,7 @@ namespace MuHua {
 		public readonly UISliderFunc sliderFunc;
 
 		public VisualElement Container => Q<VisualElement>("Container");
+		public VisualElement Title => Q<VisualElement>("Title");
 		public VisualElement Tracker => Q<VisualElement>("Tracker");
 		public VisualElement Dragger => Q<VisualElement>("Dragger");
 
