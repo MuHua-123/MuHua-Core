@@ -29,8 +29,10 @@ namespace MuHua {
 		public VisualElement ScrollerHorizontal => Q<VisualElement>("ScrollerHorizontal");
 		public VisualElement ScrollerVertical => Q<VisualElement>("ScrollerVertical");
 
-		public UIScrollView(VisualElement element, VisualElement canvas, UIDirection direction = UIDirection.HorizontalAndVertical,
-		 UIDirection sh = UIDirection.FromLeftToRight, UIDirection sv = UIDirection.FromTopToBottom) : base(element) {
+		public UIScrollView(VisualElement element, VisualElement canvas,
+		UIDirection direction = UIDirection.HorizontalAndVertical,
+		UIDirection sh = UIDirection.FromLeftToRight,
+		UIDirection sv = UIDirection.FromTopToBottom) : base(element) {
 			this.canvas = canvas;
 			this.direction = direction;
 
@@ -79,7 +81,7 @@ namespace MuHua {
 		}
 
 		/// <summary> 更新状态 </summary>
-		public void Update() {
+		public virtual void Update() {
 			horizontal.Update();
 			vertical.Update();
 
