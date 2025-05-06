@@ -6,7 +6,7 @@ namespace MuHua {
 	/// <summary>
 	/// Web请求类型
 	/// </summary>
-	public enum WebRequestType {
+	public enum EnumNetworkRequestType {
 		/// <summary> GET </summary>
 		GET = 0,
 		/// <summary> POST 表单 </summary>
@@ -14,6 +14,8 @@ namespace MuHua {
 		/// <summary> POST Json </summary>
 		PostJson = 2,
 		/// <summary> GET 获取图片 </summary>
-		Texture = 3
+		Texture = 3,
+		/// <summary> GET 获取音频 </summary>
+		Audio = 4
 	}
 }

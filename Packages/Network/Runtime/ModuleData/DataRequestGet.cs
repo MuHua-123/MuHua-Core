@@ -11,11 +11,12 @@ namespace MuHua {
 	public class DataRequestGet : DataRequest {
 		public readonly string url;
 
+		public string result;
 		public Action<string> OnError;
 		public Action<string> OnCallback;
 
 		public override string Url => url;
-		public override WebRequestType RequestType => WebRequestType.GET;
+		public override EnumNetworkRequestType RequestType => EnumNetworkRequestType.GET;
 
 		/// <summary> Web Get请求数据 </summary>
 		public DataRequestGet(string url, Action<string> OnCallback = null) {
@@ -25,6 +26,7 @@ namespace MuHua {
 
 		public override void RequestResultHandle(bool isDone, UnityWebRequest web) {
 			DownloadHandler downloadHandler = web.downloadHandler;
+			result = downloadHandler.text;
 			if (!isDone) { OnError?.Invoke(downloadHandler.text); return; }
 			OnCallback?.Invoke(downloadHandler.text);
 		}

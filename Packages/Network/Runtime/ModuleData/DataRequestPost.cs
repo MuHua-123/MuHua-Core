@@ -12,13 +12,14 @@ namespace MuHua {
 		public readonly string url;
 		public readonly string json;
 		public readonly WWWForm form;
-		public readonly WebRequestType type;
+		public readonly EnumNetworkRequestType type;
 
+		public string result;
 		public Action<string> OnError;
 		public Action<string> OnCallback;
 
 		public override string Url => url;
-		public override WebRequestType RequestType => type;
+		public override EnumNetworkRequestType RequestType => type;
 		public override string Json => json;
 		public override WWWForm Form => form;
 
@@ -27,18 +28,19 @@ namespace MuHua {
 			this.url = url;
 			this.json = json;
 			this.OnCallback = OnCallback;
-			type = WebRequestType.PostJson;
+			type = EnumNetworkRequestType.PostJson;
 		}
 		/// <summary> Web Post请求 提交WWWForm数据 </summary>
 		public DataRequestPost(string url, WWWForm form, Action<string> OnCallback = null) {
 			this.url = url;
 			this.form = form;
 			this.OnCallback = OnCallback;
-			type = WebRequestType.PostForm;
+			type = EnumNetworkRequestType.PostForm;
 		}
 
 		public override void RequestResultHandle(bool isDone, UnityWebRequest web) {
 			DownloadHandler downloadHandler = web.downloadHandler;
+			result = downloadHandler.text;
 			if (!isDone) { OnError?.Invoke(downloadHandler.text); return; }
 			OnCallback?.Invoke(downloadHandler.text);
 		}

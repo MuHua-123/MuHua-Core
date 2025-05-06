@@ -10,13 +10,14 @@ namespace MuHua {
 	/// <summary>
 	/// 异步网络请求
 	/// </summary>
-	public static class WebRequestAsync {
+	public static class NetworkRequestAsync {
 		/// <summary> 发送请求 </summary>
 		public static void Execute(DataRequest request) {
-			if (request.RequestType == WebRequestType.GET) { Get(request); }
-			if (request.RequestType == WebRequestType.PostForm) { PostForm(request); }
-			if (request.RequestType == WebRequestType.PostJson) { PostJson(request); }
-			if (request.RequestType == WebRequestType.Texture) { Texture(request); }
+			if (request.RequestType == EnumNetworkRequestType.GET) { Get(request); }
+			if (request.RequestType == EnumNetworkRequestType.PostForm) { PostForm(request); }
+			if (request.RequestType == EnumNetworkRequestType.PostJson) { PostJson(request); }
+			if (request.RequestType == EnumNetworkRequestType.Texture) { Texture(request); }
+			if (request.RequestType == EnumNetworkRequestType.Audio) { Audio(request); }
 		}
 		public static async void Get(DataRequest request) {
 			string url = request.Url;
@@ -40,7 +41,7 @@ namespace MuHua {
 #if UNITY_2022
 			using UnityWebRequest web = UnityWebRequest.PostWwwForm(url, "POST");
 #else
-        using UnityWebRequest web = UnityWebRequest.Post(url, "POST");
+        	using UnityWebRequest web = UnityWebRequest.Post(url, "POST");
 #endif
 			web.uploadHandler.Dispose();
 			web.uploadHandler = new UploadHandlerRaw(postBytes);
@@ -53,6 +54,14 @@ namespace MuHua {
 		public static async void Texture(DataRequest request) {
 			string url = request.Url;
 			using UnityWebRequest web = UnityWebRequestTexture.GetTexture(url);
+			await web.SendWebRequest();
+			bool isDone = web.isDone && web.result == UnityWebRequest.Result.Success;
+			request.RequestResultHandle(isDone, web);
+		}
+		/// <summary> 下载音频 </summary>
+		public static async void Audio(DataRequest request) {
+			string url = request.Url;
+			using UnityWebRequest web = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.UNKNOWN); // 自动检测音频类型
 			await web.SendWebRequest();
 			bool isDone = web.isDone && web.result == UnityWebRequest.Result.Success;
 			request.RequestResultHandle(isDone, web);

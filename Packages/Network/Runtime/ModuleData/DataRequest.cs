@@ -11,7 +11,7 @@ namespace MuHua {
 		/// <summary> Web请求地址 </summary>
 		public abstract string Url { get; }
 		/// <summary> Web请求类型 </summary>
-		public abstract WebRequestType RequestType { get; }
+		public abstract EnumNetworkRequestType RequestType { get; }
 		/// <summary> 提交json数据 </summary>
 		public virtual string Json { get; }
 		/// <summary> 提交Form表单数据 </summary>
@@ -19,5 +19,10 @@ namespace MuHua {
 
 		/// <summary> Web请求结果处理 </summary>
 		public abstract void RequestResultHandle(bool isDone, UnityWebRequest web);
+
+		/// <summary> 发送请求 </summary>
+		public virtual IEnumerator Send() => NetworkRequest.Execute(this);
+		/// <summary> 发送请求（异步） </summary>
+		public virtual void SendAsync() => NetworkRequestAsync.Execute(this);
 	}
 }
