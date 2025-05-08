@@ -8,17 +8,16 @@ namespace MuHua {
 	/// <summary>
 	/// UI项容器
 	/// </summary>
-	public class ModuleUIItems<T, Data> : ModuleUIPanel where T : ModuleUIItem<Data> {
-		public readonly VisualTreeAsset templateAsset;
-		public readonly Func<Data, VisualElement, T> generate;
+	public class ModuleUIItems<TItem, TData> : ModuleUIPanel where TItem : ModuleUIItem<TData> {
+		public readonly VisualTreeAsset templateAsset;// 模板资源
+		public readonly Func<TData, VisualElement, TItem> generate;// 生成UI项的函数
 
-		public List<T> uiItems = new List<T>();
+		public List<TItem> uiItems = new List<TItem>();// UI项列表
 
-		/// <summary> 数据操作 </summary
-		public virtual T this[int index] => uiItems[index];
+		public TItem this[int index] { get => uiItems[index]; }// 索引器
 
 		/// <summary>  UI容器  </summary>
-		public ModuleUIItems(VisualElement element, VisualTreeAsset templateAsset, Func<Data, VisualElement, T> generate) : base(element) {
+		public ModuleUIItems(VisualElement element, VisualTreeAsset templateAsset, Func<TData, VisualElement, TItem> generate) : base(element) {
 			this.templateAsset = templateAsset;
 			this.generate = generate;
 		}
@@ -26,19 +25,23 @@ namespace MuHua {
 		public void Release() {
 			element.Clear();
 			uiItems.ForEach(obj => obj.Release());
-			uiItems = new List<T>();
+			uiItems = new List<TItem>();
 		}
 		/// <summary> 创建UI项 </summary>
-		public void Create(List<Data> datas) {
+		public void Create(List<TData> datas) {
 			Release();
 			datas.ForEach(Create);
 		}
 		/// <summary> 创建UI项 </summary>
-		public void Create(Data data) {
+		public void Create(TData data) {
 			VisualElement element = templateAsset.Instantiate();
-			T item = generate(data, element);
+			TItem item = generate(data, element);
 			this.element.Add(item.element);
 			uiItems.Add(item);
+		}
+		/// <summary> 遍历 </summary>
+		public void ForEach(Action<TItem> action) {
+			uiItems.ForEach(action);
 		}
 	}
 }
