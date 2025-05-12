@@ -9,7 +9,6 @@ namespace MuHua {
 	/// 渲染轮廓功能
 	/// </summary>
 	public class SRFOutline : ScriptableRendererFeature {
-		[Tooltip("轮廓大小")] public float size = 5;
 		[Tooltip("辅助材质")] public Material unlit;
 		[Tooltip("轮廓材质")] public Material outline;
 		[Tooltip("混合材质")] public Material blend;
@@ -17,7 +16,7 @@ namespace MuHua {
 		public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
 
 		/// <summary> 渲染对象 </summary>
-		public static List<Renderer> RenderObjs = new List<Renderer>();
+		[HideInInspector] public List<Renderer> RenderObjs = new List<Renderer>();
 		/// <summary> 是否有效 </summary>
 		public bool IsValid => unlit != null && outline != null && blend != null;
 
@@ -48,21 +47,21 @@ namespace MuHua {
 		}
 
 		/// <summary> 添加到渲染队列 </summary>
-		public static void Add(Renderer renderer, bool isClear) {
+		public void Add(Renderer renderer, bool isClear) {
 			if (isClear) { Clear(); }
-			if (RenderObjs.Contains(renderer)) { RenderObjs.Add(renderer); }
+			if (!RenderObjs.Contains(renderer)) { RenderObjs.Add(renderer); }
 		}
 		/// <summary> 添加到渲染队列 </summary>
-		public static void Add(Renderer[] renderers, bool isClear) {
+		public void Add(Renderer[] renderers, bool isClear) {
 			if (isClear) { Clear(); }
 			RenderObjs.AddRange(renderers);
 		}
 		/// <summary> 移出渲染队列 </summary>
-		public static void Remove(Renderer renderer) {
+		public void Remove(Renderer renderer) {
 			if (RenderObjs.Contains(renderer)) { RenderObjs.Remove(renderer); }
 		}
 		/// <summary> 清空队列 </summary>
-		public static void Clear() {
+		public void Clear() {
 			RenderObjs?.Clear();
 			RenderObjs = new List<Renderer>();
 		}
