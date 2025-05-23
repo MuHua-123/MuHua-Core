@@ -4,13 +4,11 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-namespace MuHua
-{
+namespace MuHua {
 	/// <summary>
 	/// 轮廓渲染设置
 	/// </summary>
-	public class SRFOutlineSettings
-	{
+	public class SRFOutlineSettings {
 		/// <summary> 辅助材质 </summary>
 		public Material unlit;
 		/// <summary> 轮廓材质 </summary>
@@ -25,8 +23,7 @@ namespace MuHua
 	/// <summary>
 	/// 轮廓渲染通道
 	/// </summary>
-	public class SRFOutlinePass : ScriptableRenderPass
-	{
+	public class SRFOutlinePass : ScriptableRenderPass {
 		public const string ProfilerTag = "Outline";
 
 		/// <summary> 渲染设置 </summary>
@@ -38,8 +35,7 @@ namespace MuHua
 		public RTHandle outlineRTHandle;
 
 		/// <summary> 渲染前设置 </summary>
-		public void Setup(SRFOutlineSettings settings, in RenderingData renderingData)
-		{
+		public void Setup(SRFOutlineSettings settings, in RenderingData renderingData) {
 			this.settings = settings;
 			renderPassEvent = settings.renderPassEvent;
 			RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
@@ -48,8 +44,7 @@ namespace MuHua
 			RenderingUtils.ReAllocateIfNeeded(ref tempRTHandle, descriptor, name: "TempRT");
 		}
 
-		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-		{
+		public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData) {
 			if (renderingData.cameraData.cameraType == CameraType.SceneView || renderingData.cameraData.cameraType == CameraType.Preview) return;
 
 			CommandBuffer command = CommandBufferPool.Get(ProfilerTag);
@@ -78,16 +73,13 @@ namespace MuHua
 			outlineRTHandle?.Release();
 		}
 
-		public void DrawRenderer(CommandBuffer command, Material material)
-		{
-			for (int i = 0; i < settings.renderObjs.Length; i++)
-			{
+		public void DrawRenderer(CommandBuffer command, Material material) {
+			for (int i = 0; i < settings.renderObjs.Length; i++) {
 				Renderer renderer = settings.renderObjs[i];
 				if (renderer == null) { continue; }
 
 				// 遍历所有的子网格
-				for (int subMeshIndex = 0; subMeshIndex < renderer.sharedMaterials.Length; subMeshIndex++)
-				{
+				for (int subMeshIndex = 0; subMeshIndex < renderer.sharedMaterials.Length; subMeshIndex++) {
 					command.DrawRenderer(renderer, material, subMeshIndex, 0);
 				}
 			}
