@@ -14,5 +14,8 @@
       "description": "An example showing how to use the UITool.",
       "path": "Samples~"
     }
-  ]
+  ],
+  "dependencies": {
+    "com.unity.render-pipelines.core": "14.0.11"
+  }
 }
