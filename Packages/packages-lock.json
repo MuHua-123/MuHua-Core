@@ -283,9 +283,7 @@
       "version": "file:Character",
       "depth": 0,
       "source": "embedded",
-      "dependencies": {
-        "com.unity.inputsystem": "1.7.0"
-      }
+      "dependencies": {}
     },
     "muhua-follow-tag": {
       "version": "file:FollowTag",
