@@ -29,7 +29,7 @@ public class UITestPage : ModuleUIPage {
 		dropdown.SetValue(list);
 		dropdown.ValueChanged += (value) => Debug.Log(value);
 
-		scrollView = new UIScrollView(ScrollView, root, UIDirection.FromTopToBottom);
+		scrollView = new UIScrollView(ScrollView, root, UIDirection.Vertical, UIDirection.FromLeftToRight, UIDirection.FromTopToBottom);
 	}
 	private void Update() {
 		dropdown.Update();

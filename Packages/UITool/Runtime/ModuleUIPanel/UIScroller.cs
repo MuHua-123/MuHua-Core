@@ -175,8 +175,8 @@ namespace MuHua {
 			public override void UpdateValue(float value, bool send = true) {
 				scroller.value = value;
 				if (send) { scroller.ValueChanged?.Invoke(value); }
-				float max = scroller.element.resolvedStyle.height - scroller.Dragger.resolvedStyle.height;
-				float y = Mathf.Lerp(max, 0, value);
+				float max = scroller.Dragger.resolvedStyle.height - scroller.element.resolvedStyle.height;
+				float y = Mathf.Lerp(0, max, value);
 				scroller.Dragger.transform.position = new Vector3(0, y);
 			}
 		}

@@ -13,6 +13,10 @@ namespace MuHua {
 		public readonly VisualElement canvas;
 		/// <summary> 元素方向 </summary>
 		public readonly UIDirection direction;
+		/// <summary> 水平滑动方向 </summary>
+		public readonly UIDirection sh;
+		/// <summary> 垂直滑动方向 </summary>
+		public readonly UIDirection sv;
 		/// <summary> 值改变时 </summary>
 		public event Action<Vector2> ValueChanged;
 
@@ -35,6 +39,8 @@ namespace MuHua {
 		UIDirection sv = UIDirection.FromTopToBottom) : base(element) {
 			this.canvas = canvas;
 			this.direction = direction;
+			this.sh = sh;
+			this.sv = sv;
 
 			element.generateVisualContent += ElementGenerateVisualContent;
 
@@ -43,6 +49,7 @@ namespace MuHua {
 
 			if (sv == UIDirection.FromTopToBottom) { vertical = new UIScroller(ScrollerVertical, canvas, sv); }
 			if (sv == UIDirection.FromBottomToTop) { vertical = new UIScroller(ScrollerVertical, canvas, sv); }
+
 
 			//设置事件
 			horizontal.ValueChanged += (x) => { UpdateValue(new Vector2(x, value.y)); };
@@ -116,6 +123,8 @@ namespace MuHua {
 			float maxHeight = Viewport.resolvedStyle.height - Container.resolvedStyle.height;
 			float xPos = maxWidth * value.x;
 			float yPos = maxHeight * value.y;
+			xPos *= sh == UIDirection.FromLeftToRight ? 1 : -1;
+			yPos *= sv == UIDirection.FromTopToBottom ? 1 : -1;
 			Container.transform.position = new Vector3(xPos, yPos);
 
 			if (horizontal.value != value.x) { horizontal.UpdateValue(value.x, false); }
