@@ -22,5 +22,7 @@ namespace MuHua {
 		public void Release() => Items.Release();
 		/// <summary> 创建UI项 </summary>
 		public void Create(List<Data> datas) => Items.Create(datas);
+		/// <summary> 创建UI项 </summary>
+		public void Create(Data data) => Items.Create(data);
 	}
 }
