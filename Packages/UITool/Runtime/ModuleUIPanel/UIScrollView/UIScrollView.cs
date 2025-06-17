@@ -44,21 +44,32 @@ namespace MuHua {
 
 			element.generateVisualContent += ElementGenerateVisualContent;
 
-			if (sh == UIDirection.FromLeftToRight) { horizontal = new UIScroller(ScrollerHorizontal, canvas, sh); }
-			if (sh == UIDirection.FromRightToLeft) { horizontal = new UIScroller(ScrollerHorizontal, canvas, sh); }
+			if (sh == UIDirection.FromLeftToRight) {
+				horizontal = new UIScroller(ScrollerHorizontal, canvas, sh);
+				Viewport.style.flexDirection = FlexDirection.Row;
+			}
+			if (sh == UIDirection.FromRightToLeft) {
+				horizontal = new UIScroller(ScrollerHorizontal, canvas, sh);
+				Viewport.style.flexDirection = FlexDirection.RowReverse;
+			}
 
-			if (sv == UIDirection.FromTopToBottom) { vertical = new UIScroller(ScrollerVertical, canvas, sv); }
-			if (sv == UIDirection.FromBottomToTop) { vertical = new UIScroller(ScrollerVertical, canvas, sv); }
+			if (sv == UIDirection.FromTopToBottom) {
+				vertical = new UIScroller(ScrollerVertical, canvas, sv);
+				Viewport.style.flexDirection = FlexDirection.Column;
+			}
+			if (sv == UIDirection.FromBottomToTop) {
+				vertical = new UIScroller(ScrollerVertical, canvas, sv);
+				Viewport.style.flexDirection = FlexDirection.ColumnReverse;
+			}
 
-
-			//设置事件
+			// 设置事件
 			horizontal.ValueChanged += (x) => { UpdateValue(new Vector2(x, value.y)); };
 			vertical.ValueChanged += (y) => { UpdateValue(new Vector2(value.x, y)); };
 
 			Viewport.RegisterCallback<WheelEvent>(ViewportWheel);
 			Viewport.RegisterCallback<PointerDownEvent>(DraggerDown);
 			Viewport.RegisterCallback<MouseCaptureEvent>((evt) => isDrag = false);
-
+			// 释放
 			canvas.RegisterCallback<PointerUpEvent>((evt) => isDrag = false);
 			canvas.RegisterCallback<PointerLeaveEvent>((evt) => isDrag = false);
 		}
@@ -73,12 +84,9 @@ namespace MuHua {
 		/// <summary> 视图滚轮滑动 </summary>
 		private void ViewportWheel(WheelEvent evt) {
 			float wheel = Mathf.Clamp(evt.delta.y, -1, 1);
-			if (direction == UIDirection.Horizontal) {
-				UpdateValue(new Vector2(value.x - wheel, value.y));
-			}
-			else {
-				UpdateValue(new Vector2(value.x, value.y - wheel));
-			}
+			Vector2 offset = new Vector2(0, wheel);
+			if (direction == UIDirection.Horizontal) { offset = new Vector2(wheel, 0); }
+			UpdateValue(new Vector2(value.x, value.y) - offset);
 		}
 		private void DraggerDown(PointerDownEvent evt) {
 			isDrag = true;
@@ -111,6 +119,8 @@ namespace MuHua {
 
 			float x = offset.x / maxWidth;
 			float y = offset.y / maxHeight;
+			x *= sh == UIDirection.FromLeftToRight ? 1 : -1;
+			y *= sv == UIDirection.FromTopToBottom ? 1 : -1;
 			UpdateValue(new Vector2(x, y));
 		}
 		/// <summary> 更新值(0-1) </summary>

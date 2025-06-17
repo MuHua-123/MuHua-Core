@@ -1,0 +1,11 @@
+{
+  "name": "muhua-cleaner",
+  "version": "1.0.0",
+  "displayName": "MuHua Cleaner",
+  "description": "\u8d44\u6e90\u6e05\u7406\u5de5\u5177\u5305",
+  "author": {
+    "name": "MuHua",
+    "email": "muhua233@qq.com"
+  },
+  "type": "tool"
+}

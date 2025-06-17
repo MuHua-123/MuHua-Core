@@ -41,8 +41,9 @@ namespace MuHua {
 			canvas.RegisterCallback<PointerUpEvent>((evt) => isDragger = false);
 			canvas.RegisterCallback<PointerLeaveEvent>((evt) => isDragger = false);
 		}
-
+		/// <summary> 拖拽元素 </summary>
 		private void DraggerDown(PointerDownEvent evt) => scrollerFunc.DraggerDown(evt);
+		/// <summary> 按下元素 </summary>
 		private void ElementDown(PointerDownEvent evt) => scrollerFunc.ElementDown(evt);
 		/// <summary> 更新状态 </summary>
 		public void Update() => scrollerFunc.Update();
@@ -52,17 +53,22 @@ namespace MuHua {
 		public abstract class UIScrollerFunc {
 			public readonly UIScroller scroller;
 			public UIScrollerFunc(UIScroller scroller) => this.scroller = scroller;
-
+			/// <summary> 拖拽元素 </summary>
 			public abstract void DraggerDown(PointerDownEvent evt);
+			/// <summary> 按下元素 </summary>
 			public abstract void ElementDown(PointerDownEvent evt);
 			/// <summary> 更新状态 </summary>
 			public abstract void Update();
 			/// <summary> 更新值(0-1) </summary>
 			public abstract void UpdateValue(float value, bool send = true);
 		}
-
+		/// <summary>
+		/// 滑块从左到右
+		/// </summary>
 		public class FromLeftToRight : UIScrollerFunc {
-			public FromLeftToRight(UIScroller scroller) : base(scroller) { }
+			public FromLeftToRight(UIScroller scroller) : base(scroller) {
+				scroller.element.style.flexDirection = FlexDirection.Row;
+			}
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
 				scroller.originalPosition = scroller.Dragger.transform.position.x;
@@ -90,9 +96,13 @@ namespace MuHua {
 				scroller.Dragger.transform.position = new Vector3(x, 0);
 			}
 		}
-
+		/// <summary>
+		/// 滑块从右到左
+		/// </summary>
 		public class FromRightToLeft : UIScrollerFunc {
-			public FromRightToLeft(UIScroller scroller) : base(scroller) { }
+			public FromRightToLeft(UIScroller scroller) : base(scroller) {
+				scroller.element.style.flexDirection = FlexDirection.RowReverse;
+			}
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
 				scroller.originalPosition = scroller.Dragger.transform.position.x;
@@ -120,9 +130,13 @@ namespace MuHua {
 				scroller.Dragger.transform.position = new Vector3(x, 0);
 			}
 		}
-
+		/// <summary>
+		/// 滑块从上到下
+		/// </summary>
 		public class FromTopToBottom : UIScrollerFunc {
-			public FromTopToBottom(UIScroller scroller) : base(scroller) { }
+			public FromTopToBottom(UIScroller scroller) : base(scroller) {
+				scroller.element.style.flexDirection = FlexDirection.Column;
+			}
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
 				scroller.originalPosition = scroller.Dragger.transform.position.y;
@@ -150,9 +164,13 @@ namespace MuHua {
 				scroller.Dragger.transform.position = new Vector3(0, y);
 			}
 		}
-
+		/// <summary>
+		/// 滑块从下到上
+		/// </summary>
 		public class FromBottomToTop : UIScrollerFunc {
-			public FromBottomToTop(UIScroller scroller) : base(scroller) { }
+			public FromBottomToTop(UIScroller scroller) : base(scroller) {
+				scroller.element.style.flexDirection = FlexDirection.ColumnReverse;
+			}
 			public override void DraggerDown(PointerDownEvent evt) {
 				scroller.isDragger = true;
 				scroller.originalPosition = scroller.Dragger.transform.position.y;

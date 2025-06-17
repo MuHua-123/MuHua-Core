@@ -285,6 +285,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "muhua-cleaner": {
+      "version": "file:Cleaner",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "muhua-follow-tag": {
       "version": "file:FollowTag",
       "depth": 0,
