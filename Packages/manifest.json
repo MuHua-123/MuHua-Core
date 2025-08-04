@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.muhua.uicontrol": "https://github.com/MuHua-123/MuHua-UIControl.git?path=Packages/UIControl",
     "com.unity.collab-proxy": "2.5.2",
     "com.unity.collections": "1.2.4",
     "com.unity.feature.development": "1.0.1",
@@ -11,6 +10,7 @@
     "com.unity.toolchain.win-x86_64-linux-x86_64": "2.0.10",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",
+    "muhua-ui-tool": "https://github.com/MuHua-123/MuHua-UIElements.git?path=Packages/UITool",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
