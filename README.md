@@ -6,3 +6,6 @@
   
 ## 网络请求包
  * https://github.com/MuHua-123/MuHua-Core.git?path=Packages/Network
+
+## 渲染扩展包
+ * https://github.com/MuHua-123/MuHua-Effects.git?path=Packages/URPExtend
