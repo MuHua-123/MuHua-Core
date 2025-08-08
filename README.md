@@ -10,5 +10,11 @@
 ## 网络请求包
  * https://github.com/MuHua-123/MuHua-Core.git?path=Packages/Network
 
+## 角色模块包
+ * https://github.com/MuHua-123/MuHua-Character.git?path=Packages/MCharacter
+
 ## 渲染扩展包
  * https://github.com/MuHua-123/MuHua-Effects.git?path=Packages/URPExtend
+
+## 地形扩展包
+ * https://github.com/MuHua-123/MuHua-Terrain.git?path=Packages/Terrain
