@@ -8,23 +8,40 @@ using MuHua;
 /// 相机模块
 /// </summary>
 public class ModuleCamera : ModuleSingle<ModuleCamera> {
+
 	/// <summary> 当前相机 </summary>
 	public static CameraController CurrentCamera;
 	/// <summary> 相机模式事件 </summary>
-	public static event Action<EnumCameraMode> OnCameraMode;
+	public static event Action<CameraMode> OnCameraMode;
+
 	/// <summary> 设置相机模式 </summary>
-	public static void Mode(EnumCameraMode mode, bool isReset = true) {
+	public static void Settings(CameraMode mode, bool isReset = true) {
 		OnCameraMode?.Invoke(mode);
 		if (isReset) { I.ResetCamera(); }
 	}
 
 	public List<CameraController> cameras;
 
-	protected override void Awake() => NoReplace();
+	protected override void Awake() {
+		NoReplace();
+		cameras.ForEach(obj => obj.Initial());
+	}
 
-	private void Start() => cameras.ForEach(obj => obj.Initialize());
+	private void OnDestroy() => cameras.ForEach(obj => obj.Release());
 
 	/// <summary> 重置相机 </summary>
 	public void ResetCamera() => cameras.ForEach(obj => obj.ResetCamera());
 
+}
+/// <summary>
+/// 相机模式
+/// </summary>
+public enum CameraMode {
+	None,// 无
+
+	// FixedEdit,// 固定编辑
+
+	// FreeEdit,// 自由编辑
+
+	MoveAxis,// 移轴
 }

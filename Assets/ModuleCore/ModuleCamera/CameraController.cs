@@ -14,11 +14,20 @@ public abstract class CameraController : MonoBehaviour {
 	public abstract Vector3 Right { get; set; }
 	/// <summary> 旋转 </summary>
 	public abstract Vector3 EulerAngles { get; set; }
-	/// <summary> 距离 </summary>
-	public abstract float Distance { get; set; }
+	/// <summary> 视野 </summary>
+	public abstract float VisualField { get; set; }
 
 	/// <summary> 初始化 </summary>
-	public abstract void Initialize();
+	public virtual void Initial() {
+		ModuleCamera.OnCameraMode += ModuleCamera_OnCameraMode;
+	}
+	/// <summary> 释放 </summary>
+	public virtual void Release() {
+		ModuleCamera.OnCameraMode -= ModuleCamera_OnCameraMode;
+	}
+
+	/// <summary> 相机模式 </summary>
+	public abstract void ModuleCamera_OnCameraMode(CameraMode mode);
 	/// <summary> 重置相机 </summary>
 	public abstract void ResetCamera();
 

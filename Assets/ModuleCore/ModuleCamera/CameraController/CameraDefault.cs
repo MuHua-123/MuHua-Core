@@ -23,21 +23,17 @@ public class CameraDefault : CameraController {
 		get => throw new System.NotImplementedException();
 		set => throw new System.NotImplementedException();
 	}
-	public override float Distance {
+	public override float VisualField {
 		get => throw new System.NotImplementedException();
 		set => throw new System.NotImplementedException();
 	}
 
-	public override void Initialize() {
-		ModuleCamera.OnCameraMode += ModuleCamera_OnCameraMode;
-	}
-
-	private void ModuleCamera_OnCameraMode(EnumCameraMode mode) {
+	public override void ModuleCamera_OnCameraMode(CameraMode mode) {
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
 		return;
 #endif
-		gameObject.SetActive(mode == EnumCameraMode.None);
-		if (mode == EnumCameraMode.None) { ModuleCamera.CurrentCamera = this; }
+		gameObject.SetActive(mode == CameraMode.None);
+		if (mode == CameraMode.None) { ModuleCamera.CurrentCamera = this; }
 	}
 
 	public override void ResetCamera() {
