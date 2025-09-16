@@ -270,7 +270,7 @@
         "com.unity.shadergraph": "14.0.11",
         "com.unity.render-pipelines.core": "14.0.11"
       },
-      "hash": "f249f16f1f5bbcf0ceaf5e519abe0b82e01b92fb"
+      "hash": "714f29fc26b8f8c5212081e723b3d420fa028263"
     },
     "muhua-urp-extend": {
       "version": "file:URPExtend",
