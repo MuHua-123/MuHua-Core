@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="ShortcutMenu" src="project://database/Assets/UI%20Toolkit/GamePanel/ShortcutMenu/ShortcutMenu.uxml?fileID=9197481963319205126&amp;guid=531a74f84d51b5d49a048079629e13e0&amp;type=3#ShortcutMenu" />
+    <Style src="project://database/Assets/UI%20Toolkit/Document/Document.uss?fileID=7433441132597879392&amp;guid=9205939af30a4394f8f2e34232b27890&amp;type=3#Document" />
+    <ui:Instance template="ShortcutMenu" name="ShortcutMenu" picking-mode="Ignore" class="document-page" />
+</ui:UXML>

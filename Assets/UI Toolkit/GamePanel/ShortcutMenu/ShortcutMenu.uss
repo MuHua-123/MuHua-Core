@@ -1,0 +1,32 @@
+.menu {
+    position: absolute;
+}
+
+.menu-hide {
+    display: none;
+}
+
+.menu-unit {
+    flex-direction: row;
+    align-self: flex-start;
+}
+
+.menu-unit:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.menu-arrow {
+    flex-grow: 0;
+    height: 30px;
+    width: 30px;
+    background-image: url("project://database/Assets/UI%20Toolkit/DefaultTheme/UnityDefaultRuntimeTheme.tss?fileID=-1087164816274819069&guid=59bfacbee7a859f42904b05799bf9437&type=3#arrow-right@2x");
+    -unity-background-image-tint-color: rgb(51, 51, 51);
+}
+
+.menu-arrow-hide {
+    display: none;
+}
