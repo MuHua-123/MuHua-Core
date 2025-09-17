@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 属性实例
 /// </summary>
-[Serializable]
-public class DataAttributeInstance {
+public class AttributeInstance {
 	/// <summary> 属性类型 </summary>
 	public AttributeType type;
 	/// <summary> 基础值 </summary>

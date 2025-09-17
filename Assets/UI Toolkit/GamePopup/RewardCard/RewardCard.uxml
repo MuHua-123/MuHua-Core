@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="RewardCardTemplate" src="project://database/Assets/UI%20Toolkit/GamePage/RewardCard/RewardCardTemplate.uxml?fileID=9197481963319205126&amp;guid=6400fdee57aa4e64b9bfec731afb0c99&amp;type=3#RewardCardTemplate" />
+    <Style src="project://database/Assets/UI%20Toolkit/GamePage/RewardCard/RewardCard.uss?fileID=7433441132597879392&amp;guid=50f05ccf18e315e47b6f51e163bb6e94&amp;type=3#RewardCard" />
+    <ui:VisualElement name="Container" style="flex-grow: 1; flex-direction: row; align-items: center; justify-content: space-around;">
+        <ui:Instance template="RewardCardTemplate" name="RewardCardTemplate" />
+        <ui:Instance template="RewardCardTemplate" name="RewardCardTemplate" />
+        <ui:Instance template="RewardCardTemplate" name="RewardCardTemplate" />
+    </ui:VisualElement>
+</ui:UXML>

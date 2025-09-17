@@ -7,16 +7,16 @@ using MuHua;
 /// <summary>
 /// 属性附加
 /// </summary>
-public class AttributeBonus : Module<AttributeBonus> {
+public class AttributeSystem : Module<AttributeSystem> {
 	/// <summary> 修改事件 </summary>
-	public static event Action<AttributeBonus> OnChange;
+	public static event Action<AttributeSystem> OnChange;
 	/// <summary> 附加字典 </summary>
-	public Dictionary<string, DataAttributeContainer> dictionary = new Dictionary<string, DataAttributeContainer>();
+	public Dictionary<string, AttributeContainer> dictionary = new Dictionary<string, AttributeContainer>();
 
 	/// <summary> 应用修改 </summary>
 	public void Apply() => OnChange?.Invoke(this);
 	/// <summary> 添加容器 </summary>
-	public void AddInstance(string containerID, DataAttributeContainer container) {
+	public void AddInstance(string containerID, AttributeContainer container) {
 		if (dictionary.ContainsKey(containerID)) { return; }
 		dictionary.Add(containerID, container);
 		OnChange?.Invoke(this);
@@ -32,12 +32,12 @@ public class AttributeBonus : Module<AttributeBonus> {
 		foreach (var item in dictionary) { item.Value.RecalculateValue(); }
 	}
 	/// <summary> 查询容器 </summary>
-	public DataAttributeContainer FindContainer(string containerID) {
+	public AttributeContainer FindContainer(string containerID) {
 		if (!dictionary.ContainsKey(containerID)) { return new(); }
 		return dictionary[containerID];
 	}
 	/// <summary> 查询容器 </summary>
-	public bool TryContainer(string containerID, out DataAttributeContainer container) {
+	public bool TryContainer(string containerID, out AttributeContainer container) {
 		container = null;
 		if (!dictionary.ContainsKey(containerID)) { return false; }
 		container = dictionary[containerID];

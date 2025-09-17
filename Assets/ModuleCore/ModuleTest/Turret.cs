@@ -13,28 +13,30 @@ public class Turret : MonoBehaviour {
 	public List<ConstAttributeContainer> presetInherits;
 
 	/// <summary> 属性 </summary>
-	public DataAttributeContainer attribute;
-	/// <summary> 继承属性 </summary>
-	public List<DataAttributeContainer> inherits;
+	public AttributeContainer attribute;
 
 	private void Awake() => attribute = presetAttribute.To();
 
 	private void Start() {
-		inherits = new List<DataAttributeContainer>();
+		AttributeSystem.OnChange += RecalculateValue;
+		RecalculateValue(AttributeSystem.I);
+	}
+	private void RecalculateValue(AttributeSystem system) {
+		List<AttributeContainer> inherits = new List<AttributeContainer>();
 		for (int i = 0; i < presetInherits.Count; i++) {
 			string containerID = presetInherits[i].name;
-			inherits.Add(AttributeBonus.I.FindContainer(containerID));
+			inherits.Add(system.FindContainer(containerID));
 		}
-		RecalculateValue();
+		RecalculateValue(inherits);
 	}
-	private void RecalculateValue() {
-		attribute.ForEach(RecalculateValue);
+	private void RecalculateValue(List<AttributeContainer> inherits) {
+		attribute.ForEach((attributeID, instance) => RecalculateValue(attributeID, instance, inherits));
 		attribute.RecalculateValue();
 	}
-	private void RecalculateValue(string attributeID, DataAttributeInstance instance) {
+	private void RecalculateValue(string attributeID, AttributeInstance instance, List<AttributeContainer> inherits) {
 		List<AttributeModifier> modifiers = new List<AttributeModifier>();
 		for (int i = 0; i < inherits.Count; i++) {
-			DataAttributeContainer container = inherits[i];
+			AttributeContainer container = inherits[i];
 			modifiers.AddRange(container.FindModifier(attributeID));
 		}
 		instance.AddModifier(modifiers, false);
@@ -45,9 +47,9 @@ public class Turret : MonoBehaviour {
 /// </summary>
 public class TurretModifier : AttributeModifier {
 	/// <summary> 固定数值 </summary>
-	public int value;
+	public float value;
 	/// <summary> 百分比% </summary>
-	public int percentage;
+	public float percentage;
 
 	public override float Fixed(float input) => input + value;
 

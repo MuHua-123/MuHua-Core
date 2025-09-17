@@ -12,8 +12,8 @@ public class ConstAttributeContainer : ScriptableObject {
 	public List<ConstAttributeInstance> instances;
 
 	/// <summary> 转换数据 </summary>
-	public DataAttributeContainer To() {
-		DataAttributeContainer container = new DataAttributeContainer();
+	public AttributeContainer To() {
+		AttributeContainer container = new AttributeContainer();
 		instances.ForEach(obj => container.AddInstance(obj.name, obj.To()));
 		return container;
 	}

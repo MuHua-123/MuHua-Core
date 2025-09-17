@@ -19,10 +19,7 @@ public class AssetsManager : ModuleSingle<AssetsManager> {
 		// 初始炮塔建造菜单
 		turrets.ForEach(CreateTurretMenu);
 		// 添加全局炮塔属性
-		presetInherits.ForEach(obj => AttributeBonus.I.AddInstance(obj.name, obj.To()));
-		// 添加修改器
-		TurretModifier modifier = new TurretModifier { value = 5 };
-		AttributeBonus.I.AddModifier("炮塔", "攻击力", modifier, true);
+		presetInherits.ForEach(obj => AttributeSystem.I.AddInstance(obj.name, obj.To()));
 	}
 
 	private void CreateTurretMenu(Turret turret) {

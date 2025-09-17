@@ -6,12 +6,12 @@ using UnityEngine;
 /// <summary>
 /// 属性容器
 /// </summary>
-public class DataAttributeContainer {
+public class AttributeContainer {
 	/// <summary> 属性字典 </summary>
-	public Dictionary<string, DataAttributeInstance> dictionary = new Dictionary<string, DataAttributeInstance>();
+	public Dictionary<string, AttributeInstance> dictionary = new Dictionary<string, AttributeInstance>();
 
 	/// <summary> 添加属性 </summary>
-	public void AddInstance(string attributeID, DataAttributeInstance instance) {
+	public void AddInstance(string attributeID, AttributeInstance instance) {
 		if (dictionary.ContainsKey(attributeID)) { return; }
 		dictionary.Add(attributeID, instance);
 	}
@@ -25,7 +25,7 @@ public class DataAttributeContainer {
 		foreach (var item in dictionary) { item.Value.RecalculateValue(); }
 	}
 	/// <summary> 循环属性集合 </summary>
-	public void ForEach(Action<string, DataAttributeInstance> action) {
+	public void ForEach(Action<string, AttributeInstance> action) {
 		foreach (var item in dictionary) { action?.Invoke(item.Key, item.Value); }
 	}
 	/// <summary> 查询值 </summary>

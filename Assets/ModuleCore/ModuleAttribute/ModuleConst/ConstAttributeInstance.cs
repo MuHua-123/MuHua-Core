@@ -21,8 +21,8 @@ public class ConstAttributeInstance : ScriptableObject {
 	public ConstAttributeContainer container;
 
 	/// <summary> 转换数据 </summary>
-	public DataAttributeInstance To() {
-		DataAttributeInstance instance = new DataAttributeInstance();
+	public AttributeInstance To() {
+		AttributeInstance instance = new AttributeInstance();
 		instance.type = type;
 		instance.baseValue = defaultValue;
 		instance.currentValue = defaultValue;

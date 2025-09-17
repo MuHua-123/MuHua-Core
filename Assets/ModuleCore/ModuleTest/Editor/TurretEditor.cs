@@ -22,7 +22,7 @@ public class TurretEditor : Editor {
 			EditorGUILayout.HelpBox("attribute 未实例化", MessageType.Warning);
 			return;
 		}
-		Dictionary<string, DataAttributeInstance> dictionary = turret.attribute.dictionary;
+		Dictionary<string, AttributeInstance> dictionary = turret.attribute.dictionary;
 		foreach (var item in dictionary) {
 			EditorGUILayout.TextField(item.Key, item.Value.currentValue.ToString());
 		}
