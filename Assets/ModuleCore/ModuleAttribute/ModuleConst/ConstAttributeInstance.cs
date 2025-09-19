@@ -24,6 +24,7 @@ public class ConstAttributeInstance : ScriptableObject {
 	public AttributeInstance To() {
 		AttributeInstance instance = new AttributeInstance();
 		instance.type = type;
+		instance.name = name;
 		instance.baseValue = defaultValue;
 		instance.currentValue = defaultValue;
 		instance.minValue = minValue;

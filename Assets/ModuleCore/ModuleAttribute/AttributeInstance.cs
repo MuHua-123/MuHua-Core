@@ -8,6 +8,8 @@ using UnityEngine;
 public class AttributeInstance {
 	/// <summary> 属性类型 </summary>
 	public AttributeType type;
+	/// <summary> 属性名称 </summary>
+	public string name;
 	/// <summary> 基础值 </summary>
 	public float baseValue;
 	/// <summary> 当前值 </summary>
