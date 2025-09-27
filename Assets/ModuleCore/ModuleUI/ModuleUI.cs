@@ -8,19 +8,27 @@ using MuHua;
 /// <summary>
 /// UI模块
 /// </summary>
-public class ModuleUI : ModuleSingle<ModuleUI> {
+public class ModuleUI : ModuleUISingle<ModuleUI> {
+	/// <summary> 当前页面 </summary>
 	public static Page page;
+	/// <summary> 跳转页面事件 </summary>
 	public static event Action<Page> OnJumpPage;
+	/// <summary> UI控件列表 </summary>
+	public static List<UIControl> controls = new List<UIControl>();
+	/// <summary> 跳转页面 </summary>
+	public static void Settings(Page pageType) => OnJumpPage?.Invoke(pageType);
+	/// <summary> 添加UI控件 </summary>
+	public static void AddControl(UIControl control) => controls.Add(control);
+	/// <summary> 移除UI控件 </summary>
+	public static void RemoveControl(UIControl control) => controls.Remove(control);
 
-	public UIDocument document;// 绑定文档
-
-	/// <summary> 根目录文档 </summary>
-	public VisualElement root => document.rootVisualElement;
+	public override VisualElement Element => document.rootVisualElement;
 
 	protected override void Awake() => NoReplace();
 
-	/// <summary> 跳转页面 </summary>
-	public static void Jump(Page pageType) => OnJumpPage?.Invoke(pageType);
+	private void Update() => controls.ForEach(c => c.Update());
+
+	private void OnDestroy() => controls.ForEach(c => c.Dispose());
 }
 /// <summary>
 /// 页面类型
