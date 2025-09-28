@@ -16,7 +16,18 @@ public class SceneSystem : Module<SceneSystem> {
 	/// <summary> 平滑进度 </summary>
 	public List<SceneData> scenes = new List<SceneData>();
 
+	/// <summary> 添加场景数据 </summary>
+	public static void AddScene(SceneData scene) {
+		if (scene == null) return;
+		if (I.scenes.Contains(scene)) return;
+		I.scenes.Add(scene);
+	}
+
 	#region 协程加载
+	/// <summary> 协程加载内置场景 </summary>
+	public void Load(SceneData scene) {
+		Load(scene.name);
+	}
 	/// <summary> 协程加载内置场景 </summary>
 	public void Load(string sceneName, Action complete = null, LoadSceneMode mode = LoadSceneMode.Single) {
 		SingleManager.I.StartCoroutine(ILoad(sceneName, complete, mode));

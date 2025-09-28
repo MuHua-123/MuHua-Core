@@ -8,25 +8,26 @@ using MuHua;
 /// UI弹出管理器
 /// </summary>
 public class UIPopupManager : ModuleUISingle<UIPopupManager> {
+	/// <summary> 菜单模板 </summary>
+	public VisualTreeAsset menuTreeAsset;
+	/// <summary> 项目模板 </summary>
+	public VisualTreeAsset itemTreeAsset;
 
-	// private UILoading loading;
-	// private UIBannerTip bannerTip;
+	private UILoading loading;
+	public UIShortcutMenu shortcutMenu;
 
 	public override VisualElement Element => root.Q<VisualElement>("Popup");
 
 	public VisualElement Loading => Q<VisualElement>("Loading");
-	public VisualElement BannerTip => Q<VisualElement>("BannerTip");
+	public VisualElement ShortcutMenu => Q<VisualElement>("ShortcutMenu");
 
 	protected override void Awake() {
 		NoReplace(false);
-		// loading = new UILoading(Loading, root);
-		// bannerTip = new UIBannerTip(BannerTip);
+		loading = new UILoading(Loading, root);
+		shortcutMenu = new UIShortcutMenu(ShortcutMenu, menuTreeAsset, itemTreeAsset);
 	}
 
 	public static void SettingsLoading(bool active, float value1, string value2) {
-		// I.loading.Settings(active, value1, value2);
-	}
-	public static void SettingsBannerTip(bool active, string value) {
-		// I.bannerTip.Settings(active, value);
+		I.loading.Settings(active, value1, value2);
 	}
 }

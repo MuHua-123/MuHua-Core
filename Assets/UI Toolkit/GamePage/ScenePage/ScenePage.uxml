@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="SceneList" src="project://database/Assets/UI%20Toolkit/GamePanel/SceneList/SceneList.uxml?fileID=9197481963319205126&amp;guid=03c6bfd6235b4b64581ffdf22d087911&amp;type=3#SceneList" />
+    <Style src="project://database/Assets/UI%20Toolkit/GamePage/ScenePage/ScenePage.uss?fileID=7433441132597879392&amp;guid=cdc435606c926ba4f87fb209337bfdd8&amp;type=3#ScenePage" />
+    <ui:Instance template="SceneList" name="SceneList" />
+</ui:UXML>

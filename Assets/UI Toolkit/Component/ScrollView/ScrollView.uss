@@ -3,7 +3,7 @@
 }
 
 .scrollview-viewport {
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0);
     overflow: hidden;
     margin-right: 30px;
     margin-bottom: 30px;
@@ -11,7 +11,7 @@
 }
 
 .scrollview-container {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0);
     transition-duration: 0.1s;
     flex-direction: column;
     align-self: flex-start;

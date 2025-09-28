@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/GamePanel/SceneList/SceneList.uss?fileID=7433441132597879392&amp;guid=86e5f3d91291f6a4caaacc4eab871111&amp;type=3#SceneList" />
+    <ui:VisualElement name="Image" style="width: 160px; height: 90px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; background-color: rgb(102, 102, 102); margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; flex-direction: column-reverse;">
+        <ui:Label tabindex="-1" text="Label" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Title" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; height: 30px; color: rgb(255, 255, 255);" />
+    </ui:VisualElement>
+</ui:UXML>
