@@ -36,11 +36,6 @@ public class ModuleUI : ModuleUISingle<ModuleUI> {
 public enum Page {
 	None,
 
-	Menu,// 主菜单
 	Scene,// 场景选择
-	Prepare,// 准备游戏
-	Battle,// 战斗页面
-	Settlement,// 结算页面
-
-	Settings,// 游戏设置
+	Module,// 模组页面
 }

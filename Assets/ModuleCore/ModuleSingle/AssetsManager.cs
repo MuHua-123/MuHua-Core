@@ -12,7 +12,13 @@ public class AssetsManager : ModuleSingle<AssetsManager> {
 
 	protected override void Awake() {
 		NoReplace(false);
-		sceneDatas.ForEach(obj => SceneSystem.AddScene(obj.ToData()));
+		ModuleSystem.OnChange += UpdateScene;
+		ModuleSystem.LoadModules();
 	}
 
+	private void UpdateScene() {
+		SceneSystem.I.scenes.Clear();
+		sceneDatas.ForEach(obj => SceneSystem.AddScene(obj.ToData()));
+		ModuleSystem.Loads<ConstSceneData>("default", obj => SceneSystem.AddScene(obj.ToData(true)));
+	}
 }

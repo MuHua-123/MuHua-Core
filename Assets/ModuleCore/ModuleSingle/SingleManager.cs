@@ -13,5 +13,6 @@ public class SingleManager : ModuleSingle<SingleManager> {
 	private void Start() {
 		UIShortcutMenu shortcutMenu = UIPopupManager.I.shortcutMenu;
 		shortcutMenu.Add("场景", () => { ModuleUI.Settings(Page.Scene); });
+		shortcutMenu.Add("模组", () => { ModuleUI.Settings(Page.Module); });
 	}
 }

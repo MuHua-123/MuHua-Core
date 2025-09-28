@@ -293,6 +293,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1570422635}
+  - {fileID: 1518497766}
   - {fileID: 166485413}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -650,6 +651,52 @@ MonoBehaviour:
   m_DefaultActionMap: 980e951d-9299-4b1a-8308-0fde7904e580
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!1 &1518497765
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1518497766}
+  - component: {fileID: 1518497767}
+  m_Layer: 5
+  m_Name: UIModulePage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1518497766
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518497765}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 488984818}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1518497767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518497765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13f864a7274196644afd51cb039362a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  document: {fileID: 488984817}
+  ModuleTemplate: {fileID: 9197481963319205126, guid: 148d5651c94725e4b98b17f1eae52d12, type: 3}
 --- !u!1 &1570422634
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,10 +833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be68145041e1fe34e842cda6c009c65f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneDatas:
-  - {fileID: 11400000, guid: 085ee86cb9dd8b3428a9deb867f24762, type: 2}
-  - {fileID: 11400000, guid: 506eb0c58e5ac0a4388a343a75804acd, type: 2}
-  - {fileID: 11400000, guid: 71f8b43012a667f4e842616f5f2662a6, type: 2}
+  sceneDatas: []
 --- !u!1 &2090012553
 GameObject:
   m_ObjectHideFlags: 0

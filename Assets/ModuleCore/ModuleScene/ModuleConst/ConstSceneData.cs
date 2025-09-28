@@ -10,9 +10,10 @@ public class ConstSceneData : ScriptableObject {
 	/// <summary> 场景预览 </summary>
 	public Sprite preview;
 
-	public SceneData ToData() {
+	public SceneData ToData(bool isAddressables = false) {
 		SceneData scene = new SceneData();
 		scene.name = name;
+		scene.isAddressables = isAddressables;
 		scene.preview = preview;
 		return scene;
 	}

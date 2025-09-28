@@ -1,9 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="ScenePage" src="project://database/Assets/UI%20Toolkit/GamePage/ScenePage/ScenePage.uxml?fileID=9197481963319205126&amp;guid=934e2b15445e47042b3f6e14d20692e0&amp;type=3#ScenePage" />
+    <ui:Template name="ModulePage" src="project://database/Assets/UI%20Toolkit/GamePage/ModulePage/ModulePage.uxml?fileID=9197481963319205126&amp;guid=f7dc7e69d79081b4d8e6e0cceefd94fb&amp;type=3#ModulePage" />
     <ui:Template name="ShortcutMenu" src="project://database/Assets/UI%20Toolkit/GamePopup/ShortcutMenu/ShortcutMenu.uxml?fileID=9197481963319205126&amp;guid=531a74f84d51b5d49a048079629e13e0&amp;type=3#ShortcutMenu" />
     <ui:Template name="Loading" src="project://database/Assets/UI%20Toolkit/GamePopup/Loading/Loading.uxml?fileID=9197481963319205126&amp;guid=fb5d6f3bc717b0d4d9de29e39c671f95&amp;type=3#Loading" />
     <Style src="project://database/Assets/UI%20Toolkit/Document/Document.uss?fileID=7433441132597879392&amp;guid=9205939af30a4394f8f2e34232b27890&amp;type=3#Document" />
     <ui:Instance template="ScenePage" name="ScenePage" class="document-page document-page-hide" />
+    <ui:Instance template="ModulePage" name="ModulePage" class="document-page document-page-hide" />
     <ui:VisualElement name="Popup" picking-mode="Ignore" class="document-page">
         <ui:Instance template="ShortcutMenu" name="ShortcutMenu" picking-mode="Ignore" class="document-page" />
         <ui:Instance template="Loading" name="Loading" class="document-page document-page-hide" />
