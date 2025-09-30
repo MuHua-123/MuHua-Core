@@ -28,7 +28,6 @@ public class SceneSystem : Module<SceneSystem> {
 
 	/// <summary> 加载场景 </summary>
 	public void Load(SceneData scene) {
-		Debug.Log($"scene.isAddressables = {scene.isAddressables}");
 		if (!scene.isAddressables) { Load(scene.name); }
 		else { AddressablesLoad(scene.name); }
 	}
