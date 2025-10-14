@@ -8,7 +8,7 @@ using MuHua;
 /// </summary>
 public class AssetsManager : ModuleSingle<AssetsManager> {
 
-	public List<ConstSceneData> sceneDatas;
+	public List<SceneDataConst> sceneDatas;
 
 	protected override void Awake() {
 		NoReplace(false);
@@ -19,6 +19,6 @@ public class AssetsManager : ModuleSingle<AssetsManager> {
 	private void UpdateScene() {
 		SceneSystem.I.scenes.Clear();
 		sceneDatas.ForEach(obj => SceneSystem.AddScene(obj.ToData()));
-		ModuleSystem.Loads<ConstSceneData>("default", obj => SceneSystem.AddScene(obj.ToData(true)));
+		ModuleSystem.Loads<SceneDataConst>("default", obj => SceneSystem.AddScene(obj.ToData()));
 	}
 }

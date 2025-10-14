@@ -13,7 +13,7 @@ public class UIPopupManager : ModuleUISingle<UIPopupManager> {
 	/// <summary> 项目模板 </summary>
 	public VisualTreeAsset itemTreeAsset;
 
-	private UILoading loading;
+	public UILoading loading;
 	public UIShortcutMenu shortcutMenu;
 
 	public override VisualElement Element => root.Q<VisualElement>("Popup");
@@ -25,9 +25,7 @@ public class UIPopupManager : ModuleUISingle<UIPopupManager> {
 		NoReplace(false);
 		loading = new UILoading(Loading, root);
 		shortcutMenu = new UIShortcutMenu(ShortcutMenu, menuTreeAsset, itemTreeAsset);
-	}
 
-	public static void SettingsLoading(bool active, float value1, string value2) {
-		I.loading.Settings(active, value1, value2);
+		SceneSystem.OnProgress = (active, value) => loading.Settings(active, value, "场景加载中》》》");
 	}
 }

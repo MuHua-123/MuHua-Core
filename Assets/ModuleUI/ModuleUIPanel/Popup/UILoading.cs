@@ -18,6 +18,10 @@ public class UILoading : ModuleUIPanel {
 	}
 
 	/// <summary> 设置加载进度 </summary> 
+	public void Settings(bool active, float value1) {
+		Settings(active, value1, "");
+	}
+	/// <summary> 设置加载进度 </summary> 
 	public void Settings(bool active, float value1, string value2) {
 		element.EnableInClassList("document-page-hide", !active);
 		slider.UpdateValue(value1);
