@@ -17,7 +17,7 @@ public class AssetsManager : ModuleSingle<AssetsManager> {
 	}
 
 	private void UpdateScene() {
-		SceneSystem.I.scenes.Clear();
+		SceneSystem.scenes.Clear();
 		sceneDatas.ForEach(obj => SceneSystem.AddScene(obj.ToData()));
 		ModuleSystem.Loads<SceneDataConst>("default", obj => SceneSystem.AddScene(obj.ToData()));
 	}

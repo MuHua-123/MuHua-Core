@@ -30,7 +30,7 @@ public class UISceneList : ModuleUIPanel, UIControl {
 
 	public void Dispose() => Items.Dispose();
 
-	public void Initial() => Items.Create(SceneSystem.I.scenes);
+	public void Initial() => Items.Create(SceneSystem.scenes);
 
 	public void Settings(SceneData data) => callback?.Invoke(data);
 

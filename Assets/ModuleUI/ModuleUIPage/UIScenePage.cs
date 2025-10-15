@@ -18,7 +18,7 @@ public class UIScenePage : ModuleUIPage {
 	public VisualElement SceneList => Q<VisualElement>("SceneList");
 
 	protected void Awake() {
-		sceneList = new UISceneList(SceneList, root, SceneTemplate, SceneSystem.I.Load);
+		sceneList = new UISceneList(SceneList, root, SceneTemplate, SceneSystem.Load);
 
 		ModuleUI.OnJumpPage += ModuleUI_OnJumpPage;
 	}
