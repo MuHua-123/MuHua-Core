@@ -28,8 +28,4 @@ public class SceneLoaderStandard : SceneLoader {
 		if (SmoothedProgress < 1f) { yield break; }
 		operation.allowSceneActivation = true;
 	}
-
-	public override void LoadAsync(string sceneName, Action complete, LoadSceneMode mode) {
-		throw new NotImplementedException();
-	}
 }

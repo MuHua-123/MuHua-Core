@@ -29,8 +29,4 @@ public class ModuleSceneLoader : SceneLoader {
 		if (SmoothedProgress < 1f) { yield break; }
 		handle.Result.ActivateAsync();
 	}
-
-	public override void LoadAsync(string sceneName, Action complete, LoadSceneMode mode) {
-		throw new NotImplementedException();
-	}
 }

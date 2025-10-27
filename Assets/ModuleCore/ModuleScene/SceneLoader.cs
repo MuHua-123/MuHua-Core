@@ -17,6 +17,4 @@ public abstract class SceneLoader {
 
 	/// <summary> 加载场景(协程) </summary>
 	public abstract IEnumerator ILoad(string sceneName, Action complete, LoadSceneMode mode);
-	/// <summary> 加载场景(异步) </summary>
-	public abstract void LoadAsync(string sceneName, Action complete, LoadSceneMode mode);
 }
