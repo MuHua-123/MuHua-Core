@@ -20,13 +20,14 @@ namespace MuHua {
 
 		/// <summary> 获取文件路径 </summary> 
 		public static bool OpenFileType(string title, out string path, params string[] type) {
-			return OpenFile(title, out path, FileTypes(type));
+			return OpenFile(title, out path, FileTypes(type), type[0]);
 		}
 		/// <summary> 获取文件路径 </summary> 
-		public static bool OpenFile(string title, out string path, string type) {
+		public static bool OpenFile(string title, out string path, string type, string expand) {
 			FileDialog fd = new FileDialog();
 			fd.structSize = Marshal.SizeOf(fd);
 			fd.filter = type;
+			fd.defExt = expand;
 			fd.file = new string(new char[256]);
 			fd.maxFile = fd.file.Length;
 			fd.fileTitle = new string(new char[64]);
@@ -34,19 +35,24 @@ namespace MuHua {
 			fd.initialDir = "C:/";
 			fd.title = title;
 			fd.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000200 | 0x00000008;
+			return OpenFile(fd, out path);
+		}
+		/// <summary> 获取文件路径 </summary> 
+		public static bool OpenFile(FileDialog fd, out string path) {
 			bool result = GetOpenFileName(fd);
 			path = fd.file;
 			return result;
 		}
 		/// <summary> 获取保存路径 </summary> 
 		public static bool SaveFileType(string title, out string path, params string[] type) {
-			return SaveFile(title, out path, FileTypes(type));
+			return SaveFile(title, out path, FileTypes(type), type[0]);
 		}
 		/// <summary> 获取保存路径 </summary> 
-		public static bool SaveFile(string title, out string path, string type) {
+		public static bool SaveFile(string title, out string path, string type, string expand) {
 			FileDialog fd = new FileDialog();
 			fd.structSize = Marshal.SizeOf(fd);
 			fd.filter = type;
+			fd.defExt = expand;
 			fd.file = new string(new char[256]);
 			fd.maxFile = fd.file.Length;
 			fd.fileTitle = new string(new char[64]);
@@ -54,6 +60,10 @@ namespace MuHua {
 			fd.initialDir = "C:/";//默认路径
 			fd.title = title;
 			fd.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000200 | 0x00000008;
+			return SaveFile(fd, out path);
+		}
+		/// <summary> 获取保存路径 </summary> 
+		public static bool SaveFile(FileDialog fd, out string path) {
 			bool result = GetSaveFileName(fd);
 			path = fd.file;
 			return result;
@@ -82,7 +92,7 @@ namespace MuHua {
 		}
 		/// <summary> 文件类型 </summary> 
 		public static string FileType(string expand) {
-			return $"(*.{expand})\0*.{expand}\0";
+			return $"(*.{expand})\0*.{expand}\0";//
 		}
 
 	}
@@ -91,7 +101,7 @@ namespace MuHua {
 		public int structSize = 0;
 		public IntPtr dlgOwner = IntPtr.Zero;
 		public IntPtr instance = IntPtr.Zero;
-		public string filter = null;//筛选文件类型
+		public string filter = null;// 筛选文件类型
 		public string customFilter = null;
 		public int maxCustFilter = 0;
 		public int filterIndex = 0;
@@ -99,12 +109,12 @@ namespace MuHua {
 		public int maxFile = 0;
 		public string fileTitle = null;
 		public int maxFileTitle = 0;
-		public string initialDir = null;//默认路径
-		public string title = null;
+		public string initialDir = null;// 默认路径
+		public string title = null;// 窗口标题
 		public int flags = 0;
 		public short fileOffset = 0;
 		public short fileExtension = 0;
-		public string defExt = null;
+		public string defExt = null;// 默认扩展名
 		public IntPtr custData = IntPtr.Zero;
 		public IntPtr hook = IntPtr.Zero;
 		public string templateName = null;
