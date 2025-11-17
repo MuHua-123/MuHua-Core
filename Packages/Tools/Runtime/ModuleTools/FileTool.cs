@@ -9,39 +9,56 @@ namespace MuHua {
 
 #if UNITY_STANDALONE_WIN
 
-		#region 选择文件路径
-		public static bool OpenFile(string title, out string path, params string[] type) {
+		[DllImport("Comdlg32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
+		public static extern bool GetOpenFileName([In, Out] FileDialog fileDialog);
+		[DllImport("Shell32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
+		private static extern IntPtr SHBrowseForFolder([In, Out] BrowseFolder browseFolder);
+		[DllImport("Shell32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
+		public static extern bool SHGetPathFromIDList([In] IntPtr dlist, [In] char[] path);
+		[DllImport("Comdlg32.dll", CharSet = CharSet.Auto, SetLastError = true, ThrowOnUnmappableChar = true)]
+		public static extern bool GetSaveFileName([In, Out] FileDialog fileDialog);
+
+		/// <summary> 获取文件路径 </summary> 
+		public static bool OpenFileType(string title, out string path, params string[] type) {
+			return OpenFile(title, out path, FileTypes(type));
+		}
+		/// <summary> 获取文件路径 </summary> 
+		public static bool OpenFile(string title, out string path, string type) {
 			FileDialog fd = new FileDialog();
 			fd.structSize = Marshal.SizeOf(fd);
-			fd.filter = FileType(type);
+			fd.filter = type;
 			fd.file = new string(new char[256]);
 			fd.maxFile = fd.file.Length;
 			fd.fileTitle = new string(new char[64]);
 			fd.maxFileTitle = fd.fileTitle.Length;
 			fd.initialDir = "C:/";
 			fd.title = title;
-			fd.defExt = type[0];
 			fd.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000200 | 0x00000008;
 			bool result = GetOpenFileName(fd);
 			path = fd.file;
 			return result;
 		}
-		public static string FileType(params string[] array) {
-			string type = "";
-			foreach (var item in array) {
-				type += "文件(*." + item + ")\0*." + item + "\0";
-			}
-			return type;
+		/// <summary> 获取保存路径 </summary> 
+		public static bool SaveFileType(string title, out string path, params string[] type) {
+			return SaveFile(title, out path, FileTypes(type));
 		}
-		[DllImport("Comdlg32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
-		public static extern bool GetOpenFileName([In, Out] FileDialog fileDialog);
-		#endregion
-
-		#region 打开文件夹
-		[DllImport("Shell32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
-		private static extern IntPtr SHBrowseForFolder([In, Out] BrowseFolder browseFolder);
-		[DllImport("Shell32.dll", SetLastError = true, ThrowOnUnmappableChar = true, CharSet = CharSet.Auto)]
-		public static extern bool SHGetPathFromIDList([In] IntPtr dlist, [In] char[] path);
+		/// <summary> 获取保存路径 </summary> 
+		public static bool SaveFile(string title, out string path, string type) {
+			FileDialog fd = new FileDialog();
+			fd.structSize = Marshal.SizeOf(fd);
+			fd.filter = type;
+			fd.file = new string(new char[256]);
+			fd.maxFile = fd.file.Length;
+			fd.fileTitle = new string(new char[64]);
+			fd.maxFileTitle = fd.fileTitle.Length;
+			fd.initialDir = "C:/";//默认路径
+			fd.title = title;
+			fd.flags = 0x00080000 | 0x00001000 | 0x00000800 | 0x00000200 | 0x00000008;
+			bool result = GetSaveFileName(fd);
+			path = fd.file;
+			return result;
+		}
+		/// <summary> 获取文件夹路径 </summary> 
 		public static string BrowseForFolder(string title = "Path") {
 			BrowseFolder temp = new BrowseFolder();
 			temp.pszDisplayName = new string(new char[2048]);
@@ -54,9 +71,19 @@ namespace MuHua {
 			string res = new string(path);
 			return res.Substring(0, res.IndexOf('\0'));
 		}
-		#endregion
 
 #endif
+
+		/// <summary> 文件类型 </summary> 
+		public static string FileTypes(params string[] array) {
+			string type = "";
+			foreach (var item in array) { type += FileType(item); }
+			return type;
+		}
+		/// <summary> 文件类型 </summary> 
+		public static string FileType(string expand) {
+			return $"(*.{expand})\0*.{expand}\0";
+		}
 
 	}
 	[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
